@@ -7,13 +7,16 @@
     <div class="row">
         <br/><br/>
         <div class="col-md-6 col-md-offset-3">
+
+            @include('errors/errors')
+
             <div class="panel panel-default">
                 <div class="panel-heading ">
                     <img src="/images/logo.png" class="img-responsive center-block">
                 </div>
                 <div class="panel-body">
                     <p class="text-center text-primary"><strong>Login</strong></p>
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+                    {!! Form::open(['route'=>'login.store', 'method'=>'POST','class'=>'form-horizontal']) !!}
                         {!! csrf_field() !!}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -60,10 +63,9 @@
                                     <i class="fa fa-btn fa-sign-in"></i>Login
                                 </button>
 
-                                <a class="btn btn-link" href="{{ url('/password/reset') }}">Olvidaste el Password?</a>
                             </div>
                         </div>
-                    </form>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>

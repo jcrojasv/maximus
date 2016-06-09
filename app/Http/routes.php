@@ -15,15 +15,29 @@
     return view('ficha/index');
 });*/
 
-Route::get('ficha','FichaController@index');
-
-Route::controllers([
+/*Route::controllers([
     'auth'      => 'Auth\AuthController',
     'password'  => 'Auth\PasswordController'
 ]);
+*/
 
 Route::get('/', 'HomeController@index');
- 
-Route::auth();
-
 Route::get('/home', 'HomeController@index');
+
+//Route::auth();
+
+Route::resource('/login','LoginController');
+Route::get('/logout','LoginController@logout');
+
+//Rutas para la ficha tecnica
+Route::resource('/propietario','PropietarioController');
+
+//Rutas para mascotas
+Route::resource('/mascota','MascotaController');
+
+//Rutas para ejecutar peticiones de carga de select depediente a traves de ajax
+Route::get('selectRazas', 'PropietarioController@cargarRazasJquery');
+Route::get('selectAlimentos', 'PropietarioController@cargarAlimentosJquery');
+/*
+Route::get('buscarMascota', 'ficha\FichaController@buscarMascota');
+*/

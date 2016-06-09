@@ -16,7 +16,7 @@
     <link href='/css/sb-admin-2.css' type="text/css" rel="stylesheet"/>
            
     <!-- Custom Fonts -->
-    <link href='/css/font-awesome/css/font-awesome.min.css' type="text/css" rel="stylesheet"/>
+    <link href='/css/font-awesome-4.6.3/css/font-awesome.min.css' type="text/css" rel="stylesheet"/>
     
     
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -28,12 +28,6 @@
 
     @yield('estilos')     
     
-</head>
-
-<body>
-    
-    @yield('content')
-  
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
@@ -42,6 +36,14 @@
      
          
    @yield('javascript')
+
+</head>
+
+<body>
+    
+    @yield('content')
+  
+    
     
 </body>
 

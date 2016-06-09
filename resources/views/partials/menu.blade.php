@@ -8,11 +8,12 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="{{urlSitio}}/home"> <img src="{{dirRaiz}}images/logoSistemaP.png"></a>
+    <a class="navbar-brand" href="{{ url('/home') }}" id='sistema'><span class="fa fa-paw"></span> Maximus V0.1</a>
   </div>
   <!-- /.navbar-header -->
 
   <ul class="nav navbar-top-links navbar-right">
+    <li><span class="text-info" >{!! Auth::user()->name!!}</span></li>
     <!-- /.dropdown -->
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -23,7 +24,7 @@
         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
         <li class="divider"></li>
        
-        <li><a href="{{urlSitio}}/usuario/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+        <li><a href="{{ url('/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
       </ul>
     <!-- /.dropdown-user -->
     </li>
@@ -35,46 +36,35 @@
   <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
       <ul class="nav" id="side-menu">
-        <li class="sidebar-search">
-          <div class="input-group custom-search-form">
-            <input type="text" class="form-control" placeholder="Search...">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button">
-                <i class="fa fa-search"></i>
-              </button>
-            </span>
-          </div>
-          <!-- /input-group -->                  
-        </li>
-        
         <li>
-          <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+          <a href="{{ url('home') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
         </li>
-        
-        {% for item in arrMenu %}
-        <li {% if item.subelemento %} {% if urlModulo == item.enlace %} class="active" {% endif %}{% endif %}>
-          <a href="{{item.enlace}}" > 
-            {{ item.titulo | raw}}
-            {% if item.subelemento %}<span class="fa-arrow"></span>{% endif %}
-          </a>
-            
-          {% if item.subelemento %}
-          
-            <ul class="nav nav-second-level collapse">
-            {% for subitem in item.subelemento %}
-              <li {% if subitem.subelemento %} class=" {% if url == subitem.enlace or urlModulo == subitem.enlace %} active{% endif %}" {% endif %}>
-                <a href="{{ subitem.enlace }}">{{ subitem.titulo | raw }}</a>
-              </li>
-            {% endfor %}
-            </ul>
-          {% endif %}
+
+        <li>
+          <a href="{{ url('mascota/') }}"><i class="fa fa-github-alt"></i> Mascotas</a>
         </li>
-        {% endfor %}
-        
+
+        <li>
+          <a href="{{ url('propietario/') }}"><i class="fa fa-users"></i> Propietarios</a>
+
+        </li>
+
+        <li>
+          <a href="#"><i class="fa fa-file"></i> Ordenes</a>
+
+        </li>
+
+        <li>
+          <a href="#"><i class="fa fa-calendar"></i> Citas</a>
+
+        </li>
+
+
         
       </ul>
-      </div>
-      <!-- /.sidebar-collapse -->
+      
+    </div>
+    <!-- /.sidebar-collapse -->
   </div>
   <!-- /Menu Principal -->
 </nav>
