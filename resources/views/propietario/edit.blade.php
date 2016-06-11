@@ -4,32 +4,75 @@
 
 @section('scriptsJs')
 
-	<script src="/js/input-mask/jquery.inputmask.js" type="text/javascript"></script>
-	<script src="/js/input-mask/jquery.inputmask.date.extensions.js" type="text/javascript"></script>
-	<script src="/js/input-mask/jquery.inputmask.extensions.js" type="text/javascript"></script>
-
 <script>
 $(document).ready(function(){
 
 	$('input[name=especie]').click(function() {
+		var cod = $(this).val();
 
-		$.get("{{ url('selectRazas')}}",
-			{ especieId: $(this).val() },
-			function(data) {
+		//llamada a la funcion para cargar razas
+		url = "{{ url('selectRazas')}}";
+		$.cargaSelect(url,'#divRaza',cod);
 
-				$('#divRaza').empty();
-				$("#divRaza").html(data);
+		//llamada a la funcion para cargar razas
+		url = "{{ url('selectAlimentos')}}";
+		$.cargaSelect(url,'#divAlimentos',cod);
 
-			});
-		$.get("{{ url('selectAlimentos')}}",
-			{ especieId: $(this).val() },
-			function(data) {
 
-				$('#divAlimentos').empty();
-				$("#divAlimentos").html(data);
-
-			});
 	});
+
+	$('#btnAddMascota').click(function(){
+		var frmMascota = $("#frmMascota").serialize();
+		var ruta = "{{ route("mascota.store") }}";
+		var token = $("input[name=_token]").val();
+
+
+		$.ajax({
+			url: ruta,
+			headers: {'X-CSRF-TOKEN': token},
+			type: 'post',
+			dataType: 'json',
+			data: frmMascota,
+			beforeSend:  function(){
+				$('span.help-block').addClass('hidden');
+				$('div').removeClass('has-error');
+			},
+
+		}).done(function(respuesta) {
+
+			$('#mensaje').html(' ');
+
+			$('#divMensajeMascota').removeClass('hidden');
+			
+			$("#mensajeMascota").html(respuesta.message);
+
+			$('#frmCollapse').removeAttr('aria-expanded');
+			$('#frmCollapse').removeClass('in');
+
+			//Llamamos a la funcion para resetaear campos de formulario
+			$.reset('#frmMascota');
+
+		}).fail(function(respuesta){
+
+
+			$.each(respuesta.responseJSON,function (ind, elem) { 
+  			
+  				$('div.'+ind).removeClass('hidden').addClass('has-error');
+  				
+  				$('span.'+ind).removeClass('hidden');
+
+  				$('span.'+ind).html(' ');
+  				$('span.'+ind).html('<strong>'+elem+'</strong>');
+
+			});
+				
+
+		});
+		
+
+	});
+
+	
   
   $(function () {
     $('[data-toggle="tooltip"]').tooltip()
@@ -37,8 +80,7 @@ $(document).ready(function(){
 
   $('select').addClass('form-control');
 
-  //Inicializar los inputmask
-  $("[data-mask='data-mask']").inputmask();
+ 
 });
 
 </script>
@@ -52,6 +94,7 @@ $(document).ready(function(){
 </div>
 
  @include('errors.errors')
+
  @include('partials.mensajes')
 
 <div class="row">
@@ -59,7 +102,7 @@ $(document).ready(function(){
 	{!! Form::model($propietario, ['route' => ['propietario.update', $propietario->id],'method'=>'put'])!!}
 
 		@include('propietario.forms.frmPropietario')
-		 <input type="text" class="form-control" data-inputmask='"mask": "(999) 999-9999"' data-mask/>
+		
 	{!! Form::close() !!}
 </div>
 
@@ -68,6 +111,11 @@ $(document).ready(function(){
 	<div class="panel panel-default">
 		<div class="panel-heading"><h4 class="text-primary">Mascotas</h4></div>
 		<div class="panel-body">
+
+			<div id="divEncabezadoForm">
+				@include('partials.mensajes',['divMensajes'=>'divMensajeMascota','pMensajes'=>'mensajeMascota'])
+			</div>
+
 			<div class="text-center">
 				<button type="button" class="btn btn-primary btn-circle" data-toggle="collapse" data-target="#frmCollapse" aria-expanded="false" aria-controls="frmCollapse">
 					<i class="fa fa-plus"></i>
@@ -79,8 +127,12 @@ $(document).ready(function(){
 			<div class="collapse" id="frmCollapse">
 				<br/>
 				
-				@include('mascota.forms.frmMascota')
-		
+				<div id="divFrmMascota">
+				{!! Form::open(['route'=>'mascota.store','id'=>'frmMascota'])!!}
+					@include('mascota.forms.frmMascota')
+				{!! Form::close() !!}
+				</div>
+				
 			</div>
 
 			<br/>
@@ -92,8 +144,8 @@ $(document).ready(function(){
 						<div class="panel-heading">
 
 							<div class="pull-right">
-								<button type="button" class="btn btn-circle btn-danger btn-sm " data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fa fa-times"></i></button>
-								<button type="button" class="btn btn-circle btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-pencil"></i></button>
+								<button type="button" class="btn btn-circle btn-danger btn-sm prueba" data-toggle="tooltip" data-placement="top" title="Eliminar" ><i class="fa fa-times"></i></button>
+								<button type="button" class="btn btn-circle btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Editar" data-id="{{ $mascota->id }}"><i class="fa fa-pencil"></i></button>
 								<button type="button" class="btn btn-circle btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Crear orden"><i class="fa fa-file-text"></i></button>
 							</div>
 							<h4>{{ $mascota->nombre }}</h4>

@@ -4,7 +4,8 @@
   		<span aria-hidden="true">&times;</span>
   	</button>
     <p><strong>Ooops!</strong> Ha ocurrido un error, por favor corrija lo que mas abajo se indica</p>
-    
+    <div id="mensajeError">
+    </div>
   </div>
 @endif
 

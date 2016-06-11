@@ -106,15 +106,18 @@ class PropietarioController extends Controller
      */
     public function edit($id)
     {
+
+
         //hago una consulta de la tabla propietarios
         $propietario = Propietario::with('mascota.color','mascota.raza.especie')->find($id);
 
         //Datos para el select colores
         $colores = Color::lists('color','id');
-
-
-        //return view('propietario.edit',['propietario'=>$propietario,'colores'=>$colores]);
-        return view('propietario.edit',compact('propietario','colores'));
+        
+        //Atributos para el formulario de mascotas
+        $arrAtributosForm = ['strClaseForm'=>'open','strMethod'=>'post','strRuta'=>'mascota.store'];
+       
+        return view('propietario.edit',compact('propietario','colores','arrAtributosForm'));
     }
 
     /**
@@ -164,11 +167,12 @@ class PropietarioController extends Controller
 
         $table = new Raza();
 
-        $id = $request->input('especieId');
+        $id = $request->input('id');
 
         $razas = $table->getRazasById($id);
         
         $strHtml = "<select name='raza_id' id='raza_id' class='form-control'>";
+        $strHtml .= sprintf("<option value='%d'>%s</option>",0,'-->Seleccione una raza<--');
         foreach ($razas as $raza) {
         
             $strHtml .= sprintf("<option value='%d'>%s</option>",$raza->id,$raza->descripcion);   
@@ -191,11 +195,12 @@ class PropietarioController extends Controller
 
         $table = new Alimento();
 
-        $id = $request->input('especieId');
+        $id = $request->input('id');
 
         $alimentos = $table->getAlimentosById($id);
         
         $strHtml = "<select name='alimento_id' id='alimento_id' class='form-control'>";
+        $strHtml .= sprintf("<option value='%d'>%s</option>",0,'-->Seleccione un alimento<--');
         foreach ($alimentos as $alimento) {
         
             $strHtml .= sprintf("<option value='%d'>%s</option>",$alimento->id,$alimento->nombre);

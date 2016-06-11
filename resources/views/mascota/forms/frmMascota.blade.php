@@ -1,6 +1,6 @@
-{!! Form::open(['method'=>'post','route'=>'mascota.store'])!!}
+
 	<!-- row 1 -->              
-	<div class="row {{ $errors->has('nombre') ? ' has-error' : '' }}">
+	<div class="row nombre">
 
 		<div class="col-lg-3 col-lg-offset-1 text-right">
 			Nombre:
@@ -9,13 +9,9 @@
 		<div class="col-lg-6 ">
 			{!! Form::hidden('propietario_id',$propietario->id) !!}
 			{!! Form::text('nombre',null, ['class'=>"form-control",'placeholder'=>'Mascota']) !!}
-			
-			@if ($errors->has('nombre'))
-			<span class="help-block">
-				<strong>{{ $errors->first('nombre') }}</strong>
-			</span>
-			@endif
-
+						
+			<span class="help-block nombre hidden"></span>
+		
 		</div>
 	</div>
 	<!-- Fin row 1 -->
@@ -68,7 +64,7 @@
 	<!-- Fin row 4 -->
 
 	<!-- Row 5 -->
-	<div class="row {{ $errors->has('especie') ? ' has-error' : '' }}">
+	<div class="row especie">
 		<br/>
 		<div class="col-lg-3 col-lg-offset-1 text-right">
 			Especie:
@@ -83,18 +79,16 @@
 					{!! Form::radio('especie','2',false) !!} Felina
 				</label>
 			</div>
-			@if ($errors->has('especie'))
-			<span class="help-block">
-				<strong>{{ $errors->first('especie') }}</strong>
-			</span>
-			@endif
+			
+			<span class="help-block especie hidden"><br/></span>
+			
 		</div>
 	</div>
 	<!-- Fin row 5 -->
 
 	<!-- Row 6 -->
 	<!-- Row 7 -->
-	<div class="row {{ $errors->has('raza_id') ? ' has-error' : '' }}">
+	<div class="row raza_id">
 		<br/>
 		<div class="col-lg-3 col-lg-offset-1 text-right">
 			Raza:
@@ -102,16 +96,14 @@
 		<div class="col-lg-6" id='divRaza'>
 			{!! Form::select('raza_id',['--> Indique Especie <--']) !!}
 		</div>
-		@if ($errors->has('raza_id'))
-			<span class="help-block">
-				<strong>{{ $errors->first('raza_id') }}</strong>
-			</span>
-		@endif
+		
+			<span class="help-block raza_id hidden"></span>
+		
 	</div>
 	<!-- Fin row 6 -->
 
 	<!-- Row 7 -->
-	<div class="row {{ $errors->has('alimento_id') ? ' has-error' : '' }}">
+	<div class="row alimento_id">
 		<br/>
 		<div class="col-lg-3 col-lg-offset-1 text-right">
 			Alimento que consume:
@@ -119,16 +111,14 @@
 		<div class="col-lg-6" id="divAlimentos">
 			{!! Form::select('alimento_id',['--> Indique Especie <--']) !!}
 		</div>
-		@if ($errors->has('alimento_id'))
-			<span class="help-block">
-				<strong>{{ $errors->first('alimento_id') }}</strong>
-			</span>
-		@endif
+		
+			<span class="help-block alimento_id hidden"></span>
+		
 	</div>
 	<!-- Fin Row 7 -->
 
 	<!-- row 8 -->              
-	<div class="row {{ $errors->has('peso') ? ' has-error' : '' }}">
+	<div class="row peso">
 		<br/>
 		<div class="col-lg-3 col-lg-offset-1 text-right">
 			Peso:
@@ -139,11 +129,9 @@
 				<span class="input-group-addon"><i class="fa fa-dashboard"> </i></span>  
 				{!! Form::text('peso',null, ['class'=>"form-control",'placeholder'=>'peso']) !!}
 			</div>
-			@if ($errors->has('peso'))
-			<span class="help-block">
-				<strong>{{ $errors->first('peso') }}</strong>
-			</span>
-		@endif
+			
+			<span class="help-block peso hidden"></span>
+		
 		</div>
 	</div>
 	<!-- Fin row 8 -->
@@ -216,7 +204,7 @@
 		<br/>
 		<div class="col-lg-12 text-center">
 
-			<button type="submit" class="btn btn-primary">
+			<button type="button" class="btn btn-primary" id="btnAddMascota">
 				<i class="fa fa-plus"></i> Agregar Mascota 
 			</button>
 			&nbsp;&nbsp;
@@ -225,4 +213,3 @@
 		</div>
 	</div>
 	<!-- Fin Row 12 -->
-{!! Form::close() !!}

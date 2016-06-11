@@ -115,7 +115,7 @@
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 					<div class="input-group ">
 						<span class="input-group-addon"><i class="fa fa-phone"></i></span>
-						{!! Form::text('telefono_fijo',null, ['class'=>"form-control",'data-inputmask'=>"'mask:' '(999) 999-9999'", 'data-mask' ]) !!}
+						{!! Form::text('telefono_fijo',null, ['class'=>"form-control",'placeholder'=>'(034)-298 73 70)']) !!}
 						
 					</div>
 					@if ($errors->has('telefono_fijo'))
@@ -137,7 +137,7 @@
 				<div class=" col-lg-6 col-md-6 col-sm-6 col-xs-6">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-mobile"></i></span>
-						{!! Form::text('telefono_celular',null, ['class'=>"form-control",'data-inputmask'=>"'mask:' '(999) 999-9999'", 'data-mask' ]) !!}
+						{!! Form::text('telefono_celular',null, ['class'=>"form-control",'placeholder'=>'(300)-888 60 63)']) !!}
 						
 					</div>
 					@if ($errors->has('telefono_celular'))

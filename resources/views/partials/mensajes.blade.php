@@ -1,10 +1,12 @@
-@if(Session::has('message'))
-  <div class="alert alert-success alert-dismissible" role="alert">
+  <div class="alert alert-success alert-dismissible {{ Session::has('message') ? '' : ' hidden' }}" role="alert" id="{{ isset($divMensajes) ? $divMensajes : 'divMensajes' }}">
   	<button type="button" class="close" data-dismiss="alert" aria-label="close">
   		<span aria-hidden="true">&times;</span>
   	</button>
-    <p>{{ Session::get('message')}}</p>
+    <p id="{{ isset($pMensajes) ? $pMensajes : 'pMensajes' }}">
+    	@if(Session::has('message')) 
+    	  {{ Session::get('message')}}
+    	@endif
+   </p>
     
   </div>
-@endif
 

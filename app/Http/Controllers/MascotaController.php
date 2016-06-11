@@ -50,41 +50,54 @@ class MascotaController extends Controller
 
             'nombre'        => ['required','max:60'] ,
             'especie'       => ['required'] ,
-            'raza_id'       => ['required'] ,
+            'peso'          => ['integer'],
+            'raza_id'       => ['required'],
             'alimento_id'   => ['required'],
-            'peso'          => ['integer']
 
         ],
         [
             'raza_id.required'      => "El campo raza es obligatorio",
             'alimento_id.required'  => "El campo alimento es obligatorio",
-        ]
-        );
-        
-        //Tomo los datos del formulario
-        $data = $request->all();
-        
-        /* Genero el id de la mascota compuesto de la siguiente manera:
-        *  propietario_id . max correlativo + 1
-        *
-        */
-        $intCorrelativo = Mascota::where('propietario_id','=',$data['propietario_id'])->max('correlativo');
-        
-        $intCorrelativo += 1;
-        
-        $idMascota = $data['propietario_id'].$intCorrelativo;
+            
+        ]);
+      
+        if($request->ajax())
+        {
+           
 
-        $data['id']          = $idMascota;
-        $data['correlativo'] = $intCorrelativo;
+            //Tomo los datos del formulario
+            $data = $request->all();
 
-        //Guardo los datos de la mascota       
-        Mascota::create($data);
+            /* Genero el id de la mascota compuesto de la siguiente manera:
+            *  propietario_id . max correlativo + 1
+            */
+            
+            $intCorrelativo = Mascota::where('propietario_id','=',$data['propietario_id'])->max('correlativo');
+            
+            $intCorrelativo += 1;
+            
+            $idMascota = $data['propietario_id'].$intCorrelativo;
 
-        //Creo una variable flash para el mensaje
-        Session::flash('message','Mascota agregada correctamente');
+            $data['id']          = $idMascota;
+            $data['correlativo'] = $intCorrelativo;
 
-        return redirect()->to('/propietario/'.$data['propietario_id'].'/edit');
+            //Guardo los datos de la mascota       
+            // Mascota::create($data);
+
+            //Creo el html para el mensaje de exito
+            $strMensajeExito = 'Mascota agregada correctamente';
+
+
+            return response()->json([
+                'message' => "Mascota agregada correctamente",
+
+                ]);
+
+            //return redirect()->to('/propietario/'.$data['propietario_id'].'/edit');
+        }
 
     }
+
+    
 
 }

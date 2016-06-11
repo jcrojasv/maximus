@@ -34,3 +34,21 @@ $(function() {
         element.addClass('active');
     }
 });
+
+//Funcion que me permite cargar un select dependiente
+$.cargaSelect = function(url,div,cod)
+{
+  $.get(url,
+    { id: cod },
+    function(data) {
+
+        $(div).empty();
+        $(div).html(data);
+
+    });
+};
+
+//Funcion para resetear campos de formulario
+$.reset = function (idFormulario) {
+    $(idFormulario).each (function() { if (!$(this).is(':hidden')) this.reset(); });
+}
