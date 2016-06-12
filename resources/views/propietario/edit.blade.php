@@ -50,7 +50,7 @@ $(document).ready(function(){
 			$('#frmCollapse').removeClass('in');
 
 			//Llamamos a la funcion para resetaear campos de formulario
-			$.reset('#frmMascota');
+			$("#frmMascota").resetear();
 
 		}).fail(function(respuesta){
 

@@ -49,6 +49,6 @@ $.cargaSelect = function(url,div,cod)
 };
 
 //Funcion para resetear campos de formulario
-$.reset = function (idFormulario) {
-    $(idFormulario).each (function() { if (!$(this).is(':hidden')) this.reset(); });
+jQuery.fn.resetear = function () {
+  $(this).each (function() { this.reset(); });
 }
