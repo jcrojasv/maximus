@@ -141,10 +141,7 @@ $(document).ready(function(){
 
 
   
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  });
-
+  
   $('select').addClass('form-control');
 
  
@@ -154,8 +151,11 @@ $(document).ready(function(){
 @endsection
 
 @section('cuerpo')
+
+
 <div class="row">
 	<div class="col-lg-12">
+		@include('partials.menuBotones')
 		<h1 class="page-header">Ficha T&eacute;cnica</h1>
 	</div>
 </div>
@@ -176,7 +176,10 @@ $(document).ready(function(){
 <div class="row">
 	<a href="#anchorMascota" id="anchorMascota"></a>
 	<div class="panel panel-default">
-		<div class="panel-heading"><h4 class="text-primary">Mascotas</h4></div>
+		<div class="panel-heading">
+			<h4 class="text-primary">Mascotas</h4>
+		</div>
+
 		<div class="panel-body">
 
 			

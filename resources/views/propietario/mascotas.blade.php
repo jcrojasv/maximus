@@ -1,6 +1,15 @@
 @extends('propietario.edit')
 
+
+
 @section('renderSection')
+
+<script type="text/javascript">
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  });
+</script>
+
 @foreach($propietario->mascota as $mascota)
 	<div class="row">
 		<div class="col-lg-8 col-lg-offset-2">
