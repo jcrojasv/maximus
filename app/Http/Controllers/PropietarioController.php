@@ -45,8 +45,7 @@ class PropietarioController extends Controller
     public function create()
     {
         
-        
-        
+         
         return view('propietario/create');
 
     }
@@ -114,10 +113,8 @@ class PropietarioController extends Controller
         //Datos para el select colores
         $colores = Color::lists('color','id');
         
-        //Atributos para el formulario de mascotas
-        $arrAtributosForm = ['strClaseForm'=>'open','strMethod'=>'post','strRuta'=>'mascota.store'];
-       
-        return view('propietario.edit',compact('propietario','colores','arrAtributosForm'));
+            
+        return view('propietario.edit',compact('propietario','colores'));
     }
 
     /**
@@ -139,7 +136,7 @@ class PropietarioController extends Controller
         //Genero el mensaje de exito
         Session::flash('message','Datos actualizados exitosamente');
 
-        return view('propietario.edit',['propietario'=>$propietario]);
+        return redirect()->to('/propietario/'.$request->input('id').'/edit');
     }
 
     /**

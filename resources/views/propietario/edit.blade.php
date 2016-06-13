@@ -7,6 +7,37 @@
 <script>
 $(document).ready(function(){
 
+
+	function ajaxRenderSection() {
+
+	var ruta = "{{ route("mascota.lista") }}";
+	var token = $("input[name=_token]").val();
+	var dato = $("input[name=id]").val();
+	
+ 	$.ajax({
+        type: 'GET',
+        url:  ruta,
+        headers: {'X-CSRF-TOKEN': token},
+        dataType: 'json',
+        data: { 'id' : dato},
+        success: function (data) {
+            $('#listadoMascotas').empty().append($(data));
+        },
+        error: function (data) {
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+        }
+    });
+	}
+
+	ajaxRenderSection();
+
+
+
 	$('input[name=especie]').click(function() {
 		var cod = $(this).val();
 
@@ -21,6 +52,30 @@ $(document).ready(function(){
 
 	});
 
+	//Acciones del boton cancelar mascota
+	$('#btnCancelar').click(function(e){
+		e.preventDefault();
+
+		//Cierro el formulario de mascota
+		$('#frmCollapse').removeAttr('aria-expanded');
+		$('#frmCollapse').removeClass('in');
+		
+		//Llamamos a la funcion para resetaear campos de formulario
+		$("#frmMascota").resetear();
+
+		$("#divFrmMascota div").removeClass('has-error');
+		$("#divFrmMascota span").removeClass('help-block').addClass('hidden');
+
+		//LLamamos a la accion para subir al top de la pagina
+		$('html,body').animate({scrollTop:'0px'}, 500);
+
+		$('#divMensajeMascota').addClass('hidden');
+
+		
+
+	});
+
+	//Acciones del boton Agregar mascota
 	$('#btnAddMascota').click(function(){
 		var frmMascota = $("#frmMascota").serialize();
 		var ruta = "{{ route("mascota.store") }}";
@@ -43,8 +98,10 @@ $(document).ready(function(){
 			$('#mensaje').html(' ');
 
 			$('#divMensajeMascota').removeClass('hidden');
-			
-			$("#mensajeMascota").html(respuesta.message);
+
+			$('#divMensajeMascota').removeClass('hidden').addClass('alert-success');
+
+			$("#mensajeMascota").html('<strong>Yeah!!</strong> ' + respuesta.message);
 
 			$('#frmCollapse').removeAttr('aria-expanded');
 			$('#frmCollapse').removeClass('in');
@@ -52,17 +109,26 @@ $(document).ready(function(){
 			//Llamamos a la funcion para resetaear campos de formulario
 			$("#frmMascota").resetear();
 
-		}).fail(function(respuesta){
+			ajaxRenderSection();
 
+		}).fail(function(respuesta){
 
 			$.each(respuesta.responseJSON,function (ind, elem) { 
   			
   				$('div.'+ind).removeClass('hidden').addClass('has-error');
   				
-  				$('span.'+ind).removeClass('hidden');
+  				$('span.'+ind).removeClass('hidden').addClass('help-block');
+
+  				$('#divMensajeMascota').removeClass('hidden').addClass('alert-danger');
+						
+				$("#mensajeMascota").html('<strong>Ooops,</strong> hubo error al procesar el formulario, por favor revise el mismo');
 
   				$('span.'+ind).html(' ');
   				$('span.'+ind).html('<strong>'+elem+'</strong>');
+
+  				//Ir a la posicion donde esta el mensaje para visualizarlo
+  				volver  = $("#anchorMascota").attr('href');
+    			$('html, body').animate({scrollTop: $(volver).offset().top}, 500);
 
 			});
 				
@@ -72,7 +138,8 @@ $(document).ready(function(){
 
 	});
 
-	
+
+
   
   $(function () {
     $('[data-toggle="tooltip"]').tooltip()
@@ -107,14 +174,14 @@ $(document).ready(function(){
 </div>
 
 <div class="row">
-
+	<a href="#anchorMascota" id="anchorMascota"></a>
 	<div class="panel panel-default">
 		<div class="panel-heading"><h4 class="text-primary">Mascotas</h4></div>
 		<div class="panel-body">
 
-			<div id="divEncabezadoForm">
-				@include('partials.mensajes',['divMensajes'=>'divMensajeMascota','pMensajes'=>'mensajeMascota'])
-			</div>
+			
+			@include('partials.mensajes',['divMensajes'=>'divMensajeMascota','pMensajes'=>'mensajeMascota'])
+			
 
 			<div class="text-center">
 				<button type="button" class="btn btn-primary btn-circle" data-toggle="collapse" data-target="#frmCollapse" aria-expanded="false" aria-controls="frmCollapse">
@@ -128,60 +195,22 @@ $(document).ready(function(){
 				<br/>
 				
 				<div id="divFrmMascota">
-				{!! Form::open(['route'=>'mascota.store','id'=>'frmMascota'])!!}
-					@include('mascota.forms.frmMascota')
-				{!! Form::close() !!}
+					@include('mascota.forms.frmMascota')			
 				</div>
 				
 			</div>
 
 			<br/>
 
-			@foreach($propietario->mascota as $mascota)
-			<div class="row">
-				<div class="col-lg-8 col-lg-offset-2">
-					<div class="panel panel-info">
-						<div class="panel-heading">
+			<div id="listadoMascotas">
+				@section('renderSection')
 
-							<div class="pull-right">
-								<button type="button" class="btn btn-circle btn-danger btn-sm prueba" data-toggle="tooltip" data-placement="top" title="Eliminar" ><i class="fa fa-times"></i></button>
-								<button type="button" class="btn btn-circle btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Editar" data-id="{{ $mascota->id }}"><i class="fa fa-pencil"></i></button>
-								<button type="button" class="btn btn-circle btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Crear orden"><i class="fa fa-file-text"></i></button>
-							</div>
-							<h4>{{ $mascota->nombre }}</h4>
-
-
-						</div>
-						<div class="panel-body">
-
-							<div class="pull-left"> 
-								<strong>Especie:</strong> {{ $mascota->raza->especie->descripcion }}<br/>
-								<strong>Raza:</strong>    {{ $mascota->raza->descripcion }}<br/>
-								<strong>Genero:</strong>  
-								
-								@if($mascota->sexo == 'F')
-									<span class="fa fa-venus" aria-hidden="true"></span>
-								@else
-								 	<span class="fa fa-mars" aria-hidden="true"></span>
-								@endif
-							
-								<br/>
-								<strong>Color:</strong>   {{ $mascota->color->color }}<br/> 
-							</div>
-							<div class="pull-right">
-								<div class="text-right text-muted"><strong>Registrado el: </strong>
-									{{ $mascota->created_at->format('d-m-Y') }} </div>
-								</div> 
-
-							</div>
-						</div>
-					</div>
-
-				</div>
-				@endforeach		
+				@endsection
 			</div>
+		
+		</div>	
 
-		</div>
+	</div>
 </div>
 @endsection
 

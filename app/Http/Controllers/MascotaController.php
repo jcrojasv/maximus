@@ -51,13 +51,13 @@ class MascotaController extends Controller
             'nombre'        => ['required','max:60'] ,
             'especie'       => ['required'] ,
             'peso'          => ['integer'],
-            'raza_id'       => ['required'],
-            'alimento_id'   => ['required'],
+            'raza_id'       => ['exists:razas,id'],
+            'alimento_id'   => ['exists:alimentos,id'],
 
         ],
         [
-            'raza_id.required'      => "El campo raza es obligatorio",
-            'alimento_id.required'  => "El campo alimento es obligatorio",
+            'raza_id.exists'      => "El campo raza es obligatorio",
+            'alimento_id.exists'  => "El campo alimento es obligatorio",
             
         ]);
       
@@ -82,7 +82,7 @@ class MascotaController extends Controller
             $data['correlativo'] = $intCorrelativo;
 
             //Guardo los datos de la mascota       
-            // Mascota::create($data);
+            Mascota::create($data);
 
             //Creo el html para el mensaje de exito
             $strMensajeExito = 'Mascota agregada correctamente';
@@ -96,6 +96,33 @@ class MascotaController extends Controller
             //return redirect()->to('/propietario/'.$data['propietario_id'].'/edit');
         }
 
+    }
+
+    public function lista(Request $request)
+    {
+       
+
+        //Tomo los datos de la peticion
+        $data = $request->all();
+
+        $propietario = Propietario::with('mascota.color','mascota.raza.especie')->find($data['id']);
+
+        //Datos para el select colores
+        $colores = Color::lists('color','id');
+
+        if($request->ajax())
+        {
+           
+            $view = view('propietario.mascotas',compact('propietario','colores'));
+        
+            $sections = $view->renderSections();
+            
+            return response()->json($sections['renderSection']); 
+                    
+
+        } else 
+
+             return view('propietario.edit',compact('propietario','colores'));
     }
 
     

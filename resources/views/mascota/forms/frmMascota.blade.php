@@ -1,4 +1,5 @@
 
+{!! Form::open(['route'=>'mascota.store','id'=>'frmMascota'])!!}
 	<!-- row 1 -->              
 	<div class="row nombre">
 
@@ -208,8 +209,9 @@
 				<i class="fa fa-plus"></i> Agregar Mascota 
 			</button>
 			&nbsp;&nbsp;
-			<a href="#">Cancelar</a>
+			<a href="#" id="btnCancelar">Cancelar</a>
 
 		</div>
 	</div>
 	<!-- Fin Row 12 -->
+{!! Form::close() !!}
