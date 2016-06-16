@@ -30,6 +30,12 @@ $(document).ready(function(){
 	ajaxRenderSection();
 
 
+	//Agrega el titulo en la ventana modal
+	$('.ventanaModal').click(function(){
+		$('tituloModal').html('Agregar');
+	});
+
+	//Carga los select dependientes
 	$('.especie_id').click(function() {
 		var cod = $(this).val();
 
@@ -52,12 +58,11 @@ $(document).ready(function(){
 		$("#frmMascota").resetear();
 		
 		$("#divFrmMascota div").removeClass('has-error');
-		$("#divFrmMascota span").removeClass('help-block').addClass('hidden');
+		$("#divFrmMascota span.help-block").addClass('hidden');
 
 		$('#divMensajeMascota').addClass('hidden');
 
 		
-
 	});
 
 	//Acciones del boton Agregar mascota
@@ -101,7 +106,7 @@ $(document).ready(function(){
   			
   				$('div.'+ind).removeClass('hidden').addClass('has-error');
   				
-  				$('span.'+ind).removeClass('hidden').addClass('help-block');
+  				$('span.'+ind).removeClass('hidden');
 
   				$('span.'+ind).html(' ');
   				$('span.'+ind).html('<strong>'+elem+'</strong>');
@@ -167,10 +172,10 @@ $(document).ready(function(){
 			
 			<div class="text-center">
 
-				<button type="button" class="btn btn-primary btn-circle" data-toggle="modal" data-target="#ventanaModal" >
+				<button type="button" class="btn btn-primary btn-circle" data-toggle="modal" data-target="#ventanaModal" class="ventanaModal">
 					<i class="fa fa-plus"></i>
 				</button>
-				<a href="#!" data-toggle="modal" data-target="#ventanaModal">A&ntilde;adir</a>
+				<a href="#!" data-toggle="modal" data-target="#ventanaModal" class="ventanaModal">A&ntilde;adir</a>
 			</div>
 			
 			<br/>

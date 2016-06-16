@@ -5,7 +5,7 @@
       <div class="modal-header">
         
         <button type='button' class="close cancelar" data-dismiss='modal' aria-hidden='true'>&times;</button>
-        <h4 class="text-primary"><span id="tituloFrm">Agregar</span> Mascota</h4>
+        <h4 class="text-primary"><span id="tituloModal">Agregar</span> Mascota</h4>
         
       </div>
       
@@ -176,15 +176,15 @@
 		<div class="col-lg-8">
 
 			<label class="checkbox-inline">
-				{!! Form::radio('vacuna','Al dia',true,['id'=>'vacuna']) !!} Al dia <span class="fa fa-smile-o text-success"></i>
+				{!! Form::radio('vacuna','Al dia',true,['id'=>'vacuna']) !!} Al dia <span class="fa fa-smile-o text-success"></i></span>
 			</label>
 
 			<label class="checkbox-inline">
-				{!! Form::radio('vacuna','No sabe',false,['id'=>'vacuna']) !!} No sabe <span class="fa fa-frown-o text-danger"></i>
+				{!! Form::radio('vacuna','No sabe',false,['id'=>'vacuna']) !!} No sabe <span class="fa fa-frown-o text-danger"></i></span>
 			</label>
 
 			<label class="checkbox-inline">
-				{!! Form::radio('vacuna','Pendiente',false,['id'=>'vacuna']) !!} Pendiente <span class="fa fa-exclamation-triangle text-warning"></i>
+				{!! Form::radio('vacuna','Pendiente',false,['id'=>'vacuna']) !!} Pendiente <span class="fa fa-exclamation-triangle text-warning"></i></span>
 			</label>
 			
 			<br/>

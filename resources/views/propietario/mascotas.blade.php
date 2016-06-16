@@ -55,8 +55,10 @@ $(document).ready(function(){
 		var id   = $(this).data('id');
 		var ruta = "{{ route('mascota.index') }}" + '/' + id;
 			
-		//Aparezco la ventana modal
+		
 		$('#ventanaModal').modal('toggle');
+
+		$('#tituloModal').html('Editar');
 
 		//Realizo peticion para mostrar los datos de la mascota
 		$.ajax({
@@ -96,7 +98,7 @@ $(document).ready(function(){
 
 					<div class="pull-right">
 						<button type="button" class="btn btn-circle btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="{{ $mascota->id }}" ><i class="fa fa-times"></i></button>
-						<button type="button" class="btn btn-circle btn-primary btn-sm btn-edit" data-toggle="tooltip" data-target="#ventanaModal" data-placement="top" title="Editar" data-id="{{ $mascota->id }}"><i class="fa fa-pencil"></i></button>
+						<button type="button" class="btn btn-circle btn-primary btn-sm btn-edit" data-toggle="tooltip" data-target="#ventanaModal" data-placement="top" title="Editar" data-id="{{ $mascota->id }}" data-whatever="@fat"><i class="fa fa-pencil"></i></button>
 						<button type="button" class="btn btn-circle btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Crear orden"><i class="fa fa-file-text"></i></button>
 					</div>
 					<h4>{{ $mascota->nombre }}</h4>

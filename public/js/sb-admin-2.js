@@ -53,9 +53,14 @@ jQuery.fn.resetear = function () {
   $(this).find(':input').each(function(){
     var elemento = this;
 
-    if(elemento.type != 'button' && elemento.type != 'submit' && elemento.type != 'hidden' && elemento.type != 'select-one')
-    {
-        $(this).val('').removeAttr('checked');
+     switch (elemento.type) 
+     {
+        case 'text':
+            $(this).val('').removeAttr('checked');
+
+         case 'checkbox':
+         case 'radio':
+            $(this).removeAttr('checked');
 
     }
    }); 
