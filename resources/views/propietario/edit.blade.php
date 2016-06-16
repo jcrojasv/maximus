@@ -22,23 +22,15 @@ $(document).ready(function(){
         data: { 'id' : dato},
         success: function (data) {
             $('#listadoMascotas').empty().append($(data));
-        },
-        error: function (data) {
-            var errors = data.responseJSON;
-            if (errors) {
-                $.each(errors, function (i) {
-                    console.log(errors[i]);
-                });
-            }
         }
     });
 	}
 
+	//Imprime el listado de mascotas
 	ajaxRenderSection();
 
 
-
-	$('input[name=especie]').click(function() {
+	$('.especie_id').click(function() {
 		var cod = $(this).val();
 
 		//llamada a la funcion para cargar razas
@@ -53,21 +45,14 @@ $(document).ready(function(){
 	});
 
 	//Acciones del boton cancelar mascota
-	$('#btnCancelar').click(function(e){
+	$('.cancelar').click(function(e){
 		e.preventDefault();
 
-		//Cierro el formulario de mascota
-		$('#frmCollapse').removeAttr('aria-expanded');
-		$('#frmCollapse').removeClass('in');
-		
 		//Llamamos a la funcion para resetaear campos de formulario
 		$("#frmMascota").resetear();
-
+		
 		$("#divFrmMascota div").removeClass('has-error');
 		$("#divFrmMascota span").removeClass('help-block').addClass('hidden');
-
-		//LLamamos a la accion para subir al top de la pagina
-		$('html,body').animate({scrollTop:'0px'}, 500);
 
 		$('#divMensajeMascota').addClass('hidden');
 
@@ -80,7 +65,6 @@ $(document).ready(function(){
 		var frmMascota = $("#frmMascota").serialize();
 		var ruta = "{{ route("mascota.store") }}";
 		var token = $("input[name=_token]").val();
-
 
 		$.ajax({
 			url: ruta,
@@ -95,7 +79,7 @@ $(document).ready(function(){
 
 		}).done(function(respuesta) {
 
-			$('#mensaje').html(' ');
+			$('#mensajeMascota').html(' ');
 
 			$('#divMensajeMascota').removeClass('hidden');
 
@@ -103,11 +87,11 @@ $(document).ready(function(){
 
 			$("#mensajeMascota").html('<strong>Yeah!!</strong> ' + respuesta.message);
 
-			$('#frmCollapse').removeAttr('aria-expanded');
-			$('#frmCollapse').removeClass('in');
-
-			//Llamamos a la funcion para resetaear campos de formulario
+			//Llamamos a la funcion para resetear campos de formulario
 			$("#frmMascota").resetear();
+
+			//Desvanecemos la ventana modal
+			$('#ventanaModal').modal('hide');
 
 			ajaxRenderSection();
 
@@ -119,16 +103,8 @@ $(document).ready(function(){
   				
   				$('span.'+ind).removeClass('hidden').addClass('help-block');
 
-  				$('#divMensajeMascota').removeClass('hidden').addClass('alert-danger');
-						
-				$("#mensajeMascota").html('<strong>Ooops,</strong> hubo error al procesar el formulario, por favor revise el mismo');
-
   				$('span.'+ind).html(' ');
   				$('span.'+ind).html('<strong>'+elem+'</strong>');
-
-  				//Ir a la posicion donde esta el mensaje para visualizarlo
-  				volver  = $("#anchorMascota").attr('href');
-    			$('html, body').animate({scrollTop: $(volver).offset().top}, 500);
 
 			});
 				
@@ -138,10 +114,8 @@ $(document).ready(function(){
 
 	});
 
-
-
-  
-  
+	
+ 
   $('select').addClass('form-control');
 
  
@@ -182,27 +156,23 @@ $(document).ready(function(){
 
 		<div class="panel-body">
 
-			
-			@include('partials.mensajes',['divMensajes'=>'divMensajeMascota','pMensajes'=>'mensajeMascota'])
-			
+			<div class="alert alert-dismissible hidden" role="alert" id="divMensajeMascota">
+			  	<button type="button" class="close" data-dismiss="alert" aria-label="close">
+			  		<span aria-hidden="true">&times;</span>
+			  	</button>
+			    <p id="mensajeMascota"></p>
+			    
+			</div>
 
+			
 			<div class="text-center">
-				<button type="button" class="btn btn-primary btn-circle" data-toggle="collapse" data-target="#frmCollapse" aria-expanded="false" aria-controls="frmCollapse">
+
+				<button type="button" class="btn btn-primary btn-circle" data-toggle="modal" data-target="#ventanaModal" >
 					<i class="fa fa-plus"></i>
 				</button>
-				<a data-toggle="collapse" href="#frmCollapse" aria-expanded="false" aria-controls="frmCollapse">A&ntilde;adir</a>
+				<a href="#!" data-toggle="modal" data-target="#ventanaModal">A&ntilde;adir</a>
 			</div>
 			
-			<!-- Div para el formulario a collapse -->
-			<div class="collapse" id="frmCollapse">
-				<br/>
-				
-				<div id="divFrmMascota">
-					@include('mascota.forms.frmMascota')			
-				</div>
-				
-			</div>
-
 			<br/>
 
 			<div id="listadoMascotas">
@@ -215,5 +185,7 @@ $(document).ready(function(){
 
 	</div>
 </div>
+
+@include('mascota.forms.frmMascota')
 @endsection
 

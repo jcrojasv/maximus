@@ -43,7 +43,7 @@
        
      </div>
      
-     <div class="modal-footer">
+    <div class="modal-footer">
       <button type="button" class="btn btn-sm btn-danger" data-dismiss='modal'>Cerrar</button> 
     </div>
     

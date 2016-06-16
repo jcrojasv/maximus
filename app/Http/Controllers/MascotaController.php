@@ -31,8 +31,8 @@ class MascotaController extends Controller
     public function index()
     {
         $results = Mascota::with('propietario','raza.especie','color')->orderBy('nombre','asc')->get();
-   		
-        return view('mascota/list',compact('results'));
+
+       return view('mascota.list',compact('results'));
     }
     /**
      * Store a newly created resource in storage.
@@ -49,13 +49,14 @@ class MascotaController extends Controller
         $this->validate($request, [
 
             'nombre'        => ['required','max:60'] ,
-            'especie'       => ['required'] ,
+            'especie_id'       => ['required'] ,
             'peso'          => ['integer'],
             'raza_id'       => ['exists:razas,id'],
             'alimento_id'   => ['exists:alimentos,id'],
 
         ],
         [
+            'especie_id.required' => "El campo especie es obligatorio",
             'raza_id.exists'      => "El campo raza es obligatorio",
             'alimento_id.exists'  => "El campo alimento es obligatorio",
             
@@ -125,6 +126,30 @@ class MascotaController extends Controller
              return view('propietario.edit',compact('propietario','colores'));
     }
 
-    
+    public function edit(Request $request, $id)
+    {
+        
+
+        if($request->ajax())
+        {
+            $mascota = Mascota::find($id);
+
+            return response()->json(compact('mascota'));
+        }
+
+    }
+
+    public function destroy($id, Request $request)
+    {
+        if($request->ajax())
+        {
+
+            //Elimino el registro
+            Mascota::find($id)->delete();
+
+            return response()->json(['message'=>'Registro eliminado correctamente']);
+
+        }
+    }
 
 }

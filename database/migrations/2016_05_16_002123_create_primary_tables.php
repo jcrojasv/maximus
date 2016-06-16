@@ -69,6 +69,7 @@ class CreatePrimaryTables extends Migration
             $table->date('fecha_nacimiento')->nullable();
             $table->enum('sexo',['F','M']);
             $table->integer('color_id')->foreign('id')->on('colores')->onUpdate('cascade');
+            $table->integer('especie_id')->foreign('id')->on('especies')->onUpdate('cascade');
             $table->integer('raza_id')->foreign('id')->on('razas')->onUpdate('cascade');
             $table->integer('alimento_id')->foreign('id')->on('alimentos')->onUpdate('cascade');
             $table->string('sena',120);
@@ -80,6 +81,8 @@ class CreatePrimaryTables extends Migration
             $table->index('propietario_id');
             $table->index('color_id');
             $table->index('alimento_id');
+            $table->index('especie_id');
+            $table->index('raza_id');
             
         });
 

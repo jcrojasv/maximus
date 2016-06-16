@@ -50,5 +50,53 @@ $.cargaSelect = function(url,div,cod)
 
 //Funcion para resetear campos de formulario
 jQuery.fn.resetear = function () {
-  $(this).each (function() { this.reset(); });
+  $(this).find(':input').each(function(){
+    var elemento = this;
+
+    if(elemento.type != 'button' && elemento.type != 'submit' && elemento.type != 'hidden' && elemento.type != 'select-one')
+    {
+        $(this).val('').removeAttr('checked');
+
+    }
+   }); 
+      
 }
+
+//funcion para llenar el formulario despues de una consulta via ajax 
+jQuery.fn.llenarFormulario = function(arreglo){
+
+    $(this).find(':input').each(function(){
+        var elemento = this;
+                
+       
+        switch (elemento.type) {
+            case 'checkbox':
+                if (arreglo[elemento.name] === true || arreglo[elemento.name] === 't' || arreglo[elemento.name] === 1){
+                    elemento.checked = true;
+                    elemento.value=true;
+                }else{
+                    elemento.value=false;
+                }
+                break;
+            
+            case 'radio':
+                if (elemento.value === arreglo[elemento.name])
+                    elemento.checked = true;
+                break;
+            case 'select-one':
+                var lon = elemento.length;
+                for (var i = 0; i < lon; i++) {
+                    if (elemento.options[i].value === arreglo[elemento.name])
+                    {
+                        elemento.options[i].selected = true;
+                        break;
+                    }
+                }
+                break;
+
+            default:
+                elemento.value = '' + arreglo[elemento.name] + '';
+        }
+    });    
+   
+};
