@@ -43,4 +43,9 @@ class Mascota extends Model
     {
         return $this->belongsTo('App\Raza');
     }
+
+    public function especie()
+    {
+        return $this->belongsTo('App\Especie');
+    }
 }

@@ -20,6 +20,7 @@
 
 		<div class="col-lg-8 ">
 			{!! Form::hidden('propietario_id',$propietario->id,['id'=>'propietario_id']) !!}
+			
 			{!! Form::text('nombre',null, ['class'=>"form-control",'placeholder'=>'Mascota','id'=>'nombre']) !!}
 				
 			<span class="help-block nombre hidden"></span>
@@ -96,7 +97,7 @@
 		</div>
 		<div class="col-lg-8" >
 			<div id='divRaza'>
-				{!! Form::select('raza_id',['--> Indique Especie <--'],['id'=>'raza_id']) !!}
+				{!! Form::select('raza_id',$razas,['id'=>'raza_id']) !!}
 			</div>
 
 			<span class="help-block raza_id hidden"></span>
@@ -126,7 +127,9 @@
 			Alimento que consume:
 		</div>
 		<div class="col-lg-8" >
-			<div id="divAlimentos">{!! Form::select('alimento_id',['--> Indique Especie <--'],['id'=>'alimento_id']) !!}</div>
+			<div id="divAlimentos">
+			{!! Form::select('alimento_id',$alimentos,['id'=>'alimento_id']) !!}
+			</div>
 			<span class="help-block alimento_id hidden"></span>
 		</div>
 		

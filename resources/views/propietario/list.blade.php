@@ -38,8 +38,7 @@ $(document).ready(function(){
 		<tr>
 			<th>Nombres</th>
 			<th>C&eacute;dula</th>
-			<th>Telefono fijo</th>
-			<th>Telefono Celular</th>
+			<th>Tel&eacute;fonos</th>
 			<th>Mascotas</th>
 			<th>Acci&oacute;n</th>
 		</tr>
@@ -49,12 +48,13 @@ $(document).ready(function(){
 			<tr data-id='{{ $result->id }}'>
 				<td>{{ $result->nombres }}, {{ $result->apellidos }}</td>
 				<td>{{ $result->id }}</td>
-				<td>{{ $result->telefono_fijo }}</td>
-				<td>{{ $result->telefono_celular }}</td>
+				<td>{{ $result->telefono_fijo }}<br/>
+				{{ $result->telefono_celular }}</td>
+
 				<td>
 					<ul>
 					@foreach($result->mascota as $mascota)
-						<li>{{ $mascota->nombre }}
+						<li>{{ $mascota->nombre }}</li>
 					@endforeach
 					</ul>
 				</td>

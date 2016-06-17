@@ -41,11 +41,11 @@ $(document).ready(function(){
 
 		//llamada a la funcion para cargar razas
 		url = "{{ url('selectRazas')}}";
-		$.cargaSelect(url,'#divRaza',cod);
+		$.cargaSelect(url,'#divRaza',cod,null);
 
 		//llamada a la funcion para cargar razas
 		url = "{{ url('selectAlimentos')}}";
-		$.cargaSelect(url,'#divAlimentos',cod);
+		$.cargaSelect(url,'#divAlimentos',cod,null);
 
 
 	});

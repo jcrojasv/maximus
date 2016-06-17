@@ -74,8 +74,8 @@ class CreatePrimaryTables extends Migration
             $table->integer('alimento_id')->foreign('id')->on('alimentos')->onUpdate('cascade');
             $table->string('sena',120);
             $table->tinyInteger('peso')->nullable();
-            $table->string('vacuna',15)->nullable();
-            $table->string('desparasitacion',15)->nullable();
+            $table->enum('vacuna',['Al día','Pendiente','No sabe'])->nullable();
+            $table->enum('desparasitacion',['Al día','Pendiente','No sabe'])->nullable();
             $table->tinyInteger('correlativo');
             $table->timestamps();
             $table->index('propietario_id');

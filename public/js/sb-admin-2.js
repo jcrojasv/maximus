@@ -36,10 +36,10 @@ $(function() {
 });
 
 //Funcion que me permite cargar un select dependiente
-$.cargaSelect = function(url,div,cod)
+$.cargaSelect = function(url,div,cod,seleccionado)
 {
   $.get(url,
-    { id: cod },
+    { id: cod , idSeleccionado: seleccionado},
     function(data) {
 
         $(div).empty();
@@ -50,17 +50,18 @@ $.cargaSelect = function(url,div,cod)
 
 //Funcion para resetear campos de formulario
 jQuery.fn.resetear = function () {
-  $(this).find(':input').each(function(){
+  $(this).find(':input').not(':hidden').each(function(){
     var elemento = this;
 
      switch (elemento.type) 
      {
         case 'text':
-            $(this).val('').removeAttr('checked');
-
+            $(this).val('');
+            break;
          case 'checkbox':
          case 'radio':
             $(this).removeAttr('checked');
+            break;
 
     }
    }); 
@@ -73,8 +74,10 @@ jQuery.fn.llenarFormulario = function(arreglo){
     $(this).find(':input').each(function(){
         var elemento = this;
                 
-       
         switch (elemento.type) {
+            case 'text': 
+                elemento.value = '' + arreglo[elemento.name] + '';
+                break;
             case 'checkbox':
                 if (arreglo[elemento.name] === true || arreglo[elemento.name] === 't' || arreglo[elemento.name] === 1){
                     elemento.checked = true;
@@ -97,10 +100,8 @@ jQuery.fn.llenarFormulario = function(arreglo){
                         break;
                     }
                 }
-                break;
-
-            default:
-                elemento.value = '' + arreglo[elemento.name] + '';
+          
+                
         }
     });    
    

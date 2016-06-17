@@ -49,7 +49,7 @@ class MascotaController extends Controller
         $this->validate($request, [
 
             'nombre'        => ['required','max:60'] ,
-            'especie_id'       => ['required'] ,
+            'especie_id'    => ['required'] ,
             'peso'          => ['integer'],
             'raza_id'       => ['exists:razas,id'],
             'alimento_id'   => ['exists:alimentos,id'],
@@ -91,6 +91,7 @@ class MascotaController extends Controller
 
             return response()->json([
                 'message' => "Mascota agregada correctamente",
+                'token'   => csrf_token(),
 
                 ]);
 
@@ -111,10 +112,16 @@ class MascotaController extends Controller
         //Datos para el select colores
         $colores = Color::lists('color','id');
 
+        //Datos para ele select de razas
+        $razas   = Raza::lists('descripcion','id');
+
+        //Datos para ele select de alimentos
+        $alimentos = Alimento::lists('nombre','id');
+
         if($request->ajax())
         {
            
-            $view = view('propietario.mascotas',compact('propietario','colores'));
+            $view = view('propietario.mascotas',compact('propietario','colores','razas','alimentos'));
         
             $sections = $view->renderSections();
             

@@ -13,4 +13,10 @@ class Especie extends Model
     {
          return $this->hasMany('App\Raza','raza_id');
     }
+
+    //Metodo para obtener la relacion con mascotas
+    public function mascota()
+    {
+        return $this->belongsTo('App\Mascota','especie_id');
+    }
 }

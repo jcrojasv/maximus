@@ -32,7 +32,7 @@ class PropietarioController extends Controller
      */
     public function index()
     {
-        $results = Propietario::with('mascota')->orderBy('nombres','asc')->get();
+        $results = Propietario::with('mascota.especie')->orderBy('nombres','asc')->get();
         return view('propietario/list',compact('results'));
     }
 
@@ -112,9 +112,15 @@ class PropietarioController extends Controller
 
         //Datos para el select colores
         $colores = Color::lists('color','id');
-        
-            
-        return view('propietario.edit',compact('propietario','colores'));
+
+        //Datos para ele select de razas
+        $razas   = Raza::lists('descripcion','id');
+
+        //Datos para ele select de alimentos
+        $alimentos = Alimento::lists('nombre','id');
+     
+        return view('propietario.edit',compact('propietario','colores','razas','alimentos'));
+       
     }
 
     /**
@@ -165,14 +171,15 @@ class PropietarioController extends Controller
         $table = new Raza();
 
         $id = $request->input('id');
+        $idSeleccionado = $request->input('idSeleccionado');
 
         $razas = $table->getRazasById($id);
         
         $strHtml = "<select name='raza_id' id='raza_id' class='form-control'>";
         $strHtml .= sprintf("<option value='%d'>%s</option>",0,'-->Seleccione una raza<--');
         foreach ($razas as $raza) {
-        
-            $strHtml .= sprintf("<option value='%d'>%s</option>",$raza->id,$raza->descripcion);   
+            $selected = ($raza->id == $idSeleccionado) ? 'selected' : '';
+            $strHtml .= sprintf("<option value='%d' %s>%s</option>",$raza->id,$selected, $raza->descripcion);   
 
         }
         $strHtml .= "</select>";
@@ -193,14 +200,15 @@ class PropietarioController extends Controller
         $table = new Alimento();
 
         $id = $request->input('id');
+        $idSeleccionado = $request->input('idSeleccionado');
 
         $alimentos = $table->getAlimentosById($id);
         
         $strHtml = "<select name='alimento_id' id='alimento_id' class='form-control'>";
         $strHtml .= sprintf("<option value='%d'>%s</option>",0,'-->Seleccione un alimento<--');
         foreach ($alimentos as $alimento) {
-        
-            $strHtml .= sprintf("<option value='%d'>%s</option>",$alimento->id,$alimento->nombre);
+            $selected = ($alimento->id == $idSeleccionado) ? 'selected' : '';
+            $strHtml .= sprintf("<option value='%d' %s>%s</option>",$alimento->id,$selected,$alimento->nombre);
 
         }
         $strHtml .= "</select>";
