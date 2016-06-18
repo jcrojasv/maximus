@@ -10,35 +10,47 @@ $(document).ready(function(){
 
 	function ajaxRenderSection() {
 
-	var ruta = "{{ route("mascota.lista") }}";
-	var token = $("input[name=_token]").val();
-	var dato = $("input[name=id]").val();
-	
- 	$.ajax({
-        type: 'GET',
-        url:  ruta,
-        headers: {'X-CSRF-TOKEN': token},
-        dataType: 'json',
-        data: { 'id' : dato},
-        success: function (data) {
-            $('#listadoMascotas').empty().append($(data));
-        }
-    });
+		var ruta        = "{{ route("mascota.index") }}/"+$("input[name=id]").val();
+		var token       = $("input[name=_token]").val();
+		var propietario = $("input[name=id]").val();
+
+
+		$.get(ruta,null,function(data) {
+
+        	$('#listadoMascotas').empty().append($(data));
+        	
+        	
+    	});
 	}
 
 	//Imprime el listado de mascotas
 	ajaxRenderSection();
 
-
-	//Agrega el titulo en la ventana modal
+	//Imprime el formulario de agragar mascota
 	$('.ventanaModal').click(function(){
-		$('tituloModal').html('Agregar');
+		var ruta        = "{{ route("mascota.create") }}";
+		var accion      = 'Agregar';
+		var propietario = $("input[name=id]").val();
+
+		//lamado ajax metodo get para tomar el formulario
+		$.get(ruta,{
+
+			propietario: propietario,
+
+		},function(data) {
+
+        	$('#divFrmMascota').empty().append($(data));
+        	
+        	//Muestro la ventana modal
+        	$('#ventanaModal').modal('toggle');
+
+    	});
 	});
 
-	//Carga los select dependientes
-	$('.especie_id').click(function() {
+	//Carga los select dependientes dependiendo de la accion click en el elemento especie
+	$('#especie_id').on('click',function() {
 		var cod = $(this).val();
-
+		alert('Especie id');
 		//llamada a la funcion para cargar razas
 		url = "{{ url('selectRazas')}}";
 		$.cargaSelect(url,'#divRaza',cod,null);
@@ -49,80 +61,6 @@ $(document).ready(function(){
 
 
 	});
-
-	//Acciones del boton cancelar mascota
-	$('.cancelar').click(function(e){
-		e.preventDefault();
-
-		//Llamamos a la funcion para resetaear campos de formulario
-		$("#frmMascota").resetear();
-		
-		$("#divFrmMascota div").removeClass('has-error');
-		$("#divFrmMascota span.help-block").addClass('hidden');
-
-		$('#divMensajeMascota').addClass('hidden');
-
-		
-	});
-
-	//Acciones del boton Agregar mascota
-	$('#btnAddMascota').click(function(){
-		var frmMascota = $("#frmMascota").serialize();
-		var ruta = "{{ route("mascota.store") }}";
-		var token = $("input[name=_token]").val();
-
-		$.ajax({
-			url: ruta,
-			headers: {'X-CSRF-TOKEN': token},
-			type: 'post',
-			dataType: 'json',
-			data: frmMascota,
-			beforeSend:  function(){
-				$('span.help-block').addClass('hidden');
-				$('div').removeClass('has-error');
-			},
-
-		}).done(function(respuesta) {
-
-			$('#mensajeMascota').html(' ');
-
-			$('#divMensajeMascota').removeClass('hidden');
-
-			$('#divMensajeMascota').removeClass('hidden').addClass('alert-success');
-
-			$("#mensajeMascota").html('<strong>Yeah!!</strong> ' + respuesta.message);
-
-			//Llamamos a la funcion para resetear campos de formulario
-			$("#frmMascota").resetear();
-
-			//Desvanecemos la ventana modal
-			$('#ventanaModal').modal('hide');
-
-			ajaxRenderSection();
-
-		}).fail(function(respuesta){
-
-			$.each(respuesta.responseJSON,function (ind, elem) { 
-  			
-  				$('div.'+ind).removeClass('hidden').addClass('has-error');
-  				
-  				$('span.'+ind).removeClass('hidden');
-
-  				$('span.'+ind).html(' ');
-  				$('span.'+ind).html('<strong>'+elem+'</strong>');
-
-			});
-				
-
-		});
-		
-
-	});
-
-	
- 
-  $('select').addClass('form-control');
-
  
 });
 
@@ -172,10 +110,11 @@ $(document).ready(function(){
 			
 			<div class="text-center">
 
-				<button type="button" class="btn btn-primary btn-circle" data-toggle="modal" data-target="#ventanaModal" class="ventanaModal">
+				<a href="#!" class="ventanaModal">
+				<button type="button" class="btn btn-primary btn-circle">
 					<i class="fa fa-plus"></i>
 				</button>
-				<a href="#!" data-toggle="modal" data-target="#ventanaModal" class="ventanaModal">A&ntilde;adir</a>
+				A&ntilde;adir</a>
 			</div>
 			
 			<br/>
@@ -190,7 +129,9 @@ $(document).ready(function(){
 
 	</div>
 </div>
-
-@include('mascota.forms.frmMascota')
+<div id="divFrmMascota">
+	@section('renderFormulario')
+	@endsection
+</div>
 @endsection
 

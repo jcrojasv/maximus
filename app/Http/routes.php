@@ -33,14 +33,7 @@ Route::get('/logout','LoginController@logout');
 Route::resource('/propietario','PropietarioController');
 
 //Rutas para mascotas
-//Route::resource('/mascota','MascotaController');
-Route::get('/mascota',['as' => 'mascota.index', 'uses' => 'MascotaController@index']);
-Route::post('/mascota/store',['as' => 'mascota.store', 'uses' => 'MascotaController@store']);
-Route::get('/mascota/lista',['as' => 'mascota.lista', 'uses' => 'MascotaController@lista']);
-Route::delete('/mascota/{id}',['as' => 'mascota.destroy', 'uses' => 'MascotaController@destroy'])->where('id', '[0-9]+');
-Route::get('/mascota/{id}',['as' => 'mascota.edit', 'uses' => 'MascotaController@edit'])->where('id', '[0-9]+');
-
-
+Route::resource('/mascota','MascotaController');
 
 //Rutas para ejecutar peticiones de carga de select depediente a traves de ajax
 Route::get('selectRazas', 'PropietarioController@cargarRazasJquery');

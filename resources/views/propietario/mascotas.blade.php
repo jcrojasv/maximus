@@ -35,12 +35,6 @@ $(document).ready(function(){
 
 				$("#mensajeMascota").html('<strong>Yeah!!</strong> ' + respuesta.message);
 
-				$('#frmCollapse').removeAttr('aria-expanded');
-				$('#frmCollapse').removeClass('in');
-
-				//Llamamos a la funcion para resetaear campos de formulario
-				$("#frmMascota").resetear();
-
 				//Desvanezco el row
 				row.fadeOut();
 
@@ -52,42 +46,27 @@ $(document).ready(function(){
 	//Funcion para modificar mascota
 	$('.btn-edit').click(function(){
 		
-		var id   = $(this).data('id');
-		var ruta = "{{ route('mascota.index') }}" + '/' + id;
-			
+		var ruta        = "{{ route("mascota.index") }}/"+ $(this).data('id')+"/edit";
+		var propietario = $("input[name=id]").val();
+
+		//lamado ajax metodo get para tomar el formulario
+		$.get(ruta,{
+
+			propietario : propietario,
 		
-		$('#ventanaModal').modal('toggle');
+		},function(data) {
 
-		$('#tituloModal').html('Editar');
+        	$('#divFrmMascota').empty().append($(data));
+        	
+        	//Muestro la ventana modal
+        	$('#ventanaModal').modal('toggle');
 
-		//Realizo peticion para mostrar los datos de la mascota
-		$.ajax({
-			url: ruta,
-			type: 'get',
-			dataType: 'json',
-		}).done(function(respuesta){
-			
-			var cod = respuesta.mascota.especie_id;
-
-			//llamada a la funcion para cargar razas
-			url = "{{ url('selectRazas')}}";
-			$.cargaSelect(url,'#divRaza',cod,respuesta.mascota.raza_id);
-
-			//llamada a la funcion para cargar razas
-			url = "{{ url('selectAlimentos')}}";
-			$.cargaSelect(url,'#divAlimentos',cod,respuesta.mascota.alimento_id);
-
-			$('#frmMascota').llenarFormulario(respuesta.mascota);
+    	});
 	
-
-		});
-
 	});
 
 });
 </script>
-
-
 
 
 @foreach($propietario->mascota as $mascota)

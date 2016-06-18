@@ -106,20 +106,10 @@ class PropietarioController extends Controller
     public function edit($id)
     {
 
-
         //hago una consulta de la tabla propietarios
-        $propietario = Propietario::with('mascota.color','mascota.raza.especie')->find($id);
-
-        //Datos para el select colores
-        $colores = Color::lists('color','id');
-
-        //Datos para ele select de razas
-        $razas   = Raza::lists('descripcion','id');
-
-        //Datos para ele select de alimentos
-        $alimentos = Alimento::lists('nombre','id');
-     
-        return view('propietario.edit',compact('propietario','colores','razas','alimentos'));
+        $propietario = Propietario::with('mascota','mascota.color','mascota.especie','mascota.raza')->find($id);
+       
+        return view('propietario.edit',compact('propietario'));
        
     }
 
