@@ -4,9 +4,14 @@
 
 @section('scriptsJs')
 
+<script src='/js/jquery.dataTables.min.js' type="text/javascript"> </script>
+<script src='/js/dataTables.bootstrap.min.js' type="text/javascript"></script>
+
 <script>
+
 $(document).ready(function(){
 
+	//Accion busqueda de mascotas
 	$('#btnBuscar').click(function(){
 		var ruta = "{{ route('orden.buscarMascota')}}";
 		var form = $('#frmBuscar');
@@ -35,7 +40,8 @@ $(document).ready(function(){
     	});
 
 	});
-  
+
+	
   
 
 });

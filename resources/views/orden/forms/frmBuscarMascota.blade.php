@@ -45,6 +45,8 @@
         @section('listadoBusqueda')
 
           <script type="text/javascript">
+          $(document).ready(function(){
+
             //Funcion para seleccionar la mascota del listado de la busqueda
             $('.btn-select').on('click',function(){
               
@@ -64,24 +66,35 @@
                 });
             
             });
-            </script>
+
+            //DataTable
+            $('#tabla').DataTable({
+              responsive: true,
+              bFilter:     false,
+             "language": { "url": "/i18n/dataTable.spanish.lang"},
+              
+            });
+          });
+          </script>
 
           @if(isset($objResult))
-            <table class='table table-striped table-hover'>
-            <thead><tr><th>Mascota</th><th>Raza</th><th>Propietario</th><th>Accion</th></tr></thead>
+          <br/>
+            <table class='table table-striped table-hover' id='tabla'>
+            <thead><tr><th>Mascota</th><th>Esp/Raza</th><th>Propietario</th><th>Accion</th></tr></thead>
               <tbody>
               
                   @foreach ($objResult as $objMascota) 
                   <tr data-id="{{ $objMascota->id}}">
                       <td>{{$objMascota->nombre}}</td>
-                      <td>{{$objMascota->descripcion}}</td>
+                      <td>{{ $objMascota->especie->descripcion }} / {{$objMascota->descripcion}}</td>
                       <td>{{$objMascota->nombres}}</td>
                       <td><button type='button' class='btn btn-warning btn-sm btn-select' data-id="{{$objMascota->id}}"><i class="fa fa-hand-rock-o"></i> Select</button></td></tr>
                   @endforeach                
               </tbody>
          
             </table>
-            @endif
+
+          @endif
         @endsection
       </div>
        
