@@ -117,10 +117,6 @@ class MascotaController extends Controller
             //Guardo los datos de la mascota       
             Mascota::create($data);
 
-            //Creo el html para el mensaje de exito
-            $strMensajeExito = 'Mascota agregada correctamente';
-
-
             return response()->json([
                 'message' => "Mascota agregada correctamente",
                 'token'   => csrf_token(),
@@ -213,17 +209,43 @@ class MascotaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Primero busco el propietario en la BD
-        $mascota = Mascota::find($id);
+        //Validacion de datos
 
-        //Actualizo con el metodo fill
-        $mascota->fill($request->all());
-        $mascota->save();
+        $this->validate($request, [
 
-        //Genero el mensaje de exito
-        Session::flash('message','Datos actualizados exitosamente');
+            'nombre'        => ['required','max:60'] ,
+            'especie_id'    => ['required'] ,
+            'peso'          => ['integer'],
+            'raza_id'       => ['exists:razas,id'],
+            'alimento_id'   => ['exists:alimentos,id'],
 
-        return redirect()->to('/propietario/'.$request->input('id').'/edit');
+        ],
+        [
+            'especie_id.required' => "El campo especie es obligatorio",
+            'raza_id.exists'      => "El campo raza es obligatorio",
+            'alimento_id.exists'  => "El campo alimento es obligatorio",
+            
+        ]);
+
+        if($request->ajax())
+        {
+            //Primero busco el propietario en la BD
+            $mascota = Mascota::find($id);
+
+            //Actualizo con el metodo fill
+            $mascota->fill($request->all());
+            $mascota->save();
+
+
+            return response()->json([
+                'message' => "Mascota modificada correctamente",
+                'token'   => csrf_token(),
+
+                ]);
+
+            return redirect()->to('/propietario/'.$request->input('id').'/edit');    
+        }
+        
     }
 
     

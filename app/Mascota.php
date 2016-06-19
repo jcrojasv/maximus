@@ -10,7 +10,7 @@ class Mascota extends Model
     protected $table = 'mascotas';
 
     protected $fillable = ['id','propietario_id','nombre','fecha_nacimiento','sexo','color_id',
-        'raza_id','alimento_id','sena','peso','vacuna','desparacitacion','correlativo'];
+        'raza_id','alimento_id','especie_id','sena','peso','vacuna','desparacitacion','correlativo'];
 
     public function buscarMascota($strMascota,$strPropietario)
     {

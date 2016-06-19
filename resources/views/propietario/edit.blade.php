@@ -7,26 +7,12 @@
 <script>
 $(document).ready(function(){
 
-
-	function ajaxRenderSection() {
-
-		var ruta        = "{{ route("mascota.index") }}/"+$("input[name=id]").val();
-		var token       = $("input[name=_token]").val();
-		var propietario = $("input[name=id]").val();
-
-
-		$.get(ruta,null,function(data) {
-
-        	$('#listadoMascotas').empty().append($(data));
-        	
-        	
-    	});
-	}
-
 	//Imprime el listado de mascotas
-	ajaxRenderSection();
+	var ruta = "{{ route("mascota.index") }}/"+$("input[name=id]").val();
 
-	//Imprime el formulario de agragar mascota
+	$.ajaxRenderSection(ruta,'#listadoMascotas');
+
+	//Imprime el formulario de agregar mascota
 	$('.ventanaModal').click(function(){
 		var ruta        = "{{ route("mascota.create") }}";
 		var accion      = 'Agregar';
@@ -47,21 +33,9 @@ $(document).ready(function(){
     	});
 	});
 
-	//Carga los select dependientes dependiendo de la accion click en el elemento especie
-	$('#especie_id').on('click',function() {
-		var cod = $(this).val();
-		alert('Especie id');
-		//llamada a la funcion para cargar razas
-		url = "{{ url('selectRazas')}}";
-		$.cargaSelect(url,'#divRaza',cod,null);
+	
 
-		//llamada a la funcion para cargar razas
-		url = "{{ url('selectAlimentos')}}";
-		$.cargaSelect(url,'#divAlimentos',cod,null);
-
-
-	});
- 
+	 
 });
 
 </script>
@@ -114,7 +88,7 @@ $(document).ready(function(){
 				<button type="button" class="btn btn-primary btn-circle">
 					<i class="fa fa-plus"></i>
 				</button>
-				A&ntilde;adir</a>
+				Agregar</a>
 			</div>
 			
 			<br/>

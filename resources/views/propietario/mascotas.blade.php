@@ -7,7 +7,7 @@
 
 $(document).ready(function(){
 
-	//Funcion para carghar el tooltip
+	//Funcion para cargar el tooltip
 	$(function () {$('[data-toggle="tooltip"]').tooltip()});
 
 	//Funcion para eliminar mascotas
@@ -29,9 +29,7 @@ $(document).ready(function(){
 			}).done(function(respuesta){
 				$('#mensaje').html(' ');
 
-				$('#divMensajeMascota').removeClass('hidden');
-
-				$('#divMensajeMascota').removeClass('hidden').addClass('alert-success');
+				$('#divMensajeMascota').removeClass('hidden').addClass('alert-success').fadeIn();
 
 				$("#mensajeMascota").html('<strong>Yeah!!</strong> ' + respuesta.message);
 

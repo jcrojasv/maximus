@@ -1,31 +1,32 @@
 
 @extends('propietario.edit')
 
-@section('scriptsJs')
+@section('renderFormulario')
 <script>
 $(document).ready(function(){
 	
-	
 
-	//Acciones del boton cancelar mascota
-	$('.cancelar').click(function(e){
-		e.preventDefault();
-
-		//Llamamos a la funcion para resetaear campos de formulario
-		$("#frmMascota").resetear();
+	//Carga los select dependientes dependiendo de la accion click en el elemento especie
+	$('input:radio[name=especie_id]').click(function() {
+		var cod = $('input:radio[name=especie_id]:checked').val();
 		
-		$("#divFrmMascota div").removeClass('has-error');
-		$("#divFrmMascota span.help-block").addClass('hidden');
+		//llamada a la funcion para cargar razas
+		url = "{{ url('selectRazas')}}";
+		$.cargaSelect(url,'#divRaza',cod,null);
 
-		$('#divMensajeMascota').addClass('hidden');
+		//llamada a la funcion para cargar razas
+		url = "{{ url('selectAlimentos')}}";
+		$.cargaSelect(url,'#divAlimentos',cod,null);
 
-		
+
 	});
 
 	//Acciones del boton Agregar mascota
-	$('#btnAddMascota').click(function(){
-		var frmMascota = $("#frmMascota").serialize();
-		var ruta = "{{ route("mascota.store") }}";
+	$('#btnMascota').click(function(){
+		
+		var form = $('#frmMascota');
+		var ruta = form.attr('action');
+		var data = form.serialize();
 		var token = $("input[name=_token]").val();
 
 		$.ajax({
@@ -33,7 +34,7 @@ $(document).ready(function(){
 			headers: {'X-CSRF-TOKEN': token},
 			type: 'post',
 			dataType: 'json',
-			data: frmMascota,
+			data: data,
 			beforeSend:  function(){
 				$('span.help-block').addClass('hidden');
 				$('div').removeClass('has-error');
@@ -41,22 +42,21 @@ $(document).ready(function(){
 
 		}).done(function(respuesta) {
 
+			//Imprime el listado de mascotas
+			var ruta = "{{ route("mascota.index") }}/"+$("input[name=id]").val();
+
+			$.ajaxRenderSection(ruta,'#listadoMascotas');
+
 			$('#mensajeMascota').html(' ');
 
-			$('#divMensajeMascota').removeClass('hidden');
-
-			$('#divMensajeMascota').removeClass('hidden').addClass('alert-success');
+			$('#divMensajeMascota').removeClass('hidden').addClass('alert-success').fadeIn();
 
 			$("#mensajeMascota").html('<strong>Yeah!!</strong> ' + respuesta.message);
-
-			//Llamamos a la funcion para resetear campos de formulario
-			$("#frmMascota").resetear();
 
 			//Desvanecemos la ventana modal
 			$('#ventanaModal').modal('hide');
 
-			ajaxRenderSection();
-
+	
 		}).fail(function(respuesta){
 
 			$.each(respuesta.responseJSON,function (ind, elem) { 
@@ -76,13 +76,13 @@ $(document).ready(function(){
 
 	});
 
-	$('select').addClass('form-control');
+	
 });
 
 </script>
-@endsection
 
-@section('renderFormulario')
+
+
 
 <div class="modal fade" id='ventanaModal' tabindex="-1" role='dialog' aria-hidden='true'>
 	<div class='modal-dialog'>
@@ -166,13 +166,13 @@ $(document).ready(function(){
 					<div class="col-lg-8">		
 
 						<label class="checkbox-inline">
-							{!! Form::radio('especie_id','1',false,['id'=>'especie_id','class'=>'especie_id']) !!} Canina
+							{!! Form::radio('especie_id','1',false,['id'=>'especie_id','class'=>'especie']) !!} Canina
 						</label>
 						<label class="checkbox-inline">
-							{!! Form::radio('especie_id','2',false,['id'=>'especie_id','class'=>'especie_id']) !!} Felina
+							{!! Form::radio('especie_id','2',false,['id'=>'especie_id','class'=>'especie']) !!} Felina
 						</label>
 
-						<span class="help-block especie hidden"><br/></span>
+						<span class="help-block especie_id hidden"><br/></span>
 
 					</div>
 				</div>
@@ -188,9 +188,9 @@ $(document).ready(function(){
 					<div class="col-lg-8" >
 						<div id='divRaza'>
 							@if(isset($razas))
-								{!! Form::select('raza_id',$razas,['id'=>'raza_id','selected'=>$mascota->raza_id]) !!}
+								{!! Form::select('raza_id',$razas,null,['id'=>'raza_id','selected'=>$mascota->raza_id,'class'=>'form-control']) !!}
 							@else
-								{!! Form::select('raza_id',['0'=>'---> Seleccione Especie <---'],['id'=>'raza_id']) !!}
+								{!! Form::select('raza_id',['0'=>'---> Seleccione Especie <---'],null,['id'=>'raza_id','class'=>'form-control']) !!}
 							@endif
 						</div>
 
@@ -210,9 +210,9 @@ $(document).ready(function(){
 					</div>
 					<div class="col-lg-8">
 						@if(isset($mascota))
-							{!! Form::select('color_id',$colores,['id'=>'color_id','selected'=>$mascota->color_id]) !!}
+							{!! Form::select('color_id',$colores,null,['id'=>'color_id','selected'=>$mascota->color_id,'class'=>'form-control']) !!}
 						@else
-							{!! Form::select('color_id',$colores,['id'=>'color_id']) !!}
+							{!! Form::select('color_id',$colores,null,['id'=>'color_id','class'=>'form-control']) !!}
 						@endif
 					</div>
 				</div>	
@@ -227,9 +227,9 @@ $(document).ready(function(){
 					<div class="col-lg-8" >
 						<div id="divAlimentos">
 							@if(isset($alimentos))
-								{!! Form::select('alimento_id',$alimentos,['id'=>'alimento_id','selected'=>$mascota->alimento_id]) !!}
+								{!! Form::select('alimento_id',$alimentos,null,['id'=>'alimento_id','selected'=>$mascota->alimento_id,'class'=>'form-control']) !!}
 							@else
-								{!! Form::select('alimento_id',['0'=>'---> Seleccione Especie <---'],['id'=>'alimento_id']) !!}
+								{!! Form::select('alimento_id',['0'=>'---> Seleccione Especie <---'],null,['id'=>'alimento_id','class'=>'form-control']) !!}
 							@endif
 						</div>
 						<span class="help-block alimento_id hidden"></span>
@@ -323,9 +323,8 @@ $(document).ready(function(){
 				<!-- Row 12 -->
 				<div class="modal-footer">
 					<br/>
-						
-					<button type="button" class="btn btn-primary" id="btnAddMascota">
-						<i class="fa fa-plus"></i> {{$accion}} Mascota 
+					<button type="button" class="btn {{ ($accion == 'Agregar') ? 'btn-primary' : 'btn-warning' }}" id="btnMascota">
+						<i class="fa {{ ($accion == 'Agregar') ? 'fa-plus' : 'fa-pencil' }}"></i> {{$accion}} Mascota 
 					</button>
 					&nbsp;&nbsp;
 					<a href="#" data-dismiss="modal" class="cancelar">Cancelar</a>

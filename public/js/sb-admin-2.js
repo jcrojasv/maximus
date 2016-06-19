@@ -48,6 +48,17 @@ $.cargaSelect = function(url,div,cod,seleccionado)
     });
 };
 
+//Funcion para recargar el listado de mascotas-propietario
+$.ajaxRenderSection = function(ruta,div) {
+
+    $.get(ruta,null,function(data) {
+
+        $(div).empty().append($(data));
+            
+            
+    });
+}
+
 //Funcion para resetear campos de formulario
 jQuery.fn.resetear = function () {
   $(this).find(':input').not(':hidden').each(function(){
