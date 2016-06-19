@@ -13,7 +13,7 @@ $(document).ready(function(){
 	$.ajaxRenderSection(ruta,'#listadoMascotas');
 
 	//Imprime el formulario de agregar mascota
-	$('.ventanaModal').click(function(){
+	$('#btnAddMascota').click(function(){
 		var ruta        = "{{ route("mascota.create") }}";
 		var accion      = 'Agregar';
 		var propietario = $("input[name=id]").val();
@@ -79,13 +79,11 @@ $(document).ready(function(){
 			</div>
 
 			
-			<div class="text-center">
-
-				<a href="#!" class="ventanaModal">
-				<button type="button" class="btn btn-primary btn-circle">
-					<i class="fa fa-plus"></i>
-				</button>
-				Agregar</a>
+			<div class="row">
+				<div class="col-lg-6 col-lg-offset-3">
+					<button type="button" class="btn btn-info btn-block" id="btnAddMascota" >
+					 <strong>Agregar mascota ...</strong> <i class="fa fa-plus-circle"> </i></button>
+				</div>
 			</div>
 			
 			<br/>
