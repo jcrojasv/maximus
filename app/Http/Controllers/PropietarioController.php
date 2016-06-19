@@ -206,51 +206,6 @@ class PropietarioController extends Controller
         return $strHtml;
     }
 
-    /**
-     * Busqueda de mascotas.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return object
-     */
-
-    public function buscarMascota(Request $request)
-    {
-
-        if($request->ajax())
-        {
-            
-            //Tomo los datos del formulario
-            $strMascota = (!is_null($request->input('mascota'))) ? $request->input('mascota') : '';
-            $strPropietario = (!is_null($request->input('propietario'))) ? $request->input('propietario') : '';
-
-            //Realizo la consulta en el modelo
-            $objTable = new Mascota();
-            $objResult = $objTable->buscarMascota($strMascota,$strPropietario);
-
-            $strHtml = "<table class='table table-striped table-hover'>";
-            $strHtml.= "<thead><tr><th>Mascota</th><th>Raza</th><th>Propietario</th><th>Accion</th></tr></thead><tbody>";
-     
-            foreach ($objResult as $objMascota) 
-            {
-            
-                $strHtml.=sprintf("<tr><td>%s</td><td>%s</td><td>%s</td><td><button type='button' onClick='return miFuncion(%d);' class='btnSelect'>Select</button></td></tr>",
-                
-                $objMascota->nombre,
-                $objMascota->descripcion,
-                $objMascota->nombres,
-                $objMascota->id
-                );
-
-            }
-
-            $strHtml.="</tbody></table>";
-       
-            return $strHtml;
-
-       }
         
-    }
-    
     
 }

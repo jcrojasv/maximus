@@ -278,7 +278,7 @@ $(document).ready(function(){
 					<div class="col-lg-8">
 
 						<label class="checkbox-inline">
-							{!! Form::radio('vacuna','Al dia',true,['id'=>'vacuna']) !!} Al dia <span class="fa fa-smile-o text-success"></i></span>
+							{!! Form::radio('vacuna','Al día',true,['id'=>'vacuna']) !!} Al d&iacute;a <span class="fa fa-smile-o text-success"></i></span>
 						</label>
 
 						<label class="checkbox-inline">
@@ -302,7 +302,7 @@ $(document).ready(function(){
 					</div>
 					<div class="col-lg-8">
 						<label class="checkbox-inline">
-							{!! Form::radio('desparasitacion','Al dia',true,['id'=>'desparasitacion']) !!} Al dia <span class="fa fa-smile-o text-success"></i></span>
+							{!! Form::radio('desparasitacion','Al día',true,['id'=>'desparasitacion']) !!} Al d&iacute;a <span class="fa fa-smile-o text-success"></i></span>
 						</label>
 
 						<label class="checkbox-inline">

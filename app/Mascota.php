@@ -16,7 +16,6 @@ class Mascota extends Model
     {
 
     	//Hago consulta tomando los datos pasados por parametros
-    
         $objResult = $this->join('propietarios','mascotas.propietario_id','=','propietarios.id')
         ->join('razas','razas.id','=','mascotas.raza_id')
         ->select('propietarios.*', 'mascotas.*','razas.descripcion')
@@ -24,9 +23,24 @@ class Mascota extends Model
         ->where('propietarios.nombres','LIKE','%'.$strPropietario.'%')
         ->orderBy('mascotas.nombre','desc')
         ->get();
-
+    
         return $objResult;
 
+    }
+
+    public function selectMascota($id)
+    {
+
+        //Hago consulta tomando los datos pasados por parametros
+        $objResult = $this->join('propietarios','mascotas.propietario_id','=','propietarios.id')
+        ->join('razas','razas.id','=','mascotas.raza_id')
+        ->join('especies','especies.id','=','mascotas.especie_id')
+        ->join('colores','colores.id','=','mascotas.color_id')
+        ->select('propietarios.*', 'mascotas.*','razas.descripcion as raza','especies.descripcion as especie','colores.color as color')
+        ->where('mascotas.id','=',$id)
+        ->first();
+    
+        return $objResult;
     }
 
     public function propietario()

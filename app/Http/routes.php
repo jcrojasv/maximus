@@ -35,9 +35,12 @@ Route::resource('/propietario','PropietarioController');
 //Rutas para mascotas
 Route::resource('/mascota','MascotaController');
 
+
 //Rutas para ejecutar peticiones de carga de select depediente a traves de ajax
 Route::get('selectRazas', 'PropietarioController@cargarRazasJquery');
 Route::get('selectAlimentos', 'PropietarioController@cargarAlimentosJquery');
-/*
-Route::get('buscarMascota', 'ficha\FichaController@buscarMascota');
-*/
+
+//Rutas para ordenes de trabajo
+Route::get('orden/buscarMascota', 'OrdenController@buscarMascota')->name('orden.buscarMascota');
+Route::get('orden/selectMascota', 'OrdenController@SelectMascota')->name('orden.selectMascota');
+Route::resource('/orden','OrdenController');

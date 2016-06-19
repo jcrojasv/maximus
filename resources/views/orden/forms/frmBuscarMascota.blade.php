@@ -1,3 +1,5 @@
+
+
 <div class="modal fade" id='ventanaModal' tabindex="-1" role='dialog' aria-hidden='true'>
   <div class='modal-dialog'>
     <div class='modal-content'>
@@ -39,7 +41,49 @@
        </div>
              
 
-      <div id="listado"></div>
+      <div id="listado">
+        @section('listadoBusqueda')
+
+          <script type="text/javascript">
+            //Funcion para seleccionar la mascota del listado de la busqueda
+            $('.btn-select').on('click',function(){
+              
+              var ruta = "{{ route("orden.selectMascota") }}";
+        
+              var mascota = $(this).data('id');
+
+
+              //lamado ajax metodo get para tomar el formulario
+              $.get(ruta,{id : mascota},function(data) {
+
+                    $('#datosMascota').empty().append($(data));
+                    
+                    //Muestro la ventana modal
+                    $('#ventanaModal').modal('toggle');
+
+                });
+            
+            });
+            </script>
+
+          @if(isset($objResult))
+            <table class='table table-striped table-hover'>
+            <thead><tr><th>Mascota</th><th>Raza</th><th>Propietario</th><th>Accion</th></tr></thead>
+              <tbody>
+              
+                  @foreach ($objResult as $objMascota) 
+                  <tr data-id="{{ $objMascota->id}}">
+                      <td>{{$objMascota->nombre}}</td>
+                      <td>{{$objMascota->descripcion}}</td>
+                      <td>{{$objMascota->nombres}}</td>
+                      <td><button type='button' class='btn btn-warning btn-sm btn-select' data-id="{{$objMascota->id}}"><i class="fa fa-hand-rock-o"></i> Select</button></td></tr>
+                  @endforeach                
+              </tbody>
+         
+            </table>
+            @endif
+        @endsection
+      </div>
        
      </div>
      
@@ -47,8 +91,7 @@
       <button type="button" class="btn btn-sm btn-danger" data-dismiss='modal'>Cerrar</button> 
     </div>
     
-    
-    
+     
   </div>
 </div>
 </div>

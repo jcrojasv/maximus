@@ -50,7 +50,7 @@
         </li>
 
         <li>
-          <a href="#"><i class="fa fa-file"></i> Ordenes</a>
+          <a href="{{ route('orden.create') }}"><i class="fa fa-file"></i> Ordenes</a>
 
         </li>
 
