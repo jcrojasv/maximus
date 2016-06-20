@@ -7,20 +7,26 @@
 		<!-- Datos Propietario -->
 		<div class="panel-body">
 			<!-- row 1 -->              
-			<div class="row {{ $errors->has('id') ? ' has-error' : '' }}">
+			<div class="row {{ $errors->has('fecha') ? ' has-error' : '' }}">
 
 				<div class="col-lg-3 col-lg-offset-1 text-right">
 	
-				  Documento de Identificaci&oacute;n:
+				 Fecha del Servicio:
 				
 				</div>
 
-				<div class="col-lg-6 ">
-					{!! Form::text('id',null, ['class'=>"form-control",'placeholder'=>'Cedula']) !!}
+				<div class="col-lg-3">
+
+					<div class="input-group date" data-provide="datepicker">
+						{!! Form::text('fecha',null, ['id'=>'fecha','class'=>'form-control','data-provide'=>'datepicker','data-date-format'=>'dd-mm-yyyy']) !!}
+				        <div class="input-group-addon">
+					        <span class="fa fa-calendar"></span>
+					    </div>
+					</div>					
 					
-					@if ($errors->has('id'))
+					@if ($errors->has('fecha'))
                     	<span class="help-block">
-                        	<strong>{{ $errors->first('id') }}</strong>
+                        	<strong>{{ $errors->first('fecha') }}</strong>
                         </span>
                     @endif
 
@@ -29,125 +35,58 @@
 			<!-- Fin row 1 -->
 
 			<!-- Row 2 -->
-			<div class="row {{ $errors->has('email') ? ' has-error' : '' }}">
+			<div class="row {{ $errors->has('entrada') ? ' has-error' : '' }}">
 				<br/>
 				<div class="col-lg-3 col-lg-offset-1 text-right">
-					Email:
+					Hora de entrada / Hora de salida:
 				</div>
-				<div class="col-lg-6">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-envelope-o"> </i></span>  
-						{!! Form::email('email',null, ['class'=>"form-control",'placeholder'=>'ejemplo@server.com']) !!}
+				<div class="col-lg-3">
+					<div class="input-group bootstrap-timepicker timepicker">
+						{!! Form::text('entrada',null, ['id'=>'entrada','class'=>'form-control input-small']) !!}
+						<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
 					</div>
-					@if ($errors->has('email'))
+					 
+					@if ($errors->has('entrada'))
                     	<span class="help-block">
-                        	<strong>{{ $errors->first('email') }}</strong>
+                        	<strong>{{ $errors->first('entrada') }}</strong>
+                        </span>
+                    @endif
+				</div>
+
+				<div class="col-lg-3">
+					<div class="input-group bootstrap-timepicker timepicker">
+						{!! Form::text('salida',null, ['id'=>'salida','class'=>'form-control input-small']) !!}
+						<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+					</div>
+					 
+					@if ($errors->has('salida'))
+                    	<span class="help-block">
+                        	<strong>{{ $errors->first('salida') }}</strong>
                         </span>
                     @endif
 				</div>
 			</div>
 			<!-- Fin Row 2 -->
-
-			<!-- Row 3 -->
-			<div class="row {{ $errors->has('nombres') ? ' has-error' : '' }}">
-				<br/>
-				<div class="col-lg-3 col-lg-offset-1 text-right">
-					Nombres:
-				</div>
-
-				<div class="col-lg-6">
-					{!! Form::text('nombres',null, ['class'=>"form-control",'placeholder'=>'Nombres']) !!}
-					@if ($errors->has('nombres'))
-                    	<span class="help-block">
-                        	<strong>{{ $errors->first('nombres') }}</strong>
-                        </span>
-                    @endif
-				</div>
 				
+			<!-- Row 3 -->
+			<div class="row">
+				<br/>
+				<div class="col-lg-4 text-right">
+					Tipo de servicio:
+				</div>
+
+				<div class="col-lg-8">
+					<label class="checkbox-inline">
+						{!! Form::radio('tipo','1',true,['id'=>'tipo']) !!} Comercial 
+					</label>
+					<label class="checkbox-inline">
+						{!! Form::radio('tipo','2',false,['id'=>'tipo']) !!} Especializado
+					</label>
+				</div>
+
 			</div>
 			<!-- Fin row 3 -->
-
-			<!-- Row 4 -->
-			<div class="row {{ $errors->has('apellidos') ? ' has-error' : '' }}">
-				<br/>
-				<div class="col-lg-3 col-lg-offset-1 text-right">
-					Apellidos:
-				</div>
-				<div class="col-lg-6">
-					{!! Form::text('apellidos',null, ['class'=>"form-control",'placeholder'=>'Apellidos']) !!}
-					@if ($errors->has('apellidos'))
-                    	<span class="help-block">
-                        	<strong>{{ $errors->first('apellidos') }}</strong>
-                        </span>
-                    @endif
-				</div>
-			</div>	
-			<!-- Fin row 4 -->
-
-			<!-- Row 5 -->
-			<div class="row {{ $errors->has('direccion') ? ' has-error' : '' }}">
-				<br/>
-				<div class="col-lg-3 col-lg-offset-1 text-right">
-					Direcci&oacute;n:
-				</div>
-				
-				<div class="col-lg-6">		
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-map-marker"></i></span> 
-						{!! Form::text('direccion',null, ['class'=>"form-control",'placeholder'=>'Direccion']) !!}
-												
-					</div>
-					@if ($errors->has('direccion'))
-                    	<span class="help-block">
-                        	<strong>{{ $errors->first('direccion') }}</strong>
-                        </span>
-                    @endif
-				</div>
-			</div>
-			<!-- Fin row 5 -->
-
-			<!-- Row 6 -->
-			<div class="row {{ $errors->has('telefono_fijo') ? ' has-error' : '' }}">
-				<br/>
-				<div class="col-lg-3 col-lg-offset-1 text-right">
-					Tel&eacute;fono Fijo:
-				</div> 
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-					<div class="input-group ">
-						<span class="input-group-addon"><i class="fa fa-phone"></i></span>
-						{!! Form::text('telefono_fijo',null, ['class'=>"form-control",'placeholder'=>'(034)-298 73 70)']) !!}
-						
-					</div>
-					@if ($errors->has('telefono_fijo'))
-                    	<span class="help-block">
-                        	<strong>{{ $errors->first('telefono_fijo') }}</strong>
-                        </span>
-                    @endif
-				</div>
-			</div>
-			<!-- Fin row 6 -->
-
-			<!-- Row 7 -->
-			<div class="row {{ $errors->has('telefono_celular') ? ' has-error' : '' }}">
-				<br/>
-				<div class="col-lg-3 col-lg-offset-1 text-right">
-				 	Tel&eacute;fono Celular
-				</div> 
-
-				<div class=" col-lg-6 col-md-6 col-sm-6 col-xs-6">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-mobile"></i></span>
-						{!! Form::text('telefono_celular',null, ['class'=>"form-control",'placeholder'=>'(300)-888 60 63)']) !!}
-						
-					</div>
-					@if ($errors->has('telefono_celular'))
-                    	<span class="help-block">
-                        	<strong>{{ $errors->first('telefono_celular') }}</strong>
-                        </span>
-                    @endif
-				</div>
-			</div>
-			<!-- Fin Row 7 -->
+			
 
 			<!-- Row 8 -->
 			<div class="row">

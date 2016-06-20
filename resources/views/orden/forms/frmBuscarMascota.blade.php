@@ -1,5 +1,3 @@
-
-
 <div class="modal fade" id='ventanaModal' tabindex="-1" role='dialog' aria-hidden='true'>
   <div class='modal-dialog'>
     <div class='modal-content'>
@@ -54,14 +52,20 @@
         
               var mascota = $(this).data('id');
 
+              //Oculto el formulario de datos de la orden
+              $('#divFrmOrden').addClass('hidden');
+
 
               //lamado ajax metodo get para tomar el formulario
               $.get(ruta,{id : mascota},function(data) {
 
-                    $('#datosMascota').empty().append($(data));
+                    $('#datosMascota').empty().append($(data)).fadeIn('slow');
                     
-                    //Muestro la ventana modal
+                    //Oculto la ventana modal
                     $('#ventanaModal').modal('toggle');
+
+                    //Muestro el formulario de datos de la orden
+                    $('#divFrmOrden').removeClass('hidden').fadeIn('slow');
 
                 });
             
@@ -84,7 +88,7 @@
               <tbody>
               
                   @foreach ($objResult as $objMascota) 
-                  <tr data-id="{{ $objMascota->id}}">
+                  <tr data-id="{{ $objMascota->id}}" >
                       <td>{{$objMascota->nombre}}</td>
                       <td>{{ $objMascota->especie->descripcion }} / {{$objMascota->descripcion}}</td>
                       <td>{{$objMascota->nombres}}</td>

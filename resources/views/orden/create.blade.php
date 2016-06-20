@@ -4,8 +4,18 @@
 
 @section('scriptsJs')
 
+<!-- Data Tables -->
 <script src='/js/jquery.dataTables.min.js' type="text/javascript"> </script>
 <script src='/js/dataTables.bootstrap.min.js' type="text/javascript"></script>
+
+<!-- bootstrap date-picker  -->
+<link rel="stylesheet" href="/js/bootstrap-datepicker-1.6.1/css/bootstrap-datepicker.min.css">
+<script src="/js/bootstrap-datepicker-1.6.1/js/bootstrap-datepicker.min.js"></script>
+<script src="/js/bootstrap-datepicker-1.6.1/locales/bootstrap-datepicker.es.min.js"></script>
+
+<!-- bootstrap time-picker  -->
+<link rel="stylesheet" href="/css/timepicker/bootstrap-timepicker.min.css">
+<script src="/js/timepicker/bootstrap-timepicker.min.js"></script>
 
 <script>
 
@@ -41,9 +51,22 @@ $(document).ready(function(){
 
 	});
 
-	
-  
+	//Cargo el timepicker al campo entrada
+	$('#entrada').timepicker({
+		
+		minuteStep: 5,
+		showInputs: false,
+		disableFocus: true
+	});
 
+	//Cargo el timepicker al campo salida
+	$('#salida').timepicker({
+		
+		minuteStep: 5,
+		showInputs: false,
+		disableFocus: true
+	});
+	
 });
 
 
@@ -92,13 +115,14 @@ $(document).ready(function(){
 	</div>
 </div>
 <br/>
-<div class="row">
+<div class="row" id="divFrmOrden">
 	
 	{!! Form::open(['method'=>'post','route'=>'orden.store'])!!}
 
 		@include('orden.forms.frmOrden')
 	
 	{!! Form::close() !!}
+
 </div>
 
 @include('orden.forms.frmBuscarMascota')
