@@ -52,10 +52,6 @@
         
               var mascota = $(this).data('id');
 
-              //Oculto el formulario de datos de la orden
-              $('#divFrmOrden').addClass('hidden');
-
-
               //lamado ajax metodo get para tomar el formulario
               $.get(ruta,{id : mascota},function(data) {
 
@@ -64,9 +60,27 @@
                     //Oculto la ventana modal
                     $('#ventanaModal').modal('toggle');
 
-                    //Muestro el formulario de datos de la orden
-                    $('#divFrmOrden').removeClass('hidden').fadeIn('slow');
+                }).done(function(){
 
+                  //Llamo por ajax el formulario de crear si la peticion anterior tuvo exito
+                  var ruta = "{{ route('orden.create')}}";
+                  alert(mascota);
+
+                  $.get(ruta,{mascota_id : mascota},function(data){
+                    
+                    $('#divFrmOrden').empty().append($(data)).fadeIn('slow');
+
+
+                  }).fail(function(data){
+
+                    var errors = data.responseJSON;
+                    if (errors) {
+                        $.each(errors, function (i) {
+                            console.log(errors[i]);
+                        });
+                    }
+
+                  });
                 });
             
             });

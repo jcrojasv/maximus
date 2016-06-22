@@ -43,4 +43,5 @@ Route::get('selectAlimentos', 'PropietarioController@cargarAlimentosJquery');
 //Rutas para ordenes de trabajo
 Route::get('orden/buscarMascota', 'OrdenController@buscarMascota')->name('orden.buscarMascota');
 Route::get('orden/selectMascota', 'OrdenController@SelectMascota')->name('orden.selectMascota');
+Route::get('orden/esp', 'OrdenController@esp')->name('orden.esp');
 Route::resource('/orden','OrdenController');

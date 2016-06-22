@@ -8,7 +8,7 @@ class Orden extends Model
 {
     //
     protected $table = 'ordenes';
-    protected $fillable = ['id','mascota_id','fecha','firma','observaciones','entreda',
+    protected $fillable = ['id','mascota_id','fecha','tipo','firma','observaciones','entrada',
         'salida','creado_por','modificado_por'];
 
     public function listadoGeneral()

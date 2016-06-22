@@ -51,21 +51,7 @@ $(document).ready(function(){
 
 	});
 
-	//Cargo el timepicker al campo entrada
-	$('#entrada').timepicker({
 		
-		minuteStep: 5,
-		showInputs: false,
-		disableFocus: true
-	});
-
-	//Cargo el timepicker al campo salida
-	$('#salida').timepicker({
-		
-		minuteStep: 5,
-		showInputs: false,
-		disableFocus: true
-	});
 	
 });
 
@@ -115,12 +101,17 @@ $(document).ready(function(){
 	</div>
 </div>
 <br/>
-<div class="row" id="divFrmOrden">
+<div class="row">
 	
-	{!! Form::open(['method'=>'post','route'=>'orden.store'])!!}
+	{!! Form::open(['method'=>'post','route'=>'orden.store','id'=>'frmOrden'])!!}
+		<div id="divFrmOrden">
+		@section('sectionFrmOrden')
+			@if(isset($arreglosGen))
+				@include('orden.forms.frmOrden')
+			@endif
+		@endsection
+		</div>
 
-		@include('orden.forms.frmOrden')
-	
 	{!! Form::close() !!}
 
 </div>

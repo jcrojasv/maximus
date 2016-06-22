@@ -27,7 +27,6 @@ class CreatePrimaryTables extends Migration
             $table->engine = 'InnoDb';
             $table->increments('id');
             $table->string('descripcion',120);
-            $table->integer('padre');
             $table->enum('tipo',['GEN','ESP']);
             $table->timestamps();
         });
@@ -93,6 +92,7 @@ class CreatePrimaryTables extends Migration
             $table->integer('mascota_id')->unsigned()->foreign('id')->on('mascotas')
             ->onUpdate('cascade');
             $table->date('fecha');
+            $table->enum('tipo',['COM','ESP']);
             $table->binary('firma')->nullable();
             $table->string('observaciones',250)->nullable();
             $table->time('entrada')->nullable();
