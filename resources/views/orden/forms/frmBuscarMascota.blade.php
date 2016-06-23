@@ -64,7 +64,7 @@
 
                   //Llamo por ajax el formulario de crear si la peticion anterior tuvo exito
                   var ruta = "{{ route('orden.create')}}";
-                  alert(mascota);
+         
 
                   $.get(ruta,{mascota_id : mascota},function(data){
                     

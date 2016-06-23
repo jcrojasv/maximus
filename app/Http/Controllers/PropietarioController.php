@@ -33,6 +33,7 @@ class PropietarioController extends Controller
     public function index()
     {
         $results = Propietario::with('mascota.especie')->orderBy('nombres','asc')->get();
+        
         return view('propietario/list',compact('results'));
     }
 

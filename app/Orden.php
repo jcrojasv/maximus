@@ -25,4 +25,10 @@ class Orden extends Model
         return $ordenes;
 
     }
+
+    //Metodo para obtener la relacion con orde_arreglos
+    public function ordenArreglo()
+    {
+        return $this->hasMany('App\ordenArreglo','orden_id');
+    }
 }

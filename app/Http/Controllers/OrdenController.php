@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Session;
+
 use App\Http\Requests;
 use App\Mascota;
 use App\Arreglo;
+use App\Orden;
+use App\OrdenArreglo;
 
 class OrdenController extends Controller
 {
@@ -76,34 +80,50 @@ class OrdenController extends Controller
             'fecha'         => ['required','','date'],
             'entrada'       => ['required'],
             'tipo'          => ['required'],
+            'arregloEsp'    => ['required_if:tipo,ESP'],
             'arregloGen'    => ['required'],
-            'arregloEsp'    => ['required_if:tipo,ESP']
+            
          
         ],[
 
             'entrada.required'       => 'La hora de entrada es requedida',
             'tipo.required'          => 'El tipo de servicio es requerido',
+            'arregloEsp.required_if' => 'Debe seleccionar al menos un arreglo especializado',
             'arregloGen.required'    => 'Debe seleccionar al menos un arreglo general',
-            'arregloEsp.required_if' => 'Debe seleccionar al menos un arreglo especializado'
+            
 
         ]
 
         );
-        
-        //Genero la orden
-        $orden = Orden::create($data);
-
-        //Almaceno en la tabla Orden_arreglos, los arreglos generales
-        foreach ($data['arregloGen'] as $value) {
-            ArregloOrden::create(array('orden_id'=>$orden->id,'arreglo_id'=>$value));
-        }
-
-        if(isset($arregloEsp))
+        if($request->ajax())
         {
-            //Genero los datos de los arreglos
-            foreach ($data['arregloEsp'] as $value) {
-                ArregloOrden::create(array('orden_id'=>$orden->id,'arreglo_id'=>$value));
+            //Formateo la fecha
+            $arrFecha = explode('-',$data['fecha']);
+            $data['fecha'] = $arrFecha['2']."-".$arrFecha['1']."-".$arrFecha['0'];
+            
+            //Digo quien creo el registro
+            $data['creado_por'] = $request->user()->id;
+           
+            //Genero la orden
+            $orden = Orden::create($data);
+
+            //Almaceno en la tabla Orden_arreglos, los arreglos generales
+            foreach ($data['arregloGen'] as $value) {
+                OrdenArreglo::create(array('orden_id'=>$orden->id,'arreglo_id'=>$value));
             }
+
+            if(isset($arregloEsp))
+            {
+                //Genero los datos de los arreglos
+                foreach ($data['arregloEsp'] as $value) {
+                    OrdenArreglo::create(array('orden_id'=>$orden->id,'arreglo_id'=>$value));
+                }
+            }
+            
+            Session::flash('message','Orden generada exitosamente');
+
+            return response()->json(['ordenId'=>$orden->id]);
+            
         }
 
         
@@ -128,7 +148,20 @@ class OrdenController extends Controller
      */
     public function edit($id)
     {
-        //
+        //Tomo los datos de la orden
+        $orden = Orden::find($id);
+        //Tomo los datos de la mascota(
+        $mascota       = new Mascota();
+        $resultMascota = $mascota->selectMascota($orden->mascota_id);
+
+        //Cargo los datos de los arreglos
+        $arreglosGen = Arreglo::where('tipo','=','GEN')->orderBy('descripcion','asc')->lists('descripcion','id');
+
+        //Selecciono los datos de los arreglos incluidos en la orden
+        $arreglosIncluidos = OrdenArreglo::where('orden_id','=',$orden->id)->with('arreglo')->get();
+        dd($arreglosIncluidos);
+
+        return view('orden.edit',compact('orden','resultMascota','arreglosGen'));
     }
 
     /**
