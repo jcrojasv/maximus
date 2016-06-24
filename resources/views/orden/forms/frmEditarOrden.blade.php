@@ -88,6 +88,7 @@
 		<div id='especializados'>
 			
 			@section('sectionEsp')
+				
 				@if(isset($arreglosEsp))
 				
 					<div class="row arregloEsp">
@@ -101,7 +102,7 @@
 							
 							<div class="checkbox">
 							<label>
-								{!! Form::checkbox('arregloEsp[]',$clave,null,['id'=>'arregloEsp[]']) !!} 
+								{!! Form::checkbox('arregloEsp[]',$clave,(in_array($clave,$arreglosIncluidos)),['id'=>'arregloEsp[]']) !!} 
 								{{$valor}} 
 							</label>
 							</div>
@@ -130,7 +131,7 @@
 				
 				<div class="checkbox">
 				<label>
-					{!! Form::checkbox('arregloGen[]',$clave,null,['id'=>'arregloGen']) !!} 
+					{!! Form::checkbox('arregloGen[]',$clave,(in_array($clave,$arreglosIncluidos)? 'true': null),['id'=>'arregloGen']) !!} 
 					{{$valor}} 
 				</label>
 				</div>
@@ -163,8 +164,8 @@
 			<br/>
 			<div class="col-lg-12 text-center">
 			
-				<button type="button" class="btn btn-primary" id="btnAddOrden">
-					<i class="fa fa-save"></i> Guardar 
+				<button type="submit" class="btn btn-warning" id="btnUpdate">
+					<i class="fa fa-pencil"></i> Actualizar 
 				</button>
 				&nbsp;&nbsp;
 				<a href="#">Cancelar</a>

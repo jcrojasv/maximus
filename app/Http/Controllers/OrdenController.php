@@ -108,16 +108,14 @@ class OrdenController extends Controller
             $orden = Orden::create($data);
 
             //Almaceno en la tabla Orden_arreglos, los arreglos generales
-            foreach ($data['arregloGen'] as $value) {
-                OrdenArreglo::create(array('orden_id'=>$orden->id,'arreglo_id'=>$value));
-            }
+            $this->addArreglos($data['arregloGen'],$orden->id);
 
-            if(isset($arregloEsp))
+            //Si ha seleccionado arreglos especializados, agrego los mismos
+            if(isset($data['arregloEsp']))
             {
-                //Genero los datos de los arreglos
-                foreach ($data['arregloEsp'] as $value) {
-                    OrdenArreglo::create(array('orden_id'=>$orden->id,'arreglo_id'=>$value));
-                }
+                
+                $this->addArreglos($data['arregloEsp'],$orden->id);
+                
             }
             
             Session::flash('message','Orden generada exitosamente');
@@ -150,18 +148,38 @@ class OrdenController extends Controller
     {
         //Tomo los datos de la orden
         $orden = Orden::find($id);
+
+        //Formateo la fecha de la orden que viene de la BD a formato dd-mm-yyyy
+        $fechaFormateada = explode('-',$orden->fecha);
+        $orden->fecha = $fechaFormateada[2].'-'.$fechaFormateada[1].'-'.$fechaFormateada[0];
+
         //Tomo los datos de la mascota(
         $mascota       = new Mascota();
         $resultMascota = $mascota->selectMascota($orden->mascota_id);
 
-        //Cargo los datos de los arreglos
+        //Cargo los datos de los arreglos generales
         $arreglosGen = Arreglo::where('tipo','=','GEN')->orderBy('descripcion','asc')->lists('descripcion','id');
-
+              
         //Selecciono los datos de los arreglos incluidos en la orden
-        $arreglosIncluidos = OrdenArreglo::where('orden_id','=',$orden->id)->with('arreglo')->get();
-        dd($arreglosIncluidos);
+        $arreglosIncluidos = OrdenArreglo::where('orden_id','=',$orden->id)->lists('arreglo_id')->toArray();
 
-        return view('orden.edit',compact('orden','resultMascota','arreglosGen'));
+        //Cargo los datos de los arreglos especializados
+        $arreglosEspecializados = Arreglo::where('tipo','=','ESP')->orderBy('descripcion','asc')->lists('descripcion','id');
+$cont = 1;
+        /*
+        $cont = 0;
+        //Verifico que existan arreglos especializados en la tabla orden arreglos, para mostrarlos
+        foreach ($arreglosIncluidos as $value) {
+    
+            if(array_key_exists($value, $arreglosEspecializados->toArray())){
+                $cont++;
+            }
+        }
+        */
+        $arreglosEsp = ($cont > 0 ) ? $arreglosEspecializados : null;
+
+        return view('orden.edit',compact('orden','resultMascota','arreglosGen','arreglosIncluidos','arreglosEsp'));
+    
     }
 
     /**
@@ -173,7 +191,42 @@ class OrdenController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        //tomo los datos enviados
+        $data = $request->all();
+        //Primero busco la orden en la BD
+        $orden = Orden::find($id);
+
+        //Formateo la fecha
+        $arrFecha = explode('-',$data['fecha']);
+        $data['fecha'] = $arrFecha['2']."-".$arrFecha['1']."-".$arrFecha['0'];
+            
+        //Digo quien creo el registro
+        $data['modificado_por'] = $request->user()->id;
+
+        //Actualizo con el metodo fill
+        $orden->fill($data);
+        $orden->save();
+
+        //Actualizo los datos de orden_arreglos, primero debo buscar los arreglos existentes
+        //para eliminarlos y crearlos de nuevo
+        OrdenArreglo::where('orden_id','=',$id)->delete();
+
+        //Almaceno en la tabla Orden_arreglos, los arreglos generales
+        $this->addArreglos($data['arregloGen'],$id);
+
+        //Si ha seleccionado arreglos especializados, agrego los mismos
+        if(isset($data['arregloEsp']))
+        {
+            
+            $this->addArreglos($data['arregloEsp'],$id);
+            
+        }
+
+        //Genero el mensaje de exito
+        Session::flash('message','Datos actualizados exitosamente');
+
+        return redirect()->to('/orden/'.$id.'/edit');
     }
 
     /**
@@ -293,8 +346,17 @@ class OrdenController extends Controller
             return response()->json($sections['sectionEsp']);
 
        }
+      
+    }
 
-       
+    private function addArreglos($arr,$id)
+    {
+        
+        //Almaceno en la tabla Orden_arreglos, los arreglos generales
+        foreach ($arr as $value) {
+            OrdenArreglo::create(array('orden_id'=>$id,'arreglo_id'=>$value));
+        }
+
         
     }
 }
