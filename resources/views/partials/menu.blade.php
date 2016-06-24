@@ -50,8 +50,11 @@
         </li>
 
         <li>
-          <a href="{{ route('orden.create') }}"><i class="fa fa-file"></i> Ordenes</a>
-
+          <a href="#"><i class="fa fa-file"></i> Ordenes <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+            <li><a href="{{ route('orden.index') }}"> Listado General</a></li>
+            <li><a href="{{ route('orden.create') }}"> Crear Orden</a></li>
+          </ul>
         </li>
 
         <li>

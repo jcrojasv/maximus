@@ -26,7 +26,12 @@ class OrdenController extends Controller
     public function index()
     {
         //
-    }
+        $tablaOrden = new Orden();
+        $ordenes = $tablaOrden->listadoGeneral();
+
+        return view('orden.index',['ordenes'=>$ordenes]);
+
+   }
 
     /**
      * Show the form for creating a new resource.
@@ -103,6 +108,9 @@ class OrdenController extends Controller
             
             //Digo quien creo el registro
             $data['creado_por'] = $request->user()->id;
+
+            //Seteo la variable estatus
+            $data['estatus'] = (isset($data['estatus']) ? 1 : 0);
            
             //Genero la orden
             $orden = Orden::create($data);
@@ -165,8 +173,7 @@ class OrdenController extends Controller
 
         //Cargo los datos de los arreglos especializados
         $arreglosEspecializados = Arreglo::where('tipo','=','ESP')->orderBy('descripcion','asc')->lists('descripcion','id');
-$cont = 1;
-        /*
+
         $cont = 0;
         //Verifico que existan arreglos especializados en la tabla orden arreglos, para mostrarlos
         foreach ($arreglosIncluidos as $value) {
@@ -175,7 +182,7 @@ $cont = 1;
                 $cont++;
             }
         }
-        */
+
         $arreglosEsp = ($cont > 0 ) ? $arreglosEspecializados : null;
 
         return view('orden.edit',compact('orden','resultMascota','arreglosGen','arreglosIncluidos','arreglosEsp'));
@@ -204,9 +211,18 @@ $cont = 1;
         //Digo quien creo el registro
         $data['modificado_por'] = $request->user()->id;
 
+        //Seteo la variable estatus
+        $data['estatus'] = (isset($data['estatus']) ? 1 : 0);
+        
         //Actualizo con el metodo fill
         $orden->fill($data);
+
+        //Uso el metodo touch para actualizar el campo updated_at
+        $orden->touch();
+        
+        //Guardo los datos
         $orden->save();
+
 
         //Actualizo los datos de orden_arreglos, primero debo buscar los arreglos existentes
         //para eliminarlos y crearlos de nuevo
@@ -224,7 +240,7 @@ $cont = 1;
         }
 
         //Genero el mensaje de exito
-        Session::flash('message','Datos actualizados exitosamente');
+        Session::flash('message','Los datos de la orden se han actualizado exitosamente');
 
         return redirect()->to('/orden/'.$id.'/edit');
     }

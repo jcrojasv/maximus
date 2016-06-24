@@ -109,6 +109,15 @@ $(document).ready(function(){
 		showMeridian: false
 	});
 
+	//Cambio el checkbox de estatus a boton on-off
+	$(function(){
+		$('input[name=estatus]').bootstrapToggle({
+	      on: 'En proceso',
+	      off: 'Finalizada'
+	    });
+	});
+	
+
 });
 </script>
 
@@ -133,7 +142,7 @@ $(document).ready(function(){
 
 				<div class="input-group">
 					
-					{!! Form::text('fecha',null, ['id'=>'fecha','class'=>'form-control']) !!}
+					{!! Form::text('fecha',date('d-m-Y'), ['id'=>'fecha','class'=>'form-control']) !!}
 					
 			        <div class="input-group-addon">
 				        <span class="fa fa-calendar"></span>
@@ -142,6 +151,9 @@ $(document).ready(function(){
 				
 				<span class="help-block fecha hidden"></span>
                 
+			</div>
+			<div class="col-lg-3">
+				{!! Form::checkbox('estatus',1,true) !!}
 			</div>
 		</div>
 		<!-- Fin row 1 -->
@@ -197,27 +209,7 @@ $(document).ready(function(){
 			@section('sectionEsp')
 				@if(isset($arreglosEsp))
 				
-					<div class="row arregloEsp">
-						<br/>
-						<div class="col-lg-4 text-right">
-							Arreglos Especializados:
-						</div>
-						
-						<div class="col-lg-8">
-						@foreach($arreglosEsp as $clave=>$valor)
-							
-							<div class="checkbox">
-							<label>
-								{!! Form::checkbox('arregloEsp[]',$clave,null,['id'=>'arregloEsp[]']) !!} 
-								{{$valor}} 
-							</label>
-							</div>
-						@endforeach	
-						<span class="help-block arregloEsp hidden"></span>
-						</div>
-
-					</div>
-				
+					@include('orden.forms.frmArreglosEsp',['arreglosIncluidos'=>array()])				
 
 				@endif
 			@endsection
