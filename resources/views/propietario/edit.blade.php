@@ -44,7 +44,7 @@ $(document).ready(function(){
 <div class="row">
 	<div class="col-lg-12">
 		@include('partials.menuBotones')
-		<h1 class="page-header">Ficha T&eacute;cnica</h1>
+		<h2 class="page-header">Ficha T&eacute;cnica <i class="fa fa-folder-open-o"></i></h2>
 	</div>
 </div>
 

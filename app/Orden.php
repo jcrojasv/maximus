@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Orden extends Model
 {
@@ -20,7 +21,9 @@ class Orden extends Model
         ->join('propietarios','mascotas.propietario_id','=','propietarios.id')
         ->select('ordenes.*', 'mascotas.nombre', 'propietarios.nombres as nb_propietario',
             'propietarios.apellidos as ap_propietario',
-            'propietarios.telefono_fijo as fijo','propietarios.telefono_celular as movil')->get();
+            'propietarios.telefono_fijo as fijo','propietarios.telefono_celular as movil')
+        ->orderBy('fecha','desc')
+        ->paginate();
 
         return $ordenes;
 
@@ -31,4 +34,11 @@ class Orden extends Model
     {
         return $this->hasMany('App\ordenArreglo','orden_id');
     }
+
+
+    public function prettyDate($column) 
+    {
+        return Carbon::createFromFormat('Y-m-d',$this->attributes[$column])->format('d/m/Y');
+    }
+
 }

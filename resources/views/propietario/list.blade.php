@@ -20,6 +20,9 @@ $(document).ready(function(){
 	   "language": { "url": "/i18n/dataTable.spanish.lang"},
 	   	
     });
+     $(function(){
+    	$('[data-toggle="tooltip"]').tooltip();
+    });
 });
 
 </script>
@@ -29,7 +32,7 @@ $(document).ready(function(){
 	
 	<div class="row">
 		<div class="col-lg-12">
-			<h1 class="page-header">Listado de Propietarios <span class="fa fa-users"></span></h1>
+			<h2 class="page-header">Listado de Propietarios <span class="fa fa-users"></span></h2>
 		</div>
 	
 	
@@ -59,9 +62,9 @@ $(document).ready(function(){
 					</ul>
 				</td>
 				<td>
-					{{ link_to_route('propietario.edit', 'Editar', ['id'=> $result->id ], ['class'=>'btn btn-primary btn-sm']) }}
-                	
-                	{{ link_to_route('propietario.destroy', 'Eliminar', ['id'=> $result->id ], ['class'=>'btn btn-danger btn-sm']) }}
+					<a href="{{ route('propietario.edit',['id'=>$result->id])}}" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class='fa fa-pencil'></i></a>
+				
+					<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="{{ $result->id }}" ><i class="fa fa-trash"></i></button>
                     
                 </td>
 			</tr>

@@ -58,13 +58,9 @@ $(document).ready(function(){
 				<td>{{ $result->propietario->nombres}}, {{ $result->propietario->apellidos }}</td>
 				
 				<td>
-					<button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Editar" id="Editar">
-						<i class="fa fa-pencil"></i>
-					</button>
-
-					<button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Eliminar" id="Eliminar">
-						<i class="fa fa-trash"></i>
-					</button>
+					<a href="{{ route('propietario.edit',['id'=>$result->propietario->id])}}" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class='fa fa-pencil'></i></a>
+				
+					<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="{{ $result->id }}" ><i class="fa fa-trash"></i></button>
                     
                 </td>
 			</tr>

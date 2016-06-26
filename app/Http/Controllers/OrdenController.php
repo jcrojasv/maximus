@@ -251,9 +251,17 @@ class OrdenController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         //
+        if($request->ajax())
+        {
+            
+            Orden::find($id)->delete();
+
+            return response()->json(['message'=>'Registro eliminado correctamente']);
+
+        }
     }
 
     /**
