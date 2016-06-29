@@ -23,7 +23,7 @@ class Orden extends Model
             'propietarios.apellidos as ap_propietario',
             'propietarios.telefono_fijo as fijo','propietarios.telefono_celular as movil')
         ->orderBy('fecha','desc')
-        ->paginate();
+        ->get();
 
         return $ordenes;
 

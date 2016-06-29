@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Yajra\Datatables\Facades\Datatables;
 
 use Session;
 
@@ -32,9 +33,8 @@ class PropietarioController extends Controller
      */
     public function index()
     {
-        $results = Propietario::with('mascota.especie')->orderBy('nombres','asc')->get();
         
-        return view('propietario/list',compact('results'));
+        return view('propietario.index');
     }
 
     /**
@@ -95,7 +95,34 @@ class PropietarioController extends Controller
     public function show($id)
     {
         //
-        return view('propietario/create');
+        $results = Propietario::with('mascota.especie')->orderBy('nombres','asc')->get();
+
+        return Datatables::of($results)
+        ->setRowId('id')
+        ->addColumn('nombres', function($result){
+            return $result->nombres.', '.$result->apellidos;
+        })
+        ->addColumn('telefonos',function($result){
+            return $result->telefono_fijo.'<br/>'.$result->telefono_celular;
+        })
+        ->addColumn('mascotas',function($result){
+            $strHtml = '<ul>';
+            foreach ($result->mascota as $mascota) 
+            {
+                $strHtml .= sprintf("<li>%s</li>",$mascota->nombre);
+            }
+            $strHtml .= '</ul>';
+            return $strHtml;
+        })
+        ->addColumn('action', function ($result) {
+            $strHtml = '<a href="'.route('propietario.edit',['id'=>$result->id]).'" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-pencil"></i></a> ';
+            $strHtml .= '<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="'.$result->id.'" ><i class="fa fa-trash"></i></button>';
+
+            return $strHtml;
+            })
+        
+        ->make(true);
+
     }
 
     /**

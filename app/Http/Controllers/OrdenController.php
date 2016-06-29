@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Yajra\Datatables\Facades\Datatables;
 
 use Session;
 
@@ -26,10 +27,8 @@ class OrdenController extends Controller
     public function index()
     {
         //
-        $tablaOrden = new Orden();
-        $ordenes = $tablaOrden->listadoGeneral();
-
-        return view('orden.index',['ordenes'=>$ordenes]);
+        
+        return view('orden.index');
 
    }
 
@@ -136,14 +135,47 @@ class OrdenController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Esta funcion me permitira sacar el listodo general de ordenes via ajax usando datatable.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+    * @return \Illuminate\Http\Response->json
      */
-    public function show($id)
+    public function show()
     {
-        //
+        //Hago la consulta general
+        $tablaOrden = new Orden();
+        $ordenes = $tablaOrden->listadoGeneral();
+
+        return Datatables::of($ordenes)
+        ->setRowId('id')
+        ->addColumn('estatus',function($orden){
+            return ($orden->estatus) ? "<strong>En proceso</strong>" : "Finalizada";
+        })
+        ->addColumn('mascota',function($orden){
+            return ($orden->estatus) ? "<strong>$orden->nombre</strong>" : $orden->nombre;
+        })
+        ->addColumn('fecha',function($orden){
+            return $orden->prettyDate('fecha');
+        })
+        ->addColumn('io',function($orden){
+            return $orden->entrada."<br/>".$orden->salida;
+        })
+        ->addColumn('propietario', function($orden){
+            return $orden->nb_propietario.', '.$orden->ap_propietario;
+        })
+        ->addColumn('telefonos',function($orden){
+            return $orden->fijo.'<br/>'.$orden->celular;
+        })
+        ->addColumn('action', function ($orden) {
+            $strHtml = '<a href="'.route('orden.edit',['id'=>$orden->id]).'" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-pencil"></i></a> ';
+            $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="%s"onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$orden->id);
+
+            return $strHtml;
+        })
+        ->setRowClass(function ($orden) {
+                return $orden->estatus ? 'alert-danger' : '';
+            })
+        ->make(true);
+
     }
 
     /**

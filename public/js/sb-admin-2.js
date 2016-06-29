@@ -59,6 +59,38 @@ $.ajaxRenderSection = function(ruta,div) {
     });
 }
 
+//Funcion generica que permite eliminar un registro desde un datatable
+//Funcion para eliminar mascotas
+jQuery.fn.eliminar = function() {
+    var form = $('#frmDelete');
+    var row  = $(this).parents('tr');
+    var id   = $(this).data('id');
+    var ruta = form.attr('action').replace(':ID',id);
+    var data = form.serialize();
+    if(confirm("Estas seguro de eliminar este registro?"))
+    {
+        $.ajax({
+            url: ruta,
+            type: 'post',
+            dataType: 'json',
+            data: data,
+            
+        }).done(function(respuesta){
+            
+            $('#pMensajes').html(' ');
+
+            $('#divMensajes').removeClass('hidden').addClass('alert-success').fadeIn();
+
+            $("#pMensajes").html('<strong>Yeah!!</strong> ' + respuesta.message);
+
+            //Desvanezco el row
+            row.fadeOut();
+
+            
+        });
+    }
+};
+
 //Funcion para resetear campos de formulario
 jQuery.fn.resetear = function () {
   $(this).find(':input').not(':hidden').each(function(){
@@ -77,7 +109,7 @@ jQuery.fn.resetear = function () {
     }
    }); 
       
-}
+};
 
 //funcion para llenar el formulario despues de una consulta via ajax 
 jQuery.fn.llenarFormulario = function(arreglo){

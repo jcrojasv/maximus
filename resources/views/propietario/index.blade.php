@@ -18,6 +18,17 @@ $(document).ready(function(){
     	responsive: true,
     	stateSave:  true,
 	   "language": { "url": "/i18n/dataTable.spanish.lang"},
+	   "processing": true,
+       "serverSide": true,
+       "ajax": "/propietario/show",
+       "columns": [
+       		{data: 'nombres'},
+       		{data: 'id'},
+       		{data: 'telefonos'},
+       		{data: 'mascotas'},
+       		{data: 'action'}
+
+       ]
 	   	
     });
      $(function(){
@@ -47,28 +58,7 @@ $(document).ready(function(){
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($results as $result)
-			<tr data-id='{{ $result->id }}'>
-				<td>{{ $result->nombres }}, {{ $result->apellidos }}</td>
-				<td>{{ $result->id }}</td>
-				<td>{{ $result->telefono_fijo }}<br/>
-				{{ $result->telefono_celular }}</td>
-
-				<td>
-					<ul>
-					@foreach($result->mascota as $mascota)
-						<li>{{ $mascota->nombre }}</li>
-					@endforeach
-					</ul>
-				</td>
-				<td>
-					<a href="{{ route('propietario.edit',['id'=>$result->id])}}" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class='fa fa-pencil'></i></a>
-				
-					<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="{{ $result->id }}" ><i class="fa fa-trash"></i></button>
-                    
-                </td>
-			</tr>
-		@endforeach
+		
 	</tbody>
 	</table>
 

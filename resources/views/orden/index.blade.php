@@ -15,40 +15,34 @@
 <script>
 $(document).ready(function(){
 
-    //Funcion para cargar el tooltip
+	//Funcion para cargar el tooltip
 	$(function () {$('[data-toggle="tooltip"]').tooltip()});
 
-	//Funcion para eliminar mascotas
-	$('.btn-delete').on('click',function(){
-		var row  = $(this).parents('tr');
-		var id   = row.data('id');
-		var form = $('#frmDelete');
-		var ruta = form.attr('action').replace(':ORDEN_ID',id);
-		var data = form.serialize();
+	//Funcion para cargar datatable
+	$('#tabla').DataTable({
+    	responsive: true,
+    	stateSave:  true,
+	   "language": { "url": "/i18n/dataTable.spanish.lang"},
+	   "processing": true,
+       "serverSide": true,
+       "ajax": "/orden/show",
+       "columns": [
+       		{data: 'id'},
+       		{data: 'estatus'},
+       		{data: 'mascota'},
+       		{data: 'fecha'},
+       		{data: 'io'},
+       		{data: 'propietario'},
+       		{data: 'telefonos'},
+       		{data: 'action'},
 
-		if(confirm("Estas seguro de eliminar este registro?"))
-		{
-			$.ajax({
-				url: ruta,
-				type: 'post',
-				dataType: 'json',
-				data: data,
-				
-			}).done(function(respuesta){
-				
-				$('#pMensajes').html(' ');
+       ],
+       "order": [[ 3, "desc" ]],
+       "aaSorting": [[ 3, "desc" ]]
+	   	
+    });
 
-				$('#divMensajes').removeClass('hidden').addClass('alert-success').fadeIn();
-
-				$("#pMensajes").html('<strong>Yeah!!</strong> ' + respuesta.message);
-
-				//Desvanezco el row
-				row.fadeOut();
-
-				
-			});
-		}
-	});
+	
         
 });
 
@@ -63,11 +57,6 @@ $(document).ready(function(){
 	</div>
 </div>
 
-<div class="row">
-	<div class="pull-right"> 
-		{!! $ordenes->render() !!}
-	</div>
-</div>
 
 <div class="row">
 	@include('partials.mensajes')
@@ -90,35 +79,14 @@ $(document).ready(function(){
 		</tr>
 	</thead>
 	<tbody>
-	@foreach($ordenes as $orden)
-		<tr data-id='{{ $orden->id }}' @if($orden->estatus) class='success' @endif>
-			<td>{{ $orden->id }}</td>
-			<td>@if($orden->estatus) <strong>En proceso</strong> @else Finalizada @endif</td>
-			<td>@if($orden->estatus) <strong>{{ $orden->nombre }}</strong> @else {{ $orden->nombre }} @endif </td>
-			<td>{{ $orden->prettyDate('fecha') }}</td>
-			<td>{{ $orden->entrada }} <br/> {{ $orden->salida }}</td>
-			<td>{{ $orden->nb_propietario }}, {{ $orden->ap_propietario }}</td>
-			<td>{{ $orden->fijo }}<br/>
-			{{ $orden->movil }}</td>
-
-			<td>
-				<a href="{{ route('orden.edit',['id'=>$orden->id])}}" class="btn btn-warning btn-sm"><i class='fa fa-pencil'></i></a>
-				
-				<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="{{ $orden->id }}" ><i class="fa fa-trash"></i></button>
-      	            	
-                
-            </td>
-		</tr>
-	@endforeach
+	
 	</tbody>
 	</table>
-	<div class="text-right"> 
-	{!! $ordenes->render() !!}
-	</div>
+	
 </div>
 
 <!-- formulario para eliminar orden -->
-{{ Form::open(['route' => ['orden.destroy',':ORDEN_ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) }}
+{{ Form::open(['route' => ['orden.destroy',':ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) }}
 
 {{ Form::close() }}
 
