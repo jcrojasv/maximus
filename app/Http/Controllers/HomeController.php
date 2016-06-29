@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
+use App\Orden;
+use Carbon\Carbon;
+
 class HomeController extends Controller
 {
     /**
@@ -24,6 +27,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+
+        $date = Carbon::now();
+ 
+        $mes = $date->format('m');
+        
+
+        $tblOrden = new Orden();
+        $promHoras = $tblOrden->promHoras($mes);
+
+        return view('home',compact('promHoras'));
     }
 }

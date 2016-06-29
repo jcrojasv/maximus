@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use DB;
 
 class Orden extends Model
 {
@@ -29,7 +30,24 @@ class Orden extends Model
 
     }
 
-    //Metodo para obtener la relacion con orde_arreglos
+    //Funcion que realiza un promedio de tiempo de duracion de las ordenes
+    
+    public function promHoras($mes)
+    {
+
+
+
+        return $this->select(DB::raw('sec_to_time(avg(time_to_sec( timediff( salida, entrada ) ) )) AS total'))
+        ->where(DB::raw('MONTH(fecha)'),'=',$mes)
+        ->whereNotNull('entrada')
+        ->whereNotNull('salida')
+        ->first();
+
+        
+
+    }
+
+    //Metodo para obtener la relacion con orden_arreglos
     public function ordenArreglo()
     {
         return $this->hasMany('App\ordenArreglo','orden_id');
