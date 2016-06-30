@@ -115,7 +115,7 @@ class OrdenController extends Controller
 
             $data['id'] = $ordenId;
             $data['correlativo'] = $correlativo;
-
+            dd($data);
 
             //Digo quien creo el registro
             $data['creado_por'] = $request->user()->id;

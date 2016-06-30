@@ -63,6 +63,28 @@ $(document).ready(function(){
 	
 	});
 
+	//Funcion para modificar mascota
+	$('.btn-orden').click(function(){
+		
+		var ruta        = "{{ route("orden.create") }}";
+		var propietario = $("input[name=id]").val();
+
+		//lamado ajax metodo get para tomar el formulario
+		$.get(ruta,{
+
+			propietario : propietario,
+		
+		},function(data) {
+
+        	$('#divFrmMascota').empty().append($(data));
+        	
+        	//Muestro la ventana modal
+        	$('#ventanaModal').modal('toggle');
+
+    	});
+	
+	});
+
 });
 </script>
 

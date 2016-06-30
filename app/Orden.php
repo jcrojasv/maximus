@@ -13,7 +13,7 @@ class Orden extends Model
     //Le digo a eloquent que el id no es autoincrement
     public $incrementing = false;
 
-    protected $fillable = ['id','mascota_id','fecha','estatus','tipo','firma','observaciones','entrada',
+    protected $fillable = ['id','mascota_id','fecha','estatus','tipo','firma','observaciones','observaciones_groomer','correlativo','entrada',
         'salida','creado_por','modificado_por'];
 
     public function listadoGeneral()
