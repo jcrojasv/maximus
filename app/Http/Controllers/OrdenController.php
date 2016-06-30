@@ -101,9 +101,21 @@ class OrdenController extends Controller
         );
         if($request->ajax())
         {
+            
             //Formateo la fecha
             $arrFecha = explode('-',$data['fecha']);
             $data['fecha'] = $arrFecha['2']."-".$arrFecha['1']."-".$arrFecha['0'];
+
+            /*Genero el id de la orden que se compone de
+            * yyyy- numero de ficha (mascota_id) - el correlativo  
+            */
+            $correlativo = Orden::where('mascota_id','=',$data['mascota_id'])->max('correlativo') + 1;
+            
+            $ordenId = $arrFecha['2'].'-'.$data['mascota_id'].'-'.$correlativo;
+
+            $data['id'] = $ordenId;
+            $data['correlativo'] = $correlativo;
+
             
             //Digo quien creo el registro
             $data['creado_por'] = $request->user()->id;
@@ -115,19 +127,19 @@ class OrdenController extends Controller
             $orden = Orden::create($data);
 
             //Almaceno en la tabla Orden_arreglos, los arreglos generales
-            $this->addArreglos($data['arregloGen'],$orden->id);
+            $this->addArreglos($data['arregloGen'],$ordenId);
 
             //Si ha seleccionado arreglos especializados, agrego los mismos
             if(isset($data['arregloEsp']))
             {
                 
-                $this->addArreglos($data['arregloEsp'],$orden->id);
+                $this->addArreglos($data['arregloEsp'],$ordenId);
                 
             }
             
             Session::flash('message','Orden generada exitosamente');
 
-            return response()->json(['ordenId'=>$orden->id]);
+            return response()->json(['ordenId'=>$ordenId]);
             
         }
 

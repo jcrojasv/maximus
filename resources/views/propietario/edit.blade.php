@@ -102,5 +102,10 @@ $(document).ready(function(){
 	@section('renderFormulario')
 	@endsection
 </div>
+
+<div id="divFrmOrden">
+	@section('renderOrden')
+	@endsection
+</div>
 @endsection
 

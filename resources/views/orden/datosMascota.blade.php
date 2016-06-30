@@ -2,10 +2,14 @@
 <div class="col-lg-8 col-lg-offset-2">
 	<div class="panel panel-info">
 		<div class="panel-heading">
-
-			<h4><span class='text-muted'>Nombre:</span> {{ $resultMascota->nombre }}</h4>
-
-
+			<div class="row">
+			<div class="col-lg-6">
+				<h4><span class='text-muted'>Nombre:</span> {{ $resultMascota->nombre }}</h4>
+			</div>
+			<div class="col-lg-6">
+				<h4><span class='text-muted'>Ficha N&deg;</span> {{ $resultMascota->id }}</h4>
+			</div>
+			</div>
 		</div>
 		<div class="panel-body">
 			

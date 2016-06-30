@@ -75,16 +75,17 @@ $(document).ready(function(){
 
 					<div class="pull-right">
 						<button type="button" class="btn btn-circle btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="{{ $mascota->id }}" ><i class="fa fa-trash"></i></button>
-						<button type="button" class="btn btn-circle btn-primary btn-sm btn-edit" data-toggle="tooltip" data-target="#ventanaModal" data-placement="top" title="Editar" data-id="{{ $mascota->id }}" data-whatever="@fat"><i class="fa fa-pencil"></i></button>
+						<button type="button" class="btn btn-circle btn-warning btn-sm btn-edit" data-toggle="tooltip" data-target="#ventanaModal" data-placement="top" title="Editar" data-id="{{ $mascota->id }}" data-whatever="@fat"><i class="fa fa-pencil"></i></button>
 						<button type="button" class="btn btn-circle btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Crear orden"><i class="fa fa-file-text"></i></button>
 					</div>
-					<h4>{{ $mascota->nombre }}</h4>
+					<h4><span class="text-muted">Ficha N&deg;</span> {{ $mascota->id }}</h4>
 
 
 				</div>
 				<div class="panel-body">
 
-					<div class="pull-left"> 
+					<div class="pull-left">
+						<strong>Mascota:</strong> {{ $mascota->nombre }}<br/>
 						<strong>Especie:</strong> {{ $mascota->raza->especie->descripcion }}<br/>
 						<strong>Raza:</strong>    {{ $mascota->raza->descripcion }}<br/>
 						<strong>Genero:</strong>  
@@ -112,5 +113,7 @@ $(document).ready(function(){
 {{ Form::open(['route' => ['mascota.destroy',':MASCOTA_ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) }}
 
 {{ Form::close() }}
+
+
 
 @endsection

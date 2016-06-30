@@ -101,19 +101,6 @@ class MascotaController extends Controller
             //Tomo los datos del formulario
             $data = $request->all();
 
-            /* Genero el id de la mascota compuesto de la siguiente manera:
-            *  propietario_id . max correlativo + 1
-            */
-            
-            $intCorrelativo = Mascota::where('propietario_id','=',$data['propietario_id'])->max('correlativo');
-            
-            $intCorrelativo += 1;
-            
-            $idMascota = $data['propietario_id'].$intCorrelativo;
-
-            $data['id']          = $idMascota;
-            $data['correlativo'] = $intCorrelativo;
-
             //Guardo los datos de la mascota       
             Mascota::create($data);
 
@@ -123,7 +110,7 @@ class MascotaController extends Controller
 
                 ]);
 
-            //return redirect()->to('/propietario/'.$data['propietario_id'].'/edit');
+          
         }
 
     }

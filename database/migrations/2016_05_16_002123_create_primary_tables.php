@@ -61,7 +61,7 @@ class CreatePrimaryTables extends Migration
         //Creacion de la tabla Mascotas
         Schema::create('mascotas', function(Blueprint $table){
             $table->engine = 'InnoDb';
-            $table->integer('id')->unsigned()->primary();
+            $table->increments('id')->unsigned()->primary();
             $table->integer('propietario_id')->unsigned()->foreign('id')->on('propietarios')
             ->onUpdate('cascade');
             $table->string('nombre',60);
@@ -75,7 +75,6 @@ class CreatePrimaryTables extends Migration
             $table->tinyInteger('peso')->nullable();
             $table->enum('vacuna',['Al día','Pendiente','No sabe'])->nullable();
             $table->enum('desparasitacion',['Al día','Pendiente','No sabe'])->nullable();
-            $table->tinyInteger('correlativo');
             $table->timestamps();
             $table->index('propietario_id');
             $table->index('color_id');
@@ -88,7 +87,7 @@ class CreatePrimaryTables extends Migration
         //Creacion de la tabla ordenes de trabajo
         Schema::create('ordenes', function(Blueprint $table){
             $table->engine = 'InnoDb';
-            $table->bigIncrements('id');
+            $table->string('id',15);
             $table->integer('mascota_id')->unsigned()->foreign('id')->on('mascotas')
             ->onUpdate('cascade');
             $table->date('fecha');
@@ -96,8 +95,11 @@ class CreatePrimaryTables extends Migration
             $table->enum('tipo',['COM','ESP']);
             $table->binary('firma')->nullable();
             $table->string('observaciones',250)->nullable();
+            $table->string('observaciones_groomer',250)->nullable();
+            $table->smallInt('correlativo')->unsigned();
             $table->time('entrada')->nullable();
             $table->time('salida')->nullable();
+            $table->integer('correlativo');
             $table->integer('creado_por')->foreign('id')->on('users')->onUpdate('cascade');
             $table->integer('modificado_por')->foreign('id')->on('users')->onUpdate('cascade');
             $table->timestamps();

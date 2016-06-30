@@ -31,10 +31,9 @@ class Orden extends Model
     }
 
     //Funcion que realiza un promedio de tiempo de duracion de las ordenes
-    
+
     public function promHoras($mes)
     {
-
 
 
         return $this->select(DB::raw('sec_to_time(avg(time_to_sec( timediff( salida, entrada ) ) )) AS total'))
