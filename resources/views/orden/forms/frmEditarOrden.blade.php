@@ -2,7 +2,7 @@
 <div class="panel panel-default">
 
 	<div class="panel-heading">
-		<h4 class="text-primary">Datos de la orden</h4>
+		<h4 class="text-primary">Orden N&deg; {!! $orden->id !!}</h4>
 	</div>
 	
 	<!-- Datos Propietario -->
@@ -12,7 +12,7 @@
 
 			<div class="col-lg-3 col-lg-offset-1 text-right">
 
-			Fecha del Servicio:
+			Fecha del Servicio: 
 			{!! Form::hidden('mascota_id',$orden->mascota_id,['id'=>'mascota_id'])!!}
 			{!! Form::hidden('id',$orden->id,['id'=>'id'])!!}
 

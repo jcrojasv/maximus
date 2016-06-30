@@ -10,6 +10,9 @@ class Orden extends Model
 {
     //
     protected $table = 'ordenes';
+    //Le digo a eloquent que el id no es autoincrement
+    public $incrementing = false;
+
     protected $fillable = ['id','mascota_id','fecha','estatus','tipo','firma','observaciones','entrada',
         'salida','creado_por','modificado_por'];
 

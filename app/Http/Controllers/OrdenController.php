@@ -107,7 +107,7 @@ class OrdenController extends Controller
             $data['fecha'] = $arrFecha['2']."-".$arrFecha['1']."-".$arrFecha['0'];
 
             /*Genero el id de la orden que se compone de
-            * yyyy- numero de ficha (mascota_id) - el correlativo  
+            * yyyy - numero de ficha (mascota_id) - el correlativo  
             */
             $correlativo = Orden::where('mascota_id','=',$data['mascota_id'])->max('correlativo') + 1;
             
@@ -116,7 +116,7 @@ class OrdenController extends Controller
             $data['id'] = $ordenId;
             $data['correlativo'] = $correlativo;
 
-            
+
             //Digo quien creo el registro
             $data['creado_por'] = $request->user()->id;
 
