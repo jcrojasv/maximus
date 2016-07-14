@@ -87,9 +87,43 @@ jQuery.fn.eliminar = function() {
             row.fadeOut();
 
             
+        }).fail(function(respuesta){
+
+            var json = JSON.parse(respuesta.responseText);
+            
+            $('#pMensajes').html(' ');
+
+            $('#divMensajes').removeClass('hidden').addClass('alert-danger').fadeIn();
+
+            $("#pMensajes").html('<strong>Ooops!!</strong> ' + json.message);
+
         });
     }
 };
+
+//Funcion para editar renderizar el formulario de editar mascota
+//Funcion para modificar mascota
+    jQuery.fn.editar = function(propietario){
+        var id = $(this).data('id');
+        var ruta = "http://localhost:8000/mascota/"+id+"/edit";
+
+        //lamado ajax metodo get para tomar el formulario
+        $.get(ruta,{
+
+            propietario : propietario,
+            vista:        'mascota.forms.frmMascotaRenderListado',
+        
+        },function(data) {
+
+            $('#divFrmMascota').empty().append($(data));
+            
+            //Muestro la ventana modal
+            $('#ventanaModal').modal('toggle');
+
+        }); 
+
+    
+    };
 
 //Funcion para resetear campos de formulario
 jQuery.fn.resetear = function () {

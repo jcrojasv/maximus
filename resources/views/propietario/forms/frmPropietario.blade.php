@@ -6,9 +6,46 @@
 		
 		<!-- Datos Propietario -->
 		<div class="panel-body">
-			<!-- row 1 -->              
-			<div class="row {{ $errors->has('id') ? ' has-error' : '' }}">
 
+			<!-- Row 1 -->
+			<div class="row {{ $errors->has('nombres') ? ' has-error' : '' }}">
+				<br/>
+				<div class="col-lg-3 col-lg-offset-1 text-right">
+					Nombres:
+				</div>
+
+				<div class="col-lg-6">
+					{!! Form::text('nombres',null, ['class'=>"form-control",'placeholder'=>'Nombres']) !!}
+					@if ($errors->has('nombres'))
+                    	<span class="help-block">
+                        	<strong>{{ $errors->first('nombres') }}</strong>
+                        </span>
+                    @endif
+				</div>
+				
+			</div>
+			<!-- Fin row 1 -->
+
+			<!-- Row 2 -->
+			<div class="row {{ $errors->has('apellidos') ? ' has-error' : '' }}">
+				<br/>
+				<div class="col-lg-3 col-lg-offset-1 text-right">
+					Apellidos:
+				</div>
+				<div class="col-lg-6">
+					{!! Form::text('apellidos',null, ['class'=>"form-control",'placeholder'=>'Apellidos']) !!}
+					@if ($errors->has('apellidos'))
+                    	<span class="help-block">
+                        	<strong>{{ $errors->first('apellidos') }}</strong>
+                        </span>
+                    @endif
+				</div>
+			</div>	
+			<!-- Fin row 2 -->
+
+			<!-- row 3 -->              
+			<div class="row {{ $errors->has('id') ? ' has-error' : '' }}">
+				<br/>
 				<div class="col-lg-3 col-lg-offset-1 text-right">
 	
 				  Documento de Identificaci&oacute;n:
@@ -26,9 +63,9 @@
 
 				</div>
 			</div>
-			<!-- Fin row 1 -->
+			<!-- Fin row 3 -->
 
-			<!-- Row 2 -->
+			<!-- Row 4 -->
 			<div class="row {{ $errors->has('email') ? ' has-error' : '' }}">
 				<br/>
 				<div class="col-lg-3 col-lg-offset-1 text-right">
@@ -46,43 +83,9 @@
                     @endif
 				</div>
 			</div>
-			<!-- Fin Row 2 -->
+			<!-- Fin Row 4 -->
 
-			<!-- Row 3 -->
-			<div class="row {{ $errors->has('nombres') ? ' has-error' : '' }}">
-				<br/>
-				<div class="col-lg-3 col-lg-offset-1 text-right">
-					Nombres:
-				</div>
-
-				<div class="col-lg-6">
-					{!! Form::text('nombres',null, ['class'=>"form-control",'placeholder'=>'Nombres']) !!}
-					@if ($errors->has('nombres'))
-                    	<span class="help-block">
-                        	<strong>{{ $errors->first('nombres') }}</strong>
-                        </span>
-                    @endif
-				</div>
-				
-			</div>
-			<!-- Fin row 3 -->
-
-			<!-- Row 4 -->
-			<div class="row {{ $errors->has('apellidos') ? ' has-error' : '' }}">
-				<br/>
-				<div class="col-lg-3 col-lg-offset-1 text-right">
-					Apellidos:
-				</div>
-				<div class="col-lg-6">
-					{!! Form::text('apellidos',null, ['class'=>"form-control",'placeholder'=>'Apellidos']) !!}
-					@if ($errors->has('apellidos'))
-                    	<span class="help-block">
-                        	<strong>{{ $errors->first('apellidos') }}</strong>
-                        </span>
-                    @endif
-				</div>
-			</div>	
-			<!-- Fin row 4 -->
+			
 
 			<!-- Row 5 -->
 			<div class="row {{ $errors->has('direccion') ? ' has-error' : '' }}">

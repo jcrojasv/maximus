@@ -43,6 +43,21 @@ class Mascota extends Model
         return $objResult;
     }
 
+    public function listadoGeneral()
+    {
+
+         $objResult = $this->join('propietarios','mascotas.propietario_id','=','propietarios.id')
+        ->join('razas','razas.id','=','mascotas.raza_id')
+        ->join('especies','especies.id','=','mascotas.especie_id')
+        ->join('colores','colores.id','=','mascotas.color_id')
+        ->select('propietarios.nombres as nb_propietario','propietarios.apellidos as ap_propietario', 'mascotas.*','razas.descripcion as raza','especies.descripcion as especie','colores.color')
+        ->orderBy('mascotas.nombre','desc')
+        ->get();
+    
+        return $objResult;
+
+    }
+
     public function propietario()
     {
         return $this->belongsTo('App\Propietario');

@@ -76,14 +76,27 @@ class PropietarioController extends Controller
         ]
         );
         
-        //Separo los datos de los formularios
-        $data = $request->all();
+        try 
+        {
+            //Separo los datos de los formularios
+            $data = $request->all();
 
-        Propietario::create($data);
+            Propietario::create($data);
 
-        Session::flash('message','Propietario creado exitosamente');
+            Session::flash('message','Propietario creado exitosamente');
 
-        return redirect()->to('/propietario/'.$request->input('id').'/edit');
+            return redirect()->to('/propietario/'.$request->input('id').'/edit');
+
+        } catch (\Illuminate\Database\QueryException $e) {
+
+            //Genero el mensaje de error
+            Session::flash('message','Error '.$e->errorInfo[1].', no se pudo grabar la informacion');
+            Session::flash('error', 'alert-danger');
+
+            return view('propietario/create');
+
+        }
+        
     }
 
     /**
@@ -92,36 +105,43 @@ class PropietarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
-        $results = Propietario::with('mascota.especie')->orderBy('nombres','asc')->get();
-
-        return Datatables::of($results)
-        ->setRowId('id')
-        ->addColumn('nombres', function($result){
-            return $result->nombres.', '.$result->apellidos;
-        })
-        ->addColumn('telefonos',function($result){
-            return $result->telefono_fijo.'<br/>'.$result->telefono_celular;
-        })
-        ->addColumn('mascotas',function($result){
-            $strHtml = '<ul>';
-            foreach ($result->mascota as $mascota) 
-            {
-                $strHtml .= sprintf("<li>%s</li>",$mascota->nombre);
-            }
-            $strHtml .= '</ul>';
-            return $strHtml;
-        })
-        ->addColumn('action', function ($result) {
-            $strHtml = '<a href="'.route('propietario.edit',['id'=>$result->id]).'" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-pencil"></i></a> ';
-            $strHtml .= '<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="'.$result->id.'" ><i class="fa fa-trash"></i></button>';
-
-            return $strHtml;
-            })
         
-        ->make(true);
+        if($request->ajax())
+        {
+            //
+            $results = Propietario::with('mascota.especie')->orderBy('nombres','asc')->get();
+
+            return Datatables::of($results)
+            ->setRowId('id')
+            ->addColumn('nombres', function($result){
+                return $result->nombres.', '.$result->apellidos;
+            })
+            ->addColumn('telefonos',function($result){
+                return $result->telefono_fijo.'<br/>'.$result->telefono_celular;
+            })
+            ->addColumn('mascotas',function($result){
+                $strHtml = '<ul>';
+                foreach ($result->mascota as $mascota) 
+                {
+                    $strHtml .= sprintf("<li>%s</li>",$mascota->nombre);
+                }
+                $strHtml .= '</ul>';
+                return $strHtml;
+            })
+            ->addColumn('action', function ($result) {
+                $strHtml = '<a href="'.route('propietario.edit',['id'=>$result->id]).'" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-pencil"></i></a> ';
+                $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="%s"onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$result->id);
+
+                return $strHtml;
+                })
+            
+            ->make(true);    
+        }
+
+        return view('propietario.index');
+        
 
     }
 
@@ -150,17 +170,29 @@ class PropietarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Primero busco el propietario en la BD
-        $propietario = Propietario::find($id);
+        
+        try {
+            //Primero busco el propietario en la BD
+            $propietario = Propietario::find($id);
 
-        //Actualizo con el metodo fill
-        $propietario->fill($request->all());
-        $propietario->save();
+            //Actualizo con el metodo fill
+            $propietario->fill($request->all());
+            $propietario->save();
 
-        //Genero el mensaje de exito
-        Session::flash('message','Datos actualizados exitosamente');
+            //Genero el mensaje de exito
+            Session::flash('message','Datos actualizados exitosamente');
 
-        return redirect()->to('/propietario/'.$request->input('id').'/edit');
+            return redirect()->to('/propietario/'.$request->input('id').'/edit');
+
+        } catch (\Illuminate\Database\QueryException $e) {
+
+            //Genero el mensaje de exito
+            Session::flash('message','Error '.$e->errorInfo[1].', no fue posible actualizar los datos del propietario');
+            Session::flash('error', 'alert-danger');
+
+            return redirect()->to('/propietario/'.$request->input('id').'/edit');
+
+        }
     }
 
     /**
@@ -169,10 +201,28 @@ class PropietarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         //
-        return $id;
+        if($request->ajax())
+        {
+            try {
+
+                Propietario::findOrFail($id)->delete();
+
+                return response()->json(['message'=>'Registro eliminado correctamente']);
+
+            }catch (\Illuminate\Database\QueryException $e) {
+
+                /*En caso de poder eliminar el registro, capturo la excepcion y envio un mensaje con el
+                * Codigo del error, y estatus 500 para que la aplicacion sepa que se trata de un error
+                */
+
+                return response()->json(['message'=>'Error '.$e->errorInfo[1].', no fue posible eliminar el registro'],500);
+
+            }
+
+        }
     }
 
 

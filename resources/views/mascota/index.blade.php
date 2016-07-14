@@ -18,12 +18,29 @@ $(document).ready(function(){
     	responsive: true,
     	stateSave:  true,
 	   "language": { "url": "/i18n/dataTable.spanish.lang"},
+	   "processing": true,
+       "serverSide": true,
+       "ajax": "/mascota/listado",
+       "columns": [
+			{data: 'id'},
+       		{data: 'nombre'},
+       		{data: 'especie'},
+       		{data: 'color'},
+       		{data: 'propietario'},
+       		{data: 'action'}
+
+       ]
 	   	
     });
 
     $(function(){
     	$('[data-toggle="tooltip"]').tooltip();
     });
+
+
+    
+	
+
 });
 
 </script>
@@ -35,38 +52,37 @@ $(document).ready(function(){
 		<div class="col-lg-12">
 			<h1 class="page-header">Listado de Mascotas <span class="fa fa-github-alt"></span></h1>
 		</div>
-	
-	
+	</div>
+
+	<div class="row">
+		@include('partials.mensajes')
+	</div>
+
 	<table class="table table-striped table-hover table-bordered" id='tabla'>
 	<thead>
 		<tr>
+			<th>Ficha n&deg;</th>
 			<th>Nombre</th>
-			<th>Especie</th>
-			<th>Raza</th>
+			<th>Esp/Raza</th>
 			<th>Color</th>
 			<th>Propietario</th>
 			<th>Acci&oacute;n</th>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($results as $result)
-			<tr data-id='{{ $result->id }}'>
-				<td>{{ $result->nombre }}</td>
-				<td>{{ $result->raza->especie->descripcion }}</td>
-				<td>{{ $result->raza->descripcion }}</td>
-				<td>{{ $result->color->color}}</td>
-				<td>{{ $result->propietario->nombres}}, {{ $result->propietario->apellidos }}</td>
-				
-				<td>
-					<a href="{{ route('propietario.edit',['id'=>$result->propietario->id])}}" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class='fa fa-pencil'></i></a>
-				
-					<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="{{ $result->id }}" ><i class="fa fa-trash"></i></button>
-                    
-                </td>
-			</tr>
-		@endforeach
+		
 	</tbody>
 	</table>
 
+
+	<!-- formulario para eliminar mascota -->
+	{{ Form::open(['route' => ['mascota.destroy',':ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) }}
+
+	{{ Form::close() }}
+
+	<!--Formulario para editar mascotas -->
+	<div id="divFrmMascota">
+	@section('renderFormulario')
+	@endsection
 	</div>
 @endsection

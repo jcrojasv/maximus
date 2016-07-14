@@ -1,89 +1,4 @@
 
-@extends('propietario.edit')
-
-@section('renderFormulario')
-<script>
-$(document).ready(function(){
-	
-
-	//Carga los select dependientes dependiendo de la accion click en el elemento especie
-	$('input:radio[name=especie_id]').click(function() {
-		var cod = $('input:radio[name=especie_id]:checked').val();
-		
-		//llamada a la funcion para cargar razas
-		url = "{{ url('selectRazas')}}";
-		$.cargaSelect(url,'#divRaza',cod,null);
-
-		//llamada a la funcion para cargar razas
-		url = "{{ url('selectAlimentos')}}";
-		$.cargaSelect(url,'#divAlimentos',cod,null);
-
-
-	});
-
-	//Acciones del boton Agregar mascota
-	$('#btnMascota').click(function(){
-		
-		var form = $('#frmMascota');
-		var ruta = form.attr('action');
-		var data = form.serialize();
-		var token = $("input[name=_token]").val();
-
-		$.ajax({
-			url: ruta,
-			headers: {'X-CSRF-TOKEN': token},
-			type: 'post',
-			dataType: 'json',
-			data: data,
-			beforeSend:  function(){
-				$('span.help-block').addClass('hidden');
-				$('div').removeClass('has-error');
-			},
-
-		}).done(function(respuesta) {
-
-			//Imprime el listado de mascotas
-			var ruta = "{{ route("mascota.index") }}/"+$("input[name=id]").val();
-
-			$.ajaxRenderSection(ruta,'#listadoMascotas');
-
-			$('#mensajeMascota').html(' ');
-
-			$('#divMensajeMascota').removeClass('hidden').addClass('alert-success').fadeIn();
-
-			$("#mensajeMascota").html('<strong>Yeah!!</strong> ' + respuesta.message);
-
-			//Desvanecemos la ventana modal
-			$('#ventanaModal').modal('hide');
-
-	
-		}).fail(function(respuesta){
-
-			$.each(respuesta.responseJSON,function (ind, elem) { 
-  			
-  				$('div.'+ind).removeClass('hidden').addClass('has-error');
-  				
-  				$('span.'+ind).removeClass('hidden');
-
-  				$('span.'+ind).html(' ');
-  				$('span.'+ind).html('<strong>'+elem+'</strong>');
-
-			});
-				
-
-		});
-		
-
-	});
-
-	
-});
-
-</script>
-
-
-
-
 <div class="modal fade" id='ventanaModal' tabindex="-1" role='dialog' aria-hidden='true'>
 	<div class='modal-dialog'>
 		<div class='modal-content'>
@@ -101,9 +16,25 @@ $(document).ready(function(){
 					{!! Form::open(['route'=>'mascota.store','id'=>'frmMascota'])!!}
 				@endif
 				
+				<!-- row 0 temporal mientras se transcriben datos -->              
+				<div class="row id">
+
+					<div class="col-lg-4 text-right">
+						N&deg; Ficha:
+					</div>
+
+					<div class="col-lg-8 ">
+						{!! Form::text('id',null, ['class'=>"form-control",'placeholder'=>'# Ficha','id'=>'id']) !!}
+
+						<span class="help-block id hidden"></span>
+
+					</div>
+				</div>
+				<!-- Fin row o -->
+
 				<!-- row 1 -->              
 				<div class="row nombre">
-
+					<br/>
 					<div class="col-lg-4 text-right">
 						Nombre:
 					</div>
@@ -335,4 +266,3 @@ $(document).ready(function(){
 		</div>
 	</div>
 </div>
-@endsection

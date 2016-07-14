@@ -51,6 +51,7 @@ $(document).ready(function(){
 		$.get(ruta,{
 
 			propietario : propietario,
+			vista:        'mascota.forms.frmMascotaRenderPropietario',
 		
 		},function(data) {
 
@@ -63,25 +64,16 @@ $(document).ready(function(){
 	
 	});
 
-	//Funcion para modificar mascota
+
+	//Funcion para asignar una orden de trabajo a la mascota
 	$('.btn-orden').click(function(){
 		
-		var ruta        = "{{ route("orden.create") }}";
-		var propietario = $("input[name=id]").val();
+		var id   = $(this).data('id');
 
-		//lamado ajax metodo get para tomar el formulario
-		$.get(ruta,{
+		var ruta  = "{{ url("orden") }}/createFromMascota/"+id;
 
-			propietario : propietario,
-		
-		},function(data) {
+		$(location).attr('href',ruta);
 
-        	$('#divFrmMascota').empty().append($(data));
-        	
-        	//Muestro la ventana modal
-        	$('#ventanaModal').modal('toggle');
-
-    	});
 	
 	});
 
@@ -97,8 +89,8 @@ $(document).ready(function(){
 
 					<div class="pull-right">
 						<button type="button" class="btn btn-circle btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="{{ $mascota->id }}" ><i class="fa fa-trash"></i></button>
-						<button type="button" class="btn btn-circle btn-warning btn-sm btn-edit" data-toggle="tooltip" data-target="#ventanaModal" data-placement="top" title="Editar" data-id="{{ $mascota->id }}" data-whatever="@fat"><i class="fa fa-pencil"></i></button>
-						<button type="button" class="btn btn-circle btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Crear orden"><i class="fa fa-file-text"></i></button>
+						<button type="button" class="btn btn-circle btn-warning btn-sm btn-edit" data-toggle="tooltip" data-target="#ventanaModal" data-placement="top" title="Editar" data-id="{{ $mascota->id }}"><i class="fa fa-pencil"></i></button>
+						<button type="button" class="btn btn-circle btn-success btn-sm btn-orden" data-toggle="tooltip" data-placement="top" title="Crear orden" data-id="{{ $mascota->id }}"><i class="fa fa-file-text"></i></button>
 					</div>
 					<h4><span class="text-muted">Ficha N&deg;</span> {{ $mascota->id }}</h4>
 

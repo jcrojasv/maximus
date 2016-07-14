@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Orden;
 use Carbon\Carbon;
+use App\Mascota;
 
 class HomeController extends Controller
 {
@@ -29,13 +30,38 @@ class HomeController extends Controller
     {
 
         $date = Carbon::now();
- 
-        $mes = $date->format('m');
-        
 
+        $year = $date->format('Y');
+
+        $fechaActual = $date->format('Y-m-d');
+
+        $strMes = $date->format('F-Y');
+
+        //fecha actual en string
+        $strFecha = $date->toFormattedDateString();
+     
+        //Promedio de tiempo de las ordenes    
         $tblOrden = new Orden();
-        $promHoras = $tblOrden->promHoras($mes);
+        $promHoras = $tblOrden->promHoras($year);
 
-        return view('home',compact('promHoras'));
+        //Formateo el promedio de horas para quitarle los segundos
+        $arrHoras = explode(':',$promHoras->total);
+        $promHoras = $arrHoras[0].":".$arrHoras[1]."'";
+
+        $resultTop = $tblOrden->topTen($year);
+
+        //Total de ordenes en el anio
+        $totalOrdenesAnual = $tblOrden->totalOrdenes('year',$year);
+
+        //Total de ordenes en el mes
+        $totalOrdenesMes = $tblOrden->totalOrdenes('mes',$fechaActual);
+
+        //Total de ordenes en el dia
+        $totalOrdenesDia = $tblOrden->totalOrdenes('day',$fechaActual);
+
+        //Ordenes actuales
+        $ordenes = $tblOrden->listadoDia($fechaActual);
+
+        return view('home',compact('promHoras','resultTop','totalOrdenesAnual','totalOrdenesMes','totalOrdenesDia','strMes','year','strFecha','ordenes'));
     }
 }

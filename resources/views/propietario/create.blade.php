@@ -10,7 +10,7 @@
 	</div>
 </div>
 
- @include('errors/errors')
+ @include('partials.mensajes')
 
 <div class="row">
 	

@@ -142,6 +142,23 @@
 		</div>
 		<!-- Fin row 6 -->
 
+		<!-- row 7 -->              
+		<div class="row">
+			<br/>
+			<div class="col-lg-3 col-lg-offset-1 text-right">
+
+			 Observaciones Groomer:
+			
+			</div>
+
+			<div class="col-lg-8">
+				
+				{!! Form::text('observaciones_groomer',null, ['id'=>'observaciones_groomer','class'=>'form-control']) !!}	
+
+			</div>
+		</div>
+		<!-- Fin row 7 -->
+
 		<!-- Row 8 -->
 		<div class="row">
 			<br/>
@@ -151,7 +168,7 @@
 					<i class="fa fa-pencil"></i> Actualizar 
 				</button>
 				&nbsp;&nbsp;
-				<a href="#">Cancelar</a>
+				<a href="{{ URL::previous() }}">Cancelar</a>
 
 			</div>
 		</div>

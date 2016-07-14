@@ -53,19 +53,28 @@
             
           </ul>
         </li>
-
         
-
         <li>
-          <a href="{{ url('mascota/') }}"><i class="fa fa-github-alt"></i> Mascotas</a>
+          <a href="#"><i class="fa fa-list"></i> Listados <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+            <li>
+              <a href="{{ url('mascota/') }}"><i class="fa fa-github-alt"></i> Mascotas</a>
+            </li>
+
+            <li>
+              <a href="{{ url('propietario/') }}"><i class="fa fa-users"></i> Propietarios</a>
+            </li>
+            
+          </ul>
         </li>
-
-        <li>
-          <a href="{{ url('propietario/') }}"><i class="fa fa-users"></i> Propietarios</a>
-
-        </li>
-
         
+         <li>
+          <a href="#"><i class="fa fa-bar-chart-o"></i> Reportes estadisticos <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+           
+            
+          </ul>
+        </li>
 
         <li>
           <a href="#"><i class="fa fa-calendar"></i> Citas</a>

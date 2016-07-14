@@ -45,22 +45,31 @@ $(document).ready(function(){
 		<div class="col-lg-12">
 			<h2 class="page-header">Listado de Propietarios <span class="fa fa-users"></span></h2>
 		</div>
+	</div>
+
+	<div class="row">
+		@include('partials.mensajes')
+	</div>
 	
-	
-	<table class="table table-striped table-hover table-bordered" id='tabla'>
-	<thead>
-		<tr>
-			<th>Nombres</th>
-			<th>C&eacute;dula</th>
-			<th>Tel&eacute;fonos</th>
-			<th>Mascotas</th>
-			<th>Acci&oacute;n</th>
-		</tr>
-	</thead>
-	<tbody>
-		
-	</tbody>
-	</table>
+	<div class="row">
+		<table class="table table-striped table-hover table-bordered" id='tabla'>
+		<thead>
+			<tr>
+				<th>Nombres</th>
+				<th>C&eacute;dula</th>
+				<th>Tel&eacute;fonos</th>
+				<th>Mascotas</th>
+				<th>Acci&oacute;n</th>
+			</tr>
+		</thead>
+		<tbody>
+			
+		</tbody>
+		</table>
 
 	</div>
+	<!-- formulario para eliminar orden -->
+	{{ Form::open(['route' => ['propietario.destroy',':ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) }}
+
+	{{ Form::close() }}
 @endsection

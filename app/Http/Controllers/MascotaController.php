@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Yajra\Datatables\Facades\Datatables;
 
 use App\Http\Requests;
 use Session;
@@ -30,9 +31,59 @@ class MascotaController extends Controller
      */
     public function index()
     {
-        $results = Mascota::with('propietario','raza.especie','color')->orderBy('nombre','asc')->get();
+        //Hago la consulta general
+       return view('mascota.index');
+        
+    }
+    /**
+     * Muesta el listado general de mascotas
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listado(Request $request)
+    {
+        
+        if($request->ajax())
+        {
 
-        return view('mascota.list',compact('results'));
+
+            $tablaMascotas = new Mascota();
+
+            $mascotas = $tablaMascotas->listadoGeneral();
+            
+
+            return Datatables::of($mascotas)
+            ->setRowId('id')
+            ->addColumn('id',function($mascota){
+                return $mascota->id;
+            })
+            ->addColumn('nombre',function($mascota){
+                return $mascota->nombre;
+            })
+            
+            ->addColumn('especie',function($mascota){
+                return $mascota->especie." / ".$mascota->raza;
+            })
+            ->addColumn('color',function($mascota){
+                return $mascota->color;
+            })
+            ->addColumn('propietario', function($mascota){
+                return $mascota->nb_propietario.', '.$mascota->ap_propietario;
+            })
+            ->addColumn('action', function ($mascota) {
+                
+                $ruta = route('mascota.edit',$mascota->id);
+
+                $strHtml = sprintf('<button type="button" class="btn btn-warning btn-sm btn-edit" data-toggle="tooltip" data-placement="top" title="Editar" data-id="%d" onClick="$(this).editar(%d)"><i class="fa fa-pencil"></i></button> ',$mascota->id,$mascota->propietario_id);
+                $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="%s"onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$mascota->id);
+
+                return $strHtml;
+            })
+            ->make(true);
+        }
+
+        return view('mascota.index');
+
     }
 
     /**
@@ -57,7 +108,7 @@ class MascotaController extends Controller
 
             $accion = 'Agregar';
 
-            $view = view('mascota.forms.frmMascota',compact('colores','accion','propietario'));
+            $view = view('mascota.forms.frmMascotaRenderPropietario',compact('colores','accion','propietario'));
         
             $sections = $view->renderSections();
            
@@ -80,14 +131,15 @@ class MascotaController extends Controller
 
         $this->validate($request, [
 
+            'id'            => ['required','integer'],
             'nombre'        => ['required','max:60'] ,
             'especie_id'    => ['required'] ,
-            'peso'          => ['integer'],
             'raza_id'       => ['exists:razas,id'],
             'alimento_id'   => ['exists:alimentos,id'],
 
         ],
         [
+            'id.required'         => "El campo N&deg; ficha es obligatorio",
             'especie_id.required' => "El campo especie es obligatorio",
             'raza_id.exists'      => "El campo raza es obligatorio",
             'alimento_id.exists'  => "El campo alimento es obligatorio",
@@ -100,7 +152,11 @@ class MascotaController extends Controller
 
             //Tomo los datos del formulario
             $data = $request->all();
-
+            /*
+            //Busco el ultimo id generado
+            $lastId = Mascota::max('id');
+            $data['id'] = $lastId + 1;
+            */
             //Guardo los datos de la mascota       
             Mascota::create($data);
 
@@ -158,7 +214,6 @@ class MascotaController extends Controller
         $colores = Color::lists('color','id');
 
 
-
         //hago una consulta de la tabla propietarios
         $propietario = Propietario::with('mascota','mascota.color','mascota.especie','mascota.raza')->find($data['propietario']);
 
@@ -175,8 +230,8 @@ class MascotaController extends Controller
         {
 
             $accion = 'Editar';
-
-            $view = view('mascota.forms.frmMascota',compact('colores','accion','propietario','mascota','razas','alimentos'));
+            
+            $view = view($data['vista'],compact('colores','accion','propietario','mascota','razas','alimentos'));
         
             $sections = $view->renderSections();
            
@@ -200,9 +255,8 @@ class MascotaController extends Controller
 
         $this->validate($request, [
 
-            'nombre'        => ['required','max:60'] ,
-            'especie_id'    => ['required'] ,
-            'peso'          => ['integer'],
+            'nombre'        => ['required','max:60'],
+            'especie_id'    => ['required'],
             'raza_id'       => ['exists:razas,id'],
             'alimento_id'   => ['exists:alimentos,id'],
 
@@ -223,14 +277,10 @@ class MascotaController extends Controller
             $mascota->fill($request->all());
             $mascota->save();
 
+          
+            return response()->json(['message'=>'Los datos se modificaron correctamente', 'token'   => csrf_token()  ]);
 
-            return response()->json([
-                'message' => "Mascota modificada correctamente",
-                'token'   => csrf_token(),
-
-                ]);
-
-            return redirect()->to('/propietario/'.$request->input('id').'/edit');    
+            //return redirect()->to('/propietario/'.$request->input('id').'/edit');    
         }
         
     }
@@ -241,10 +291,19 @@ class MascotaController extends Controller
         if($request->ajax())
         {
 
-            //Elimino el registro
-            Mascota::find($id)->delete();
+            try
+            {
+                //Elimino el registro
+                Mascota::findOrFail($id)->delete();
 
-            return response()->json(['message'=>'Registro eliminado correctamente']);
+                return response()->json(['message'=>'Registro eliminado correctamente']);    
+
+            } catch(\Illuminate\Database\QueryException $e) {
+
+                return response()->json(['message'=>'Error '.$e->errorInfo[1].', no fue posible eliminar el registro'],500);
+
+            }
+            
 
         }
     }

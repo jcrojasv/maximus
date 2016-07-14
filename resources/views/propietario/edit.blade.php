@@ -103,9 +103,5 @@ $(document).ready(function(){
 	@endsection
 </div>
 
-<div id="divFrmOrden">
-	@section('renderOrden')
-	@endsection
-</div>
 @endsection
 
