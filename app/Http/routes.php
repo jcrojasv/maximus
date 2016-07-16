@@ -44,6 +44,9 @@ Route::get('selectRazas', 'PropietarioController@cargarRazasJquery');
 Route::get('selectAlimentos', 'PropietarioController@cargarAlimentosJquery');
 
 //Rutas para ordenes de trabajo
+Route::get('orden/showHistorial/{mascota}','OrdenController@showHistorial')->name('orden.showHistorial')->where('mascota','[0-9]+');
+Route::get('orden/historial/{mascota?}','OrdenController@historial')->name('orden.historial')
+->where('mascota','[0-9]+');
 Route::get('orden/listAcumulado','OrdenController@listAcumulado')->name('orden.listAcumulado');
 Route::get('orden/showAcumulado','OrdenController@showAcumulado')->name('orden.showAcumulado');
 Route::get('orden/createFromMascota/{mascota}','OrdenController@createFromMascota')->name('orden.createFromMascota')->where('mascota', '[0-9]+');

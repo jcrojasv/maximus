@@ -37,6 +37,9 @@ class HomeController extends Controller
 
         $strMes = $date->format('F-Y');
 
+        //Numero de la semana actual
+        $intSemana = $date->format('W');
+
         //fecha actual en string
         $strFecha = $date->toFormattedDateString();
      
@@ -62,6 +65,28 @@ class HomeController extends Controller
         //Ordenes actuales
         $ordenes = $tblOrden->listadoDia($fechaActual);
 
-        return view('home',compact('promHoras','resultTop','totalOrdenesAnual','totalOrdenesMes','totalOrdenesDia','strMes','year','strFecha','ordenes'));
+        //Datos para el grafico ordenes diarias
+        $datosGrafico = $tblOrden->totalDiarioComparativo();
+        $flag = false;
+        $arrGrafico = array();
+
+        foreach ($datosGrafico as $datos) 
+        {
+           
+           if(!$flag) {
+             $semana = $datos->semana;
+             $flag = true;
+           }
+
+           
+           if(!in_array($datos->dian,$arrGrafico) && $semana == $datos->semana)
+             $arrGrafico[$datos->dian]['a'] = $datos->total;
+           else
+             $arrGrafico[$datos->dian]['b'] = $datos->total;
+
+
+        }
+        
+        return view('home',compact('promHoras','resultTop','totalOrdenesAnual','totalOrdenesMes','totalOrdenesDia','strMes','year','strFecha','ordenes','arrGrafico','intSemana'));
     }
 }

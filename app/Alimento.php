@@ -15,7 +15,7 @@ class Alimento extends Model
     	$alimentos = $this->where('especie_id','=',$especieId)
     	->select('nombre','id')
     	->orderBy('nombre','asc')
-    	->get();
+    	->lists('nombre','id');
     	
     	return $alimentos;
 

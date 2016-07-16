@@ -245,9 +245,10 @@ class PropietarioController extends Controller
         
         $strHtml = "<select name='raza_id' id='raza_id' class='form-control'>";
         $strHtml .= sprintf("<option value='%d'>%s</option>",0,'-->Seleccione una raza<--');
-        foreach ($razas as $raza) {
-            $selected = ($raza->id == $idSeleccionado) ? 'selected' : '';
-            $strHtml .= sprintf("<option value='%d' %s>%s</option>",$raza->id,$selected, $raza->descripcion);   
+        
+        foreach ($razas as $clave=>$valor) {
+            $selected = ($clave == $idSeleccionado) ? 'selected' : '';
+            $strHtml .= sprintf("<option value='%d' %s>%s</option>",$clave,$selected, $valor);   
 
         }
         $strHtml .= "</select>";
@@ -274,9 +275,9 @@ class PropietarioController extends Controller
         
         $strHtml = "<select name='alimento_id' id='alimento_id' class='form-control'>";
         $strHtml .= sprintf("<option value='%d'>%s</option>",0,'-->Seleccione un alimento<--');
-        foreach ($alimentos as $alimento) {
-            $selected = ($alimento->id == $idSeleccionado) ? 'selected' : '';
-            $strHtml .= sprintf("<option value='%d' %s>%s</option>",$alimento->id,$selected,$alimento->nombre);
+        foreach ($alimentos as $clave => $valor) {
+            $selected = ($clave == $idSeleccionado) ? 'selected' : '';
+            $strHtml .= sprintf("<option value='%d' %s>%s</option>",$clave,$selected,$valor);
 
         }
         $strHtml .= "</select>";

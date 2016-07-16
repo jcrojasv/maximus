@@ -41,60 +41,15 @@
 
       <div id="listado">
         @section('listadoBusqueda')
-
-          <script type="text/javascript">
-          $(document).ready(function(){
-
-            //Funcion para seleccionar la mascota del listado de la busqueda
-            $('.btn-select').on('click',function(){
-              
-              var ruta = "{{ route("orden.selectMascota") }}";
-        
-              var mascota = $(this).data('id');
-
-              //lamado ajax metodo get para tomar el formulario
-              $.get(ruta,{id : mascota},function(data) {
-
-                    $('#datosMascota').empty().append($(data)).fadeIn('slow');
-                    
-                    //Oculto la ventana modal
-                    $('#ventanaModal').modal('toggle');
-
-                }).done(function(){
-
-                  //Llamo por ajax el formulario de crear si la peticion anterior tuvo exito
-                  var ruta = "{{ route('orden.create')}}";
-         
-
-                  $.get(ruta,{mascota_id : mascota},function(data){
-                    
-                    $('#divFrmOrden').empty().append($(data)).fadeIn('slow');
-
-
-                  }).fail(function(data){
-
-                    var errors = data.responseJSON;
-                    if (errors) {
-                        $.each(errors, function (i) {
-                            console.log(errors[i]);
-                        });
-                    }
-
-                  });
-                });
-            
-            });
-
-            //DataTable
+          <script>
+          //DataTable
             $('#tabla').DataTable({
               responsive: true,
               bFilter:     false,
              "language": { "url": "/i18n/dataTable.spanish.lang"},
               
             });
-          });
           </script>
-
           @if(isset($objResult))
           <br/>
             <table class='table table-striped table-hover' id='tabla'>
@@ -106,7 +61,7 @@
                       <td>{{$objMascota->nombre}}</td>
                       <td>{{ $objMascota->especie->descripcion }} / {{$objMascota->descripcion}}</td>
                       <td>{{$objMascota->nombres}}</td>
-                      <td><button type='button' class='btn btn-warning btn-sm btn-select' data-id="{{$objMascota->id}}"><i class="fa fa-hand-rock-o"></i> Select</button></td></tr>
+                      <td><a href='#' class='btn btn-warning btn-sm btn-select' data-id="{{$objMascota->id}}"><i class="fa fa-hand-rock-o"></i> Select</a></td></tr>
                   @endforeach                
               </tbody>
          

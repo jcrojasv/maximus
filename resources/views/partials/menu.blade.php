@@ -49,6 +49,7 @@
           <a href="#"><i class="fa fa-file-text"></i> Ordenes <span class="fa arrow"></span></a>
           <ul class="nav nav-second-level">
             <li><a href="{{ route('orden.create') }}"> Crear Orden</a></li>
+            <li><a href="{{ route('orden.historial') }}"> Historial</a></li>
             <li><a href="{{ route('orden.index') }}"> Listado General</a></li>
             
           </ul>

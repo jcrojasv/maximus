@@ -124,21 +124,18 @@
                     <th>#</th>
                     <th>Mascota / Esp / Raza</th>
                     <th>Ent/Sal</th>
-                    <th>Prop / Tel</th>
+                    <th>Tiempo</th>
                     <th>Accion</th>
 
                 </thead>
                 <tbody>
                    @foreach($ordenes as $orden)
-                    <tr @if(!$orden->estatus) class="info" @endif>
+                    <tr @if(!$orden->estatus) class="danger" @endif>
                         
                         <td>{{$orden->id}}</td>
                         <td>{{$orden->nombre}} / {{ $orden->esp}} / {{ $orden->raza }}</td>
                         <td>{{$orden->entrada}} <br/> {{$orden->salida}}</td>
-                        <td>
-                            {{$orden->nb}}, {{$orden->ap}}
-                           
-                        </td>
+                        <td>{{$orden->tiempo}}</td>
                         <td>
                         <a href="{{route('orden.edit',['id'=>$orden->id])}}" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-pencil"></i> Editar</a></td>
                    
@@ -154,22 +151,27 @@
          @endif
         <!-- /.panel -->
         
-        <h3 class="page-title">Ordenes diarias semana 27 de Junio 2016</h3>
-        <div id="myfirstchart"></div>
+        <h3 class="page-title">Comparativo diario semanas: {{ $intSemana-1 }}-{{ $intSemana }}</h3>
+
+        
+
+        <div id="chartOrdenesDiarias"></div>
 
             <script type="text/javascript">
             new Morris.Bar({
-              element: 'myfirstchart',
+              element: 'chartOrdenesDiarias',
               data: [
-                { y: 'Lunes', a: 100, b: 90 },
-                { y: 'Martes', a: 75,  b: 65 },
-                { y: 'Miercoles', a: 50,  b: 40 },
-                { y: 'Jueves', a: 75,  b: 65 },
-                { y: 'Viernes', a: 50,  b: 40 },
-                { y: 'Sabado', a: 75,  b: 65 },
+                @foreach($arrGrafico as $clave =>$valor)
+                    { y: '{{ $clave }}',  
+                    @foreach($valor as $i => $val)
+                        {{ $i }}: {{ $val }},
+                    @endforeach
+                    },
+                @endforeach
+                
               ],
               xkey: 'y',
-              ykeys: ['a', 'b'],
+              ykeys: ['a','b'],
               labels: ['Actual', 'Anterior']
             });
             </script>
@@ -188,7 +190,7 @@
                 
                 <div class="list-group">
                     @foreach($resultTop as $topTen)
-                    <a href="#" class="list-group-item">
+                    <a href="{{ route('orden.historial',$topTen->id)}}" class="list-group-item">
                          {{$topTen->mascota}}
                         <span class="pull-right text-muted small"><em>{{$topTen->total}} Ordenes</em>
                         </span>

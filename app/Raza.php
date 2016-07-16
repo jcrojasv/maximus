@@ -15,7 +15,7 @@ class Raza extends Model
     	$razas = $this->where('especie_id','=',$especieId)
     	->select('descripcion','id')
     	->orderBy('descripcion','asc')
-    	->get();
+    	->lists('descripcion','id');
     	
     	return $razas;
 

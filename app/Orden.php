@@ -47,12 +47,13 @@ class Orden extends Model
                    
         $ordenes = $this->join('mascotas','ordenes.mascota_id','=','mascotas.id')
         ->join('propietarios','mascotas.propietario_id','=','propietarios.id')
-         ->join('especies','mascotas.especie_id','=','especies.id')
+        ->join('especies','mascotas.especie_id','=','especies.id')
         ->join('razas','mascotas.raza_id','=','razas.id')
          ->select('ordenes.*', 'mascotas.nombre', 'propietarios.nombres as nb',
             'propietarios.apellidos as ap',
             'propietarios.telefono_fijo as fijo','propietarios.telefono_celular as movil',
-            'especies.descripcion as esp','razas.descripcion as raza')
+            'especies.descripcion as esp','razas.descripcion as raza',
+            DB::raw("IF(salida != '00:00:00',timediff(salida,entrada),'') as tiempo"))
         ->where('fecha','=',$fecha)
         ->orderBy('entrada','asc')
         ->get();
@@ -77,20 +78,28 @@ class Orden extends Model
         
 
     }
-
+    /*
+        Funcion que arma la consulta de acumulados por mascota,\
+        mas adelante se usa en diferentes contextos
+    */
     public function ordenesMascotas()
     {
         return $this->join('mascotas','mascotas.id','=','ordenes.mascota_id')
                     ->join('propietarios','mascotas.propietario_id','=','propietarios.id')
                     ->join('especies','mascotas.especie_id','=','especies.id')
                     ->join('razas','mascotas.raza_id','=','razas.id')
-                    ->select(DB::raw('count(*) as total'), 'mascotas.nombre as mascota', 'propietarios.nombres as nb',
+                    ->select(DB::raw('count(*) as total'), 'mascotas.nombre as mascota', 
+                        'mascotas.id',
+                        'propietarios.nombres as nb',
                         'propietarios.apellidos as ap',
                         'especies.descripcion as esp','razas.descripcion as raza')
                     ->groupBy('mascota_id')
                     ->orderBy('total','desc');
     }
 
+    /*
+        Devuelve un listado de las 10 mascotas con mas  ordenes en el year
+    */
     public function topTen($year=null)
     {
 
@@ -100,13 +109,20 @@ class Orden extends Model
                     ->get();
 
     }
-
+    /*
+        Devuelve el total de ordenes acumuladas por mascota en el year,
+        se sirve de ordenesMascotas()
+    */
     public function acumuladoMascotas($year)
     {
         return $this->ordenesMascotas()->where(DB::raw('YEAR(fecha)'),'=',$year)
                     ->get();
     }
 
+    /*
+        Devuelve el total general de ordenes bien sea por el year,
+        por el mes o por el dia
+    */
     public function totalOrdenes($tipo,$fecha = null)
     {
 
@@ -142,6 +158,35 @@ class Orden extends Model
                     ->where(DB::raw('YEAR(fecha)'),'=',$year)
                     ->groupBy('mascota_id,tipo')
 
+                    ->get();
+    }
+    /*
+        Devuelve el total de ordenes diarias de la semana actual en comparacion
+        con la semana anterior
+    */
+    public function totalDiarioComparativo()
+    {
+
+        return $this->select(DB::raw('count(*) as total, DAY(fecha) AS dia, DAYNAME(fecha) as dian, WEEK( fecha ) as semana, DAYOFWEEK(fecha) as diaWeek'))
+            ->where(DB::raw('YEAR(fecha)'), '=', DB::raw('YEAR(NOW())'))
+            ->where(DB::raw('WEEK(fecha)'), '=', DB::raw('WEEK(NOW())'))
+            ->orWhere(DB::raw('WEEK(fecha)'), '=', DB::raw('WEEK(NOW())-1'))
+            ->groupBy('fecha')
+            ->orderBy('diaWeek','asc')->orderBy('semana','asc')
+            ->get();
+   
+    }
+
+    /*
+        Devuelve el historial de ordenes dada el numero de ficha de la 
+        mascota
+    */
+    public function historialMascota($id)
+    {
+
+        return $this->select(DB::raw('timediff(salida,entrada) as tiempo'),'ordenes.*')
+        ->where('mascota_id','=',$id)
+                    ->orderBy('fecha','desc')
                     ->get();
     }
 

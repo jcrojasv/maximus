@@ -99,7 +99,7 @@ class MascotaController extends Controller
         $data = $request->all();
 
         //Datos para el select colores
-        $colores = Color::lists('color','id');
+        $colores = Color::orderBy('color','asc')->lists('color','id');
 
         $propietario = Propietario::find($data['propietario']);
 
@@ -211,7 +211,7 @@ class MascotaController extends Controller
         $data = $request->all();
 
         //Datos para el select colores
-        $colores = Color::lists('color','id');
+        $colores = Color::orderBy('color','asc')->lists('color','id');
 
 
         //hago una consulta de la tabla propietarios
@@ -221,10 +221,13 @@ class MascotaController extends Controller
 
         
         //Datos para el select de razas
-        $razas = Raza::where('especie_id','=',$mascota['especie_id'])->lists('descripcion','id');
+        $objRazas = new Raza();
+        $razas = $objRazas->getRazasById($mascota['especie_id']);
+        
 
         //Datos para el select de alimentos
-        $alimentos = Alimento::where('especie_id','=',$mascota['especie_id'])->lists('nombre','id');
+        $objAlimentos = new Alimento();
+        $alimentos = $objAlimentos->getAlimentosById($mascota['especie_id']);
         
         if($request->ajax())
         {

@@ -55,7 +55,47 @@ $(document).ready(function(){
 
 	});
 
-		
+
+    //Funcion para seleccionar la mascota del listado de la busqueda
+    $('#listado').on('click','a.btn-select',function(){
+      
+      var ruta = "{{ route("orden.selectMascota") }}";
+
+      var mascota = $(this).data('id');
+    
+      //lamado ajax metodo get para tomar el formulario
+      $.get(ruta,{id : mascota},function(data) {
+
+            $('#datosMascota').empty().append($(data)).fadeIn('slow');
+            
+            //Oculto la ventana modal
+            $('#ventanaModal').modal('toggle');
+
+        }).done(function(){
+
+          //Llamo por ajax el formulario de crear si la peticion anterior tuvo exito
+          var ruta = "{{ route('orden.create')}}";
+ 
+
+          $.get(ruta,{mascota_id : mascota},function(data){
+            
+            $('#divFrmOrden').empty().append($(data)).fadeIn('slow');
+
+
+          }).fail(function(data){
+
+            var errors = data.responseJSON;
+            if (errors) {
+                $.each(errors, function (i) {
+                    console.log(errors[i]);
+                });
+            }
+
+          });
+        });
+    
+    });
+
 	
 });
 

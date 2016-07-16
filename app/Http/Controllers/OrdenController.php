@@ -211,7 +211,7 @@ class OrdenController extends Controller
      */
     public function show(Request $request)
     {
-       
+        
        if($request->ajax())
        {
             //Hago la consulta general
@@ -221,10 +221,10 @@ class OrdenController extends Controller
             return Datatables::of($ordenes)
             ->setRowId('id')
             ->addColumn('estatus',function($orden){
-                return ($orden->estatus) ? "<strong>En proceso</strong>" : "Finalizada";
+                return ($orden->estatus) ? "En proceso" : "Finalizada";
             })
             ->addColumn('mascota',function($orden){
-                return ($orden->estatus) ? "<strong>$orden->nombre</strong>" : $orden->nombre;
+                return ($orden->estatus) ? "$orden->nombre" : $orden->nombre;
             })
             ->addColumn('fecha',function($orden){
                 return $orden->prettyDate('fecha');
@@ -245,7 +245,18 @@ class OrdenController extends Controller
                 return $strHtml;
             })
             ->setRowClass(function ($orden) {
-                    return $orden->estatus ? 'info' : '';
+                   $objDate = Carbon::now();
+                    $fechaActual = $objDate->format('Y-m-d');
+                    if(!$orden->estatus && $orden->fecha == $fechaActual ) 
+                    {
+                        $strClase = 'danger';
+
+                    } elseif($orden->estatus && $orden->fecha == $fechaActual) {
+                        $strClase = 'info';
+                    } else {
+                        $strClase = '';
+                    }
+                    return $strClase;
                 })
             ->make(true);
        }
@@ -576,5 +587,46 @@ class OrdenController extends Controller
         }
 
         
+    }
+
+    public function historial(Request $request, $id=null)
+    {
+    
+        if($id) 
+        {
+
+            $objOrden = new Orden();
+            $objMascota = new Mascota();
+
+            $resultHistorial = $objOrden->historialMascota($id);
+            $resultMascota = $objMascota->selectMascota($id);
+
+            return view('orden.historialFromMascota',compact('resultHistorial','resultMascota'));
+
+        } else {
+
+            return view('orden.historial');    
+        }
+
+        
+    
+    }
+
+    public function showHistorial(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+
+            $objTable = new Orden();
+
+            $resultHistorial = $objTable->historialMascota($id);
+
+            $view = view('orden.historial',compact('resultHistorial'));
+         
+            $sections = $view->renderSections();
+            
+            return response()->json($sections['renderHistorial']);
+
+        }
     }
 }
