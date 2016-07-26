@@ -150,6 +150,8 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
 
+       
+
         /*
          * Application Service Providers...
          */
@@ -160,6 +162,11 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
         'Barryvdh\Debugbar\ServiceProvider',
+
+         'Illuminate\View\ViewServiceProvider',
+        'Illuminate\Html\HtmlServiceProvider',
+        'Laracasts\Flash\FlashServiceProvider',
+        'Mitul\Generator\GeneratorServiceProvider',
 
     ],
 
@@ -211,6 +218,9 @@ return [
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'Debugbar' => 'Barryvdh\Debugbar\Facade',
+        'Form'  => 'Illuminate\Html\FormFacade',
+        'HTML'  => 'Illuminate\Html\HtmlFacade',
+        'Flash' => 'Laracasts\Flash\Flash',
 
     ],
 

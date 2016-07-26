@@ -69,7 +69,7 @@ $(document).ready(function(){
 
 	</div>
 	<!-- formulario para eliminar orden -->
-	{{ Form::open(['route' => ['propietario.destroy',':ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) }}
+	{!! Form::open(['route' => ['propietario.destroy',':ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) !!}
 
-	{{ Form::close() }}
+	{!! Form::close() !!}
 @endsection

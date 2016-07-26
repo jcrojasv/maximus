@@ -76,9 +76,9 @@ $(document).ready(function(){
 
 
 	<!-- formulario para eliminar mascota -->
-	{{ Form::open(['route' => ['mascota.destroy',':ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) }}
+	{!! Form::open(['route' => ['mascota.destroy',':ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) !!}
 
-	{{ Form::close() }}
+	{!! Form::close() !!}
 
 	<!--Formulario para editar mascotas -->
 	<div id="divFrmMascota">
