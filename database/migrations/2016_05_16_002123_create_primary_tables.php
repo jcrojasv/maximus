@@ -125,7 +125,7 @@ class CreatePrimaryTables extends Migration
             $table->integer('id')->unsigned()->primary();
             $table->string('nombres',25);
             $table->string('apellidos',25);
-            $table->string('email',60)->unique()->nullable();
+            $table->string('email',60)->nullable();
             $table->string('direccion',120)->nullable();
             $table->string('telefono_celular',12)->nullable();
             $table->string('telefono_fijo',12)->nullable();

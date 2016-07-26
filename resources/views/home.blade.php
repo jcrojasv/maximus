@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">{{ $promHoras }}</div>
-                        <div>Duracion Promedio!</div>
+                        <div>Duraci&oacute;n Mes!</div>
                     </div>
                 </div>
             </div>
@@ -171,7 +171,7 @@
                 
               ],
               xkey: 'y',
-              ykeys: ['a','b'],
+              ykeys: ['b','a'],
               labels: ['Actual', 'Anterior']
             });
             </script>

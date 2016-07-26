@@ -31,6 +31,7 @@ class HomeController extends Controller
 
         $date = Carbon::now();
 
+
         $year = $date->format('Y');
 
         $fechaActual = $date->format('Y-m-d');
@@ -43,9 +44,9 @@ class HomeController extends Controller
         //fecha actual en string
         $strFecha = $date->toFormattedDateString();
      
-        //Promedio de tiempo de las ordenes    
+        //Promedio de tiempo de las ordenes mensual    
         $tblOrden = new Orden();
-        $promHoras = $tblOrden->promHoras($year);
+        $promHoras = $tblOrden->promHoras($fechaActual);
 
         //Formateo el promedio de horas para quitarle los segundos
         $arrHoras = explode(':',$promHoras->total);

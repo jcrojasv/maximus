@@ -66,7 +66,7 @@ class PropietarioController extends Controller
             'id'            => ['required','integer'],
             'nombres'       => ['required','max:25'] ,
             'apellidos'     => ['required','max:25'] ,
-            'email'         => ['required','max:60','email'] ,
+            
             'direccion'     => ['required','max:120'],
 
         ],
@@ -80,6 +80,9 @@ class PropietarioController extends Controller
         {
             //Separo los datos de los formularios
             $data = $request->all();
+
+            if($data['email']=='')
+                $data['email'] = NULL;
 
             Propietario::create($data);
 
@@ -175,6 +178,12 @@ class PropietarioController extends Controller
             //Primero busco el propietario en la BD
             $propietario = Propietario::find($id);
 
+            //Separo los datos de los formularios
+            $data = $request->all();
+
+            if($data['email']=='')
+                $data['email'] = NULL;
+            
             //Actualizo con el metodo fill
             $propietario->fill($request->all());
             $propietario->save();
