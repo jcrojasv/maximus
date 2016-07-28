@@ -55,3 +55,7 @@ Route::get('orden/selectMascota', 'OrdenController@SelectMascota')->name('orden.
 Route::get('orden/esp', 'OrdenController@esp')->name('orden.esp');
 Route::get('orden/index', 'OrdenController@index');
 Route::resource('/orden','OrdenController');
+
+//Rutas para Color
+Route::get('colors/listado','ColorController@listado');
+Route::resource('/colors','ColorController');

@@ -163,10 +163,8 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
         'Barryvdh\Debugbar\ServiceProvider',
 
-         'Illuminate\View\ViewServiceProvider',
-        'Illuminate\Html\HtmlServiceProvider',
-        'Laracasts\Flash\FlashServiceProvider',
-        'Mitul\Generator\GeneratorServiceProvider',
+        Laracasts\Flash\FlashServiceProvider::class,
+        Mitul\Generator\GeneratorServiceProvider::class,
 
     ],
 
@@ -218,9 +216,8 @@ return [
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'Debugbar' => 'Barryvdh\Debugbar\Facade',
-        'Form'  => 'Illuminate\Html\FormFacade',
-        'HTML'  => 'Illuminate\Html\HtmlFacade',
-        'Flash' => 'Laracasts\Flash\Flash',
+        'Flash'     => Laracasts\Flash\Flash::class
+        
 
     ],
 

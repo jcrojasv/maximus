@@ -67,6 +67,7 @@ jQuery.fn.eliminar = function() {
     var id   = $(this).data('id');
     var ruta = form.attr('action').replace(':ID',id);
     var data = form.serialize();
+
     if(confirm("Estas seguro de eliminar este registro?"))
     {
         $.ajax({
@@ -125,61 +126,54 @@ jQuery.fn.eliminar = function() {
     
     };
 
-//Funcion para resetear campos de formulario
-jQuery.fn.resetear = function () {
-  $(this).find(':input').not(':hidden').each(function(){
-    var elemento = this;
+//Funcion para agregar o modificar mediante ajax
+$.grabarRegistro = function(formulario,token){
 
-     switch (elemento.type) 
-     {
-        case 'text':
-            $(this).val('');
-            break;
-         case 'checkbox':
-         case 'radio':
-            $(this).removeAttr('checked');
-            break;
+    var form = $('#'+formulario);
+    var ruta = form.attr('action');
+    var data = form.serialize();
+    
+ 
+    $.ajax({
+        url: ruta,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'post',
+        dataType: 'json',
+        data: data,
+        beforeSend:  function(){
+            $('span.help-block').addClass('hidden');
+            $('div').removeClass('has-error');
+        },
 
-    }
-   }); 
-      
-};
+    }).done(function(respuesta) {
 
-//funcion para llenar el formulario despues de una consulta via ajax 
-jQuery.fn.llenarFormulario = function(arreglo){
+        //Recargo los datos en datatable para que muestre los cambios recientes
+        $('#tabla').DataTable().ajax.reload();
+        
+        //Desvanecemos la ventana modal
+        $('#ventanaModal').modal('hide');
 
-    $(this).find(':input').each(function(){
-        var elemento = this;
-                
-        switch (elemento.type) {
-            case 'text': 
-                elemento.value = '' + arreglo[elemento.name] + '';
-                break;
-            case 'checkbox':
-                if (arreglo[elemento.name] === true || arreglo[elemento.name] === 't' || arreglo[elemento.name] === 1){
-                    elemento.checked = true;
-                    elemento.value=true;
-                }else{
-                    elemento.value=false;
-                }
-                break;
+        $('#mensaje').html(' ');
+
+        $('#divMensajes').removeClass('hidden').addClass('alert-success').fadeIn();
+
+        $("#pMensajes").html('<strong>Yeah!!</strong> ' + respuesta.message);
+
+
+    }).fail(function(respuesta){
+
+        $.each(respuesta.responseJSON,function (ind, elem) { 
+        
+            $('div.'+ind).removeClass('hidden').addClass('has-error');
             
-            case 'radio':
-                if (elemento.value === arreglo[elemento.name])
-                    elemento.checked = true;
-                break;
-            case 'select-one':
-                var lon = elemento.length;
-                for (var i = 0; i < lon; i++) {
-                    if (elemento.options[i].value === arreglo[elemento.name])
-                    {
-                        elemento.options[i].selected = true;
-                        break;
-                    }
-                }
-          
-                
-        }
-    });    
-   
-};
+            $('span.'+ind).removeClass('hidden');
+
+            $('span.'+ind).html(' ');
+            $('span.'+ind).html('<strong>'+elem+'</strong>');
+
+        });
+            
+
+    });
+}
+
