@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 //Modelos
-use App\Raza;
+use App\Alimento;
 use App\Especie;
 //Fin modelos
 
@@ -16,7 +16,7 @@ use Yajra\Datatables\Facades\Datatables;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
-class RazaController extends Controller
+class AlimentoController extends Controller
 {
     
     public function __construct()
@@ -32,7 +32,7 @@ class RazaController extends Controller
     public function index()
     {
         //
-        return view('razas.index');
+        return view('alimentos.index');
     }
 
     /**
@@ -43,38 +43,38 @@ class RazaController extends Controller
     public function listado(Request $request)
     {
         
-        $tabla = new Raza();
+        $tabla = new Alimento();
 
         if($request->ajax())
         {
             
-            $razas = $tabla->all();
+            $alimentos = $tabla->all();
      
-            return Datatables::of($razas)
+            return Datatables::of($alimentos)
             ->setRowId('id')
-            ->addColumn('id',function($raza){
-                return $raza->id;
+            ->addColumn('id',function($alimento){
+                return $alimento->id;
             })
-            ->addColumn('especie',function($raza){
-                return $raza->especie->descripcion;
+            ->addColumn('especie',function($alimento){
+                return $alimento->especie->descripcion;
             })
-            ->addColumn('descripcion',function($raza){
-                return $raza->descripcion;
+            ->addColumn('nomnbre',function($alimento){
+                return $alimento->nombre;
             })
                        
-            ->addColumn('action', function ($raza) {
+            ->addColumn('action', function ($alimento) {
                 
-                $ruta = route('razas.edit',$raza->id);
+                $ruta = route('alimentos.edit',$alimento->id);
 
-                $strHtml = sprintf('<a href="#" class="btn btn-warning btn-sm btn-edit" data-toggle="tooltip" data-placement="top" title="Editar" data-id="%d"><i class="fa fa-pencil"></i></a> ',$raza->id);
-                $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="%d" onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$raza->id);
+                $strHtml = sprintf('<a href="#" class="btn btn-warning btn-sm btn-edit" data-toggle="tooltip" data-placement="top" title="Editar" data-id="%d"><i class="fa fa-pencil"></i></a> ',$alimento->id);
+                $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="%d" onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$alimento->id);
 
                 return $strHtml;
             })
             ->make(true);
         }
 
-        return view('razas.index');
+        return view('alimentos.index');
 
     }
 
@@ -93,7 +93,7 @@ class RazaController extends Controller
 
             $accion = 'Agregar';
                 
-            $view = view('razas.forms.frmRaza',compact('accion','especies'));
+            $view = view('alimentos.forms.frmAlimento',compact('accion','especies'));
             
             $sections = $view->renderSections();
                
@@ -101,7 +101,7 @@ class RazaController extends Controller
             
         } else {
 
-            return view('razas');
+            return view('alimentos');
 
         }
     }
@@ -116,8 +116,10 @@ class RazaController extends Controller
     {
         //
         $this->validate($request,[
-            'descripcion'    =>  'required',
+
+            'nombre'         =>  'required',
             'especie_id'     =>  'required'
+            
             ],
 
             [
@@ -126,7 +128,7 @@ class RazaController extends Controller
 
             );
 
-        $raza = new Raza();
+        $alimento = new Alimento();
 
         if($request->ajax())
         {
@@ -135,15 +137,15 @@ class RazaController extends Controller
 
             $data['id'] = $this->generarId($data['especie_id']);
 
-            $data['correlativo'] = $raza->getUltimoCorrelativo($data['especie_id'])+1;
+            $data['correlativo'] = $alimento->getUltimoCorrelativo($data['especie_id'])+1;
 
-            $raza->create($data);
+            $alimento->create($data);
 
             return response()->json(['message'=>'Registro creado correctamente']); 
             
         } else {
 
-            return view('razas');
+            return view('alimentos');
 
         }
     }
@@ -169,19 +171,19 @@ class RazaController extends Controller
     {
         //
 
-        $raza = Raza::find($id);
+        $alimento = Alimento::find($id);
 
         $especies = Especie::all()->lists('descripcion','id');
 
         if($request->ajax())
         {
 
-            if(!empty($raza))
+            if(!empty($alimento))
             {
 
                 $accion = 'Editar';
                 
-                $view = view('razas.forms.frmRaza',compact('accion','raza','especies'));
+                $view = view('alimentos.forms.frmAlimento',compact('accion','alimento','especies'));
             
                 $sections = $view->renderSections();
                
@@ -196,7 +198,7 @@ class RazaController extends Controller
             
         } else {
 
-            return view('colors');
+            return view('alimentos');
 
         }
     }
@@ -211,7 +213,7 @@ class RazaController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $raza = raza::findOrFail($id);
+        $alimento = Alimento::findOrFail($id);
 
         try{
 
@@ -221,32 +223,32 @@ class RazaController extends Controller
                 $data = $request->all();
 
 
-                if(empty($raza))
+                if(empty($alimento))
                 {
                     return response()->json(['message'=>'No existe el registro']);
                 
                 } else {
 
                     //Verifico la especie
-                    if($data['especie_id'] == $raza->especie_id)
+                    if($data['especie_id'] == $alimento->especie_id)
                     {
                         //Actualizo con el metodo fill
-                        $raza->fill($data);
-                        $raza->touch();
-                        $raza->save(); 
+                        $alimento->fill($data);
+                        $alimento->touch();
+                        $alimento->save(); 
 
                     } else {
 
                         //Debo eliminar el registro
-                        $raza->delete();
+                        $alimento->delete();
                         
                         //Genero el nuevo id
                         $data['id'] = $this->generarId($data['especie_id']);
 
-                        $data['correlativo'] = $raza->getUltimoCorrelativo($data['especie_id'])+1;
+                        $data['correlativo'] = $alimento->getUltimoCorrelativo($data['especie_id'])+1;
 
                         //Creo el nuevo registro
-                        $raza->create($data);
+                        $alimento->create($data);
 
                     }
                     
@@ -257,7 +259,7 @@ class RazaController extends Controller
 
             } else {
 
-                return view('razas.index');
+                return view('alimentos.index');
 
             }
 
@@ -267,7 +269,7 @@ class RazaController extends Controller
             Session::flash('message','Error '.$e->errorInfo[1].', no fue posible actualizar la orden');
             Session::flash('error', 'alert-danger');
 
-            return redirect()->to('/razas/');
+            return redirect()->to('/alimentos/');
             
 
         }
@@ -286,7 +288,7 @@ class RazaController extends Controller
         {
             try {
 
-                Raza::findOrFail($id)->delete();
+                Alimento::findOrFail($id)->delete();
 
                 return response()->json(['message'=>'Registro eliminado correctamente']);
 
@@ -305,11 +307,11 @@ class RazaController extends Controller
     public function generarId($especieId)
     {
 
-        $raza = new Raza();
+        $alimento = new Alimento();
 
         $mil = $especieId * 1000;
 
-        $id = ($raza->getUltimoCorrelativo($especieId)+1) + $mil;
+        $id = ($alimento->getUltimoCorrelativo($especieId)+1) + $mil;
 
         return $id;
 

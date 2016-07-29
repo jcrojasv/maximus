@@ -64,3 +64,7 @@ Route::resource('/colors','ColorController');
 Route::get('razas/listado','RazaController@listado');
 Route::resource('/razas','RazaController');
 
+//Rutas para Alimentos
+Route::get('alimentos/listado','AlimentoController@listado');
+Route::resource('/alimentos','AlimentoController');
+

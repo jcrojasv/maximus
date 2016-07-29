@@ -241,7 +241,7 @@
 						</label>
 
 						<label class="checkbox-inline">
-							{!! Form::radio('desparasitacion','Pendiente',false,['id'=>'desparasitacion']) !!} Pendiente <span class="fa fa-exclamation-triangle text-warning"></i> </span>
+							{!! Form::radio('desparasitacion','Pendiente',false,['id'=>'desparasitacion']) !!} Pendiente <span class="fa fa-exclamation-triangle text-warning"></i></span>
 						</label>
 
 						<br/>

@@ -280,6 +280,7 @@ class MascotaController extends Controller
             $mascota->fill($request->all());
             $mascota->save();
 
+            $data = $request->all();
           
             return response()->json(['message'=>'Los datos se modificaron correctamente', 'token'   => csrf_token()  ]);
 

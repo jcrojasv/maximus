@@ -8,6 +8,7 @@ class Alimento extends Model
 {
     //
     protected $table = 'alimentos';
+    protected $fillable = ['id','nombre','correlativo','especie_id'];
 
     public function getAlimentosById($especieId)
     {
@@ -19,5 +20,22 @@ class Alimento extends Model
     	
     	return $alimentos;
 
+    }
+
+    public function getUltimoCorrelativo($especieId)
+    {
+        return $this->where('especie_id','=',$especieId)->max('correlativo');
+
+
+    }
+
+    public function mascota()
+    {
+         return $this->hasMany('App\Mascota','alimento_id');
+    }
+
+    public function especie()
+    {
+         return $this->belongsTo('App\Especie','especie_id');
     }
 }

@@ -181,8 +181,11 @@ class PropietarioController extends Controller
             //Separo los datos de los formularios
             $data = $request->all();
 
-            if($data['email']=='')
-                $data['email'] = NULL;
+            if(isset($data['email']))
+            {
+                if($data['email']=='')
+                    $data['email'] = NULL;
+            }
             
             //Actualizo con el metodo fill
             $propietario->fill($request->all());

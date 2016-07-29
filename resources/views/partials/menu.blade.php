@@ -74,6 +74,10 @@
           <ul class="nav nav-second-level">
            
             <li>
+              <a href="{{ url('alimentos/') }}"><i class="fa fa-cutlery"></i> Alimentos</a>
+            </li>
+            
+            <li>
               <a href="{{ url('colors/') }}"><i class="fa fa-paint-brush"></i> Colores</a>
             </li>
 
