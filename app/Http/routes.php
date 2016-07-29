@@ -59,3 +59,8 @@ Route::resource('/orden','OrdenController');
 //Rutas para Color
 Route::get('colors/listado','ColorController@listado');
 Route::resource('/colors','ColorController');
+
+//Rutas para Razas
+Route::get('razas/listado','RazaController@listado');
+Route::resource('/razas','RazaController');
+

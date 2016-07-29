@@ -31,7 +31,8 @@ $(document).ready(function(){
        ]
 	   	
     });
-     $(function(){
+
+    $(function(){
     	$('[data-toggle="tooltip"]').tooltip();
     });
 });

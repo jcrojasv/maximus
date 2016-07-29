@@ -68,9 +68,24 @@
             
           </ul>
         </li>
+
+        <li>
+          <a href="#"><i class="fa fa-cogs"></i> Mantenimiento tablas <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+           
+            <li>
+              <a href="{{ url('colors/') }}"><i class="fa fa-paint-brush"></i> Colores</a>
+            </li>
+
+            <li>
+              <a href="{{ url('razas/') }}"><i class="fa fa-paw"></i> Razas</a>
+            </li>
+           
+          </ul>
+        </li>
         
          <li>
-          <a href="#"><i class="fa fa-bar-chart-o"></i> Reportes estadisticos <span class="fa arrow"></span></a>
+          <a href="#"><i class="fa fa-pie-chart"></i> Reportes estadisticos <span class="fa arrow"></span></a>
           <ul class="nav nav-second-level">
            
             

@@ -1,6 +1,6 @@
 @extends('layouts/app')
 
-@section('title','Colores') 
+@section('title','Razas') 
 
 @section('estilos')
 
@@ -20,15 +20,22 @@ $(document).ready(function(){
 	   "language": { "url": "/i18n/dataTable.spanish.lang"},
 	   "processing": true,
        "serverSide": true,
-       "ajax": "/colors/listado",
+       "ajax": "/razas/listado",
        "columns": [
 			{data: 'id'},
-       		{data: 'color'},
+       		{data: 'especie'},
+       		{data: 'descripcion'},
        		{data: 'action'}
 
-       ]
-	   	
+       ],
+
+          	
     });
+
+    //Funcion destacar una fila al darle click
+    $('#tabla tbody').on( 'click', 'tr', function () {
+        $(this).toggleClass('info');
+    } );
 
     $(function(){
     	$('[data-toggle="tooltip"]').tooltip();
@@ -38,7 +45,7 @@ $(document).ready(function(){
     //Funcion para modificar mascota
 	$('#tabla').on('click','a.btn-edit',function(){
 		
-		var ruta  = "{{ route("colors.index") }}/"+ $(this).data('id')+"/edit";
+		var ruta  = "{{ route("razas.index") }}/"+ $(this).data('id')+"/edit";
 		
 
 		//lamado ajax metodo get para tomar el formulario
@@ -56,7 +63,7 @@ $(document).ready(function(){
 	//Funcion para modificar mascota
 	$('.btn-add').click(function(){
 		
-		var ruta  = "{{ route("colors.create") }}";
+		var ruta  = "{{ route("razas.create") }}";
 		
 
 		//lamado ajax metodo get para tomar el formulario
@@ -91,7 +98,7 @@ $(document).ready(function(){
 	
 	<div class="row">
 		<div class="col-lg-12">
-			<h1 class="page-header">Colores <div class="pull-right"><button class="btn btn-primary btn-add"><i class="fa fa-pencil"></i> Nuevo</button></div></h1>
+			<h1 class="page-header">Razas <div class="pull-right"><button class="btn btn-primary btn-add"><i class="fa fa-pencil"></i> Nuevo</button></div></h1>
 		</div>
 	</div>
 
@@ -103,9 +110,12 @@ $(document).ready(function(){
 	<thead>
 		<tr>
 			<th width="10%">Id</th>
-			<th width="70%">Color</th>
 			
-			<th width="20%">Acci&oacute;n</th>
+			<th width="20%">Especie</th>
+			
+			<th width="55%">Razas</th>
+			
+			<th width="15%">Acci&oacute;n</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -115,7 +125,7 @@ $(document).ready(function(){
 
 
 	<!-- formulario para eliminar color -->
-	{!! Form::open(['route' => ['colors.destroy',':ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) !!}
+	{!! Form::open(['route' => ['razas.destroy',':ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) !!}
 
 	{!! Form::close() !!}
 

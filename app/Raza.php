@@ -8,6 +8,7 @@ class Raza extends Model
 {
     //
     protected $table = 'razas';
+    protected $fillable = ['id','descripcion','especie_id','correlativo'];
 
     public function getRazasById($especieId)
     {
@@ -18,6 +19,13 @@ class Raza extends Model
     	->lists('descripcion','id');
     	
     	return $razas;
+
+    }
+
+    public function getUltimoCorrelativo($especieId)
+    {
+        return $this->where('especie_id','=',$especieId)->max('correlativo');
+
 
     }
 

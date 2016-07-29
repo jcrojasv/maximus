@@ -10,7 +10,6 @@ use Yajra\Datatables\Facades\Datatables;
 use Session;
 
 use App\Color;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Response;
@@ -64,7 +63,7 @@ class ColorController extends Controller
                 $ruta = route('colors.edit',$color->id);
 
                 $strHtml = sprintf('<a href="#" class="btn btn-warning btn-sm btn-edit" data-toggle="tooltip" data-placement="top" title="Editar" data-id="%d"><i class="fa fa-pencil"></i></a> ',$color->id);
-                $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="%d"onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$color->id);
+                $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="%d" onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$color->id);
 
                 return $strHtml;
             })
