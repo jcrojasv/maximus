@@ -58,6 +58,11 @@ class Mascota extends Model
 
     }
 
+    public static function getMaxId()
+    {
+        return $result = self::max('id');
+    }
+
     public function propietario()
     {
         return $this->belongsTo('App\Propietario');

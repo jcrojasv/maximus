@@ -50,7 +50,10 @@ class HomeController extends Controller
 
         //Formateo el promedio de horas para quitarle los segundos
         $arrHoras = explode(':',$promHoras->total);
-        $promHoras = $arrHoras[0].":".$arrHoras[1]."'";
+        if(count($arrHoras)>1)
+            $promHoras = $arrHoras[0].":".$arrHoras[1]."'";
+        else
+            $promHoras = 0;
 
         $resultTop = $tblOrden->topTen($year);
 

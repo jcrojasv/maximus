@@ -24,7 +24,11 @@
 					</div>
 
 					<div class="col-lg-8 ">
-						{!! Form::text('id',null, ['class'=>"form-control",'placeholder'=>'# Ficha','id'=>'id']) !!}
+						@if(isset($intFicha))
+							{!! Form::text('id',$intFicha, ['class'=>"form-control",'placeholder'=>'# Ficha','id'=>'id']) !!}
+						@else
+							{!! Form::text('id',null, ['class'=>"form-control",'placeholder'=>'# Ficha','id'=>'id']) !!}
+						@endif
 
 						<span class="help-block id hidden"></span>
 

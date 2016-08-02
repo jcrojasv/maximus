@@ -27,7 +27,7 @@ $(document).ready(function(){
 
 	//Accion busqueda de mascotas
 	$('#btnBuscar').click(function(){
-		var ruta = "{{ route('orden.buscarMascota')}}";
+		var ruta = "{{ route('mascota.buscar')}}";
 		var form = $('#frmBuscar');
 		var frmData = form.serialize();
 		
@@ -59,7 +59,7 @@ $(document).ready(function(){
     //Funcion para seleccionar la mascota del listado de la busqueda
     $('#listado').on('click','a.btn-select',function(){
       
-      var ruta = "{{ route("orden.selectMascota") }}";
+      var ruta = "{{ route("mascota.seleccionar") }}";
 
       var mascota = $(this).data('id');
     
@@ -134,7 +134,7 @@ $(document).ready(function(){
 				@section('sectionDatos')
 				@if(isset($resultMascota))
 					
-					@include('orden.datosMascota')
+					@include('mascota.datos')
 
 				@endif
 				@endsection
@@ -160,7 +160,7 @@ $(document).ready(function(){
 
 </div>
 
-@include('orden.forms.frmBuscarMascota')
+@include('mascota.forms.frmBuscarMascota')
 
 
 @endsection

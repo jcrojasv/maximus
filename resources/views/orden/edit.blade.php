@@ -126,7 +126,7 @@ $(document).ready(function(){
 				<br/>
 				<div id="datosMascota">
 											
-					@include('orden.datosMascota')
+					@include('mascota.datos')
 
 				</div>
 			</div>

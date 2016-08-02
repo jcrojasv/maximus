@@ -34,6 +34,8 @@ Route::get('propietario/index', 'PropietarioController@index');
 Route::resource('/propietario','PropietarioController');
 
 //Rutas para mascotas
+Route::get('mascota/buscar', 'MascotaController@buscar')->name('mascota.buscar');
+Route::get('mascota/seleccionar', 'MascotaController@seleccionar')->name('mascota.seleccionar');
 Route::get('mascota/listado','MascotaController@listado')->name('mascota.listado');
 Route::resource('/mascota','MascotaController');
 
@@ -50,8 +52,7 @@ Route::get('orden/historial/{mascota?}','OrdenController@historial')->name('orde
 Route::get('orden/listAcumulado','OrdenController@listAcumulado')->name('orden.listAcumulado');
 Route::get('orden/showAcumulado','OrdenController@showAcumulado')->name('orden.showAcumulado');
 Route::get('orden/createFromMascota/{mascota}','OrdenController@createFromMascota')->name('orden.createFromMascota')->where('mascota', '[0-9]+');
-Route::get('orden/buscarMascota', 'OrdenController@buscarMascota')->name('orden.buscarMascota');
-Route::get('orden/selectMascota', 'OrdenController@SelectMascota')->name('orden.selectMascota');
+
 Route::get('orden/esp', 'OrdenController@esp')->name('orden.esp');
 Route::get('orden/index', 'OrdenController@index');
 Route::resource('/orden','OrdenController');

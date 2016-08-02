@@ -13,6 +13,7 @@ use App\Color;
 use App\Alimento;
 use App\Mascota;
 use App\Propietario;
+use App\Arreglo;
 
 
 class MascotaController extends Controller
@@ -103,12 +104,15 @@ class MascotaController extends Controller
 
         $propietario = Propietario::find($data['propietario']);
 
+        $intFicha = Mascota::getMaxId()+1;
+
+
         if($request->ajax())
         {
 
             $accion = 'Agregar';
 
-            $view = view('mascota.forms.frmMascotaRenderPropietario',compact('colores','accion','propietario'));
+            $view = view('mascota.forms.frmMascotaRenderPropietario',compact('colores','accion','propietario','intFicha'));
         
             $sections = $view->renderSections();
            
@@ -312,7 +316,79 @@ class MascotaController extends Controller
         }
     }
 
-    
+    /**
+     * Busqueda de mascotas.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return object
+     */
+
+    public function buscar(Request $request)
+    {
+
+        if($request->ajax())
+        {
+             //Cargo los datos de los arreglos
+            $arreglosGen = Arreglo::where('tipo','=','GEN')->orderBy('descripcion','asc')->lists('descripcion','id');
+
+            $data = $request->all();
+
+            //Inicializo la variable mascotaId para que no de error en las plantillas renderizadas
+            $mascotaId = '';
+
+            //Tomo los datos del formulario
+            $strMascota = (!is_null($data['mascota'])) ? $data['mascota'] : '';
+            $strPropietario = (!is_null($data['propietario'])) ? $data['propietario'] : '';
+
+            //Realizo la consulta en el modelo
+            $objTable = new Mascota();
+            $objResult = $objTable->buscarMascota($strMascota,$strPropietario);
+
+            $view = view('orden.create',compact('objResult','arreglosGen','mascotaId'));
+         
+            $sections = $view->renderSections();
+            
+            return response()->json($sections['listadoBusqueda']);
+
+       }
+
+       
+        
+    }
+
+    /**
+     * Seleccion de los datos de las mascotas.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return object
+     */
+
+    public function seleccionar(Request $request)
+    {
+
+        if($request->ajax())
+        {
+            
+            $data = $request->all();
+            $mascotaId = $data['id'];
+
+            //Realizo la consulta en el modelo
+            $objTable = new Mascota();
+            $resultMascota = $objTable->selectMascota($mascotaId);
+
+            $view = view('orden.create',compact('resultMascota','mascotaId'));
+         
+            $sections = $view->renderSections();
+            
+            return response()->json($sections['sectionDatos']);
+
+       }
+
+       
+        
+    }
 
    
 }

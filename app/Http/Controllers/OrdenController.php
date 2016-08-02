@@ -468,80 +468,7 @@ class OrdenController extends Controller
 
         }
     }
-
-    /**
-     * Busqueda de mascotas.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return object
-     */
-
-    public function buscarMascota(Request $request)
-    {
-
-        if($request->ajax())
-        {
-             //Cargo los datos de los arreglos
-            $arreglosGen = Arreglo::where('tipo','=','GEN')->orderBy('descripcion','asc')->lists('descripcion','id');
-
-            $data = $request->all();
-
-            //Inicializo la variable mascotaId para que no de error en las plantillas renderizadas
-            $mascotaId = '';
-
-            //Tomo los datos del formulario
-            $strMascota = (!is_null($data['mascota'])) ? $data['mascota'] : '';
-            $strPropietario = (!is_null($data['propietario'])) ? $data['propietario'] : '';
-
-            //Realizo la consulta en el modelo
-            $objTable = new Mascota();
-            $objResult = $objTable->buscarMascota($strMascota,$strPropietario);
-
-            $view = view('orden.create',compact('objResult','arreglosGen','mascotaId'));
-         
-            $sections = $view->renderSections();
-            
-            return response()->json($sections['listadoBusqueda']);
-
-       }
-
-       
-        
-    }
-
-    /**
-     * Seleccion de los datos de las mascotas.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return object
-     */
-
-    public function selectMascota(Request $request)
-    {
-
-        if($request->ajax())
-        {
-            
-            $data = $request->all();
-            $mascotaId = $data['id'];
-
-            //Realizo la consulta en el modelo
-            $objTable = new Mascota();
-            $resultMascota = $objTable->selectMascota($mascotaId);
-
-            $view = view('orden.create',compact('resultMascota','mascotaId'));
-         
-            $sections = $view->renderSections();
-            
-            return response()->json($sections['sectionDatos']);
-
-       }
-
-       
-        
-    }
+   
 
     /**
      * Seleccion de los datos de para las opciones especializadas.
@@ -628,5 +555,11 @@ class OrdenController extends Controller
             return response()->json($sections['renderHistorial']);
 
         }
+    }
+
+    public function validarHora($entrada,$salida)
+    {
+
+        
     }
 }
