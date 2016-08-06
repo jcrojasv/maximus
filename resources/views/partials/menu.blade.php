@@ -70,6 +70,18 @@
         </li>
 
         <li>
+          <a href="#"><i class="fa fa-list-ol"></i> Reportes <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+            <li>
+              <a href="{{ url('reportes/ordenesDiarias') }}"><i class="fa fa-calendar-check-o"></i> Ordenes Diarias</a>
+            </li>
+
+            
+            
+          </ul>
+        </li>
+
+        <li>
           <a href="#"><i class="fa fa-cogs"></i> Mantenimiento tablas <span class="fa arrow"></span></a>
           <ul class="nav nav-second-level">
            

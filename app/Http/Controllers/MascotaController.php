@@ -75,7 +75,10 @@ class MascotaController extends Controller
                 
                 $ruta = route('mascota.edit',$mascota->id);
 
+                $rutaHistorial = route('orden.historial',$mascota->id);
+
                 $strHtml = sprintf('<button type="button" class="btn btn-warning btn-sm btn-edit" data-toggle="tooltip" data-placement="top" title="Editar" data-id="%d" onClick="$(this).editar(%d)"><i class="fa fa-pencil"></i></button> ',$mascota->id,$mascota->propietario_id);
+                $strHtml .= sprintf('<button type="button" class="btn btn-primary btn-sm btn-historial" data-toggle="tooltip" data-placement="top" title="Historial" onclick="$(this).historial(\'%s\')"><i class="fa fa-clock-o"></i></button> ',$rutaHistorial);
                 $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete" data-toggle="tooltip" data-placement="top" title="Eliminar" data-id="%s"onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$mascota->id);
 
                 return $strHtml;

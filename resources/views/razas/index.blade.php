@@ -60,7 +60,7 @@ $(document).ready(function(){
 	
 	});
 
-	//Funcion para modificar mascota
+	//Funcion para agregar razas
 	$('.btn-add').click(function(){
 		
 		var ruta  = "{{ route("razas.create") }}";

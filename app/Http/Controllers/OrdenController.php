@@ -7,7 +7,7 @@ use Yajra\Datatables\Facades\Datatables;
 
 use Session;
 
-use App\Http\Requests;
+use App\Http\Requests\OrdenRequest;
 use App\Mascota;
 use App\Arreglo;
 use App\Orden;
@@ -67,8 +67,6 @@ class OrdenController extends Controller
         } 
 
         return view('orden.create');
-
-       
         
     }
 
@@ -108,8 +106,6 @@ class OrdenController extends Controller
 
         }
         
-
-       
         
     }
 
@@ -119,34 +115,12 @@ class OrdenController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, OrdenRequest $requests)
     {
 
         //Separo los datos de los formularios
         $data = $request->all();
 
-       //Validacion de datos
-
-        $this->validate($request, [
-
-            'fecha'         => ['required','','date'],
-            'entrada'       => ['required'],
-            'tipo'          => ['required'],
-            'arregloEsp'    => ['required_if:tipo,ESP'],
-            'arregloGen'    => ['required'],
-            
-         
-        ],[
-
-            'entrada.required'       => 'La hora de entrada es requedida',
-            'tipo.required'          => 'El tipo de servicio es requerido',
-            'arregloEsp.required_if' => 'Debe seleccionar al menos un arreglo especializado',
-            'arregloGen.required'    => 'Debe seleccionar al menos un arreglo general',
-            
-
-        ]
-
-        );
         if($request->ajax())
         {
             
@@ -192,7 +166,7 @@ class OrdenController extends Controller
 
             } catch(\Illuminate\Database\QueryException $e) {
 
-                Session::flash('message','Orden generada exitosamente');
+                Session::flash('message','No se pudo generar la orden');
                 Session::flash('error','alert-danger');
 
                 return response()->json(['ordenId'=>'']);
@@ -200,12 +174,11 @@ class OrdenController extends Controller
             }
             
         }
-
         
     }
 
     /**
-     * Esta funcion me permitira sacar el listodo general de ordenes via ajax usando datatable.
+     * Esta funcion me permitira sacar el listado general de ordenes via ajax usando datatable.
      *
     * @return \Illuminate\Http\Response->json
      */
@@ -264,7 +237,6 @@ class OrdenController extends Controller
         return view('orden.index');
 
     }
-
 
     public function showAcumulado()
     {
@@ -526,9 +498,9 @@ class OrdenController extends Controller
             $objMascota = new Mascota();
 
             $resultHistorial = $objOrden->historialMascota($id);
-            $resultMascota = $objMascota->selectMascota($id);
+            $resultMascota   = $objMascota->selectMascota($id);
 
-            return view('orden.historialFromMascota',compact('resultHistorial','resultMascota'));
+            return view('orden.historialFromMascota',compact('resultHistorial','resultMascota','id'));
 
         } else {
 
@@ -560,6 +532,19 @@ class OrdenController extends Controller
     public function validarHora($entrada,$salida)
     {
 
-        
+        $segEntrada = $this->horaSegundos($entrada);
+        $segSalida  = $this->horaSegundos($salida);
+
+        return ($segEntrada > $segSalida) ? false : true;
+
+    }
+
+    public function horaSegundos($hora)
+    {
+        list($horas,$minutos) = explode(':',$hora);
+
+        $segundos = ($horas * 3600) + ($minutos * 60);
+
+        return $segundos;
     }
 }

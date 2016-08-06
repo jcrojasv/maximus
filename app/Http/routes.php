@@ -22,7 +22,7 @@
 */
 
 Route::get('/', 'HomeController@index');
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->name('home');
 
 //Route::auth();
 
@@ -68,4 +68,7 @@ Route::resource('/razas','RazaController');
 //Rutas para Alimentos
 Route::get('alimentos/listado','AlimentoController@listado');
 Route::resource('/alimentos','AlimentoController');
+
+//Rutas para Reportes
+Route::get('reportes/ordenesDiarias','ReportesController@ordenesDiarias')->name('reportes.ordenesDiarias');
 

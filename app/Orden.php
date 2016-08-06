@@ -188,8 +188,8 @@ class Orden extends Model
 
         return $this->select(DB::raw('timediff(salida,entrada) as tiempo'),'ordenes.*')
         ->where('mascota_id','=',$id)
-                    ->orderBy('fecha','desc')
-                    ->get();
+        ->orderBy('fecha','desc')
+        ->get();
     }
 
     //Metodo para obtener la relacion con orden_arreglos

@@ -14,6 +14,7 @@
 <script src='/js/dataTables.bootstrap.min.js' type="text/javascript"></script>
 <script>
 $(document).ready(function(){
+    
     $('#tabla').DataTable({
     	responsive: true,
     	stateSave:  true,
@@ -38,6 +39,17 @@ $(document).ready(function(){
     });
 
 
+    $('#tabla').on('click','tr.btn-historial',function(){
+
+    	var id = $(this).data('id');
+
+    	alert(id);
+    });
+
+
+    jQuery.fn.historial = function(ruta){
+        $(location).attr('href',ruta);    
+    };
     
 	
 
@@ -61,7 +73,7 @@ $(document).ready(function(){
 	<table class="table table-striped table-hover table-bordered" id='tabla'>
 	<thead>
 		<tr>
-			<th>Ficha n&deg;</th>
+			<th width="10%">Ficha n&deg;</th>
 			<th>Nombre</th>
 			<th>Esp/Raza</th>
 			<th>Color</th>

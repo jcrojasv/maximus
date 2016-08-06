@@ -59,7 +59,7 @@ $(document).ready(function(){
 				
 				@if(isset($resultMascota))
 					
-					@include('orden.datosMascota')
+					@include('mascota.datos')
 
 				@endif
 				

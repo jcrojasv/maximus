@@ -95,15 +95,10 @@ $(document).ready(function(){
 
 	//Cargo el timepicker al campo salida
 	$('#salida').timepicker({
-		
-		template: false,
-		snapToStep: true,
 		minuteStep: 5,
-		showInputs: false,
+		showMeridian: false,
 		disableFocus: true,
-		explicitMode: true,
 		defaultTime: false,
-		showMeridian: false
 	});
 
 	//Cambio el checkbox de estatus a boton on-off
