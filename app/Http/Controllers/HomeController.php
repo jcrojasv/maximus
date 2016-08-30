@@ -65,6 +65,7 @@ class HomeController extends Controller
 
         //Total de ordenes en el dia
         $totalOrdenesDia = $tblOrden->totalOrdenes('day',$fechaActual);
+        
 
         //Ordenes actuales
         $ordenes = $tblOrden->listadoDia($fechaActual);

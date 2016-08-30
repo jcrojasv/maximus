@@ -12,6 +12,7 @@
             <th>Mascota / Esp / Raza</th>
             <th>Ent/Sal</th>
             <th>Tiempo</th>
+            <th>Precio</th>
             <th>Accion</th>
 
         </thead>
@@ -23,11 +24,16 @@
                 <td>{{$orden->nombre}} / {{ $orden->esp}} / {{ $orden->raza }}</td>
                 <td>{{$orden->entrada}} <br/> {{$orden->salida}}</td>
                 <td>{{$orden->tiempo}}</td>
+                <td align="right"><b>$ {{ number_format($orden->precio, 0,',',' ')}}</b></td>
                 <td>
-                <a href="{{route('orden.edit',['id'=>$orden->id])}}" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-pencil"></i> Editar</a></td>
+                <a href="{{route('orden.edit',['id'=>$orden->id])}}" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-pencil"></i></a></td>
            
             </tr>
             @endforeach
+            <tr>
+                <td colspan="2"><b>Total en pesos $</b></td>
+                <td colspan="4"></td> 
+            </tr>
         </tbody>
         </table>
         

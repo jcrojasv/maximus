@@ -12,9 +12,12 @@ use App\Mascota;
 use App\Arreglo;
 use App\Orden;
 use App\OrdenArreglo;
+use App\Precio;
+use App\OrdenPrecio;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
+use Auth;
 
 
 class OrdenController extends Controller
@@ -46,7 +49,6 @@ class OrdenController extends Controller
         //Tomo los datos de la peticion
         $data = $request->all();
    
-
         if($request->ajax())
         {
 
@@ -55,6 +57,8 @@ class OrdenController extends Controller
         
           //Cargo los datos de los arreglos
             $arreglosGen = Arreglo::where('tipo','=','GEN')->orderBy('descripcion','asc')->lists('descripcion','id');
+
+          
             //Paso los datos de la vista a una variable para poder volcar en 
             $view = view('orden.create',compact('arreglosGen','mascotaId'));
 
@@ -79,7 +83,7 @@ class OrdenController extends Controller
     {
         //Tomo los datos de la peticion
         $data = $request->all();
-   
+        
         try
         {
 
@@ -158,6 +162,12 @@ class OrdenController extends Controller
                     
                     $this->addArreglos($data['arregloEsp'],$ordenId);
                     
+                }
+
+                //Si tiene un precio definido lo agrego
+                if(isset($data['precio']))
+                {
+                    $this->addPrecio($ordenId,$data['precio']);
                 }
                 
                 Session::flash('message','Orden generada exitosamente');
@@ -298,7 +308,7 @@ class OrdenController extends Controller
         
         try {
                    
-                     
+                 
             //Tomo los datos de la orden
             $orden = Orden::findOrFail($id);
 
@@ -330,7 +340,12 @@ class OrdenController extends Controller
 
             $arreglosEsp = ($cont > 0 ) ? $arreglosEspecializados : null;
 
-            return view('orden.edit',compact('orden','resultMascota','arreglosGen','arreglosIncluidos','arreglosEsp'));
+            //Tomo los datos de precios
+            $resultPrecio = OrdenPrecio::find($id);
+            $precio = (!empty($resultPrecio)) ? $resultPrecio['precio'] : '';
+         
+
+            return view('orden.edit',compact('orden','resultMascota','arreglosGen','arreglosIncluidos','arreglosEsp','precio'));
         
         } catch (ModelNotFoundException $e){
 
@@ -393,6 +408,14 @@ class OrdenController extends Controller
                 
                 $this->addArreglos($data['arregloEsp'],$id);
                 
+            }
+
+            //Modifico el precio
+
+            if(isset($data['precio']))
+            {
+
+                $this->editPrecio($id,$data['precio']);
             }
 
             //Genero el mensaje de exito
@@ -486,6 +509,38 @@ class OrdenController extends Controller
         }
 
         
+    }
+
+    public function addPrecio($id,$precio)
+    {
+        $data = array('orden_id'=>$id,'precio'=>$precio,'creado_por'=>Auth::user()->id);
+
+        OrdenPrecio::create($data);
+    }
+
+    public function editPrecio($id,$precio)
+    {
+        
+        try {
+
+
+           $objPrecio = OrdenPrecio::findOrFail($id);
+           
+            //Actualizo con el metodo fill
+            $objPrecio->fill(array('precio'=>$precio,'modificado_por'=>Auth::user()->id));
+
+            //Uso el metodo touch para actualizar el campo updated_at
+            $objPrecio->touch();
+            
+            //Guardo los datos
+            $objPrecio->save();
+
+
+        }catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+
+            $this->addPrecio($id,$precio); 
+        }
+       
     }
 
     public function historial(Request $request, $id=null)

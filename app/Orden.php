@@ -49,10 +49,12 @@ class Orden extends Model
         ->join('propietarios','mascotas.propietario_id','=','propietarios.id')
         ->join('especies','mascotas.especie_id','=','especies.id')
         ->join('razas','mascotas.raza_id','=','razas.id')
+        ->leftJoin('orden_precio','ordenes.id','=','orden_precio.orden_id')
          ->select('ordenes.*', 'mascotas.nombre', 'propietarios.nombres as nb',
             'propietarios.apellidos as ap',
             'propietarios.telefono_fijo as fijo','propietarios.telefono_celular as movil',
             'especies.descripcion as esp','razas.descripcion as raza',
+            'orden_precio.precio as precio',
             DB::raw("IF(salida != '00:00:00',timediff(salida,entrada),'') as tiempo"))
         ->where('fecha','=',$fecha)
         ->orderBy('entrada','asc')
@@ -60,6 +62,16 @@ class Orden extends Model
 
         return $ordenes;
 
+    }
+
+    /*
+    *   Metodo para sumar el valor de cada una de las ordenes de un dia determinado
+    *
+    */
+    public function totalPesos($fecha)
+    {
+        $total = $this->join('orden_precio','ordenes.id','=','orden_precio.orden_id')
+        ->select('SUM');
     }
 
     //Funcion que realiza un promedio de tiempo de duracion de las ordenes

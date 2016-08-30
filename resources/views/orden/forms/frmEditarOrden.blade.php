@@ -125,9 +125,26 @@
 		</div>
 		<!-- Fin row 5 -->
 		
-		<!-- row 6 -->              
-		<div class="row">
 
+		<!-- Row 6 -->
+		<div class="row tipo">
+			<br/>
+			<div class="col-lg-4 text-right">
+				Precio:
+			</div>
+
+			<div class="col-lg-8">
+				{!! Form::text('precio',$precio,['id'=>'precio','class'=>'form-control']) !!}
+			</div>
+
+			<span class="help-block precio hidden"></span>
+			
+		</div>
+		<!-- Fin row 6 -->
+
+		<!-- row 7 -->              
+		<div class="row">
+			<br/>
 			<div class="col-lg-3 col-lg-offset-1 text-right">
 
 			 Observaciones:
@@ -140,9 +157,9 @@
 
 			</div>
 		</div>
-		<!-- Fin row 6 -->
+		<!-- Fin row 7 -->
 
-		<!-- row 7 -->              
+		<!-- row 8 -->              
 		<div class="row">
 			<br/>
 			<div class="col-lg-3 col-lg-offset-1 text-right">
@@ -157,9 +174,9 @@
 
 			</div>
 		</div>
-		<!-- Fin row 7 -->
+		<!-- Fin row 8 -->
 
-		<!-- Row 8 -->
+		<!-- Row 9 -->
 		<div class="row">
 			<br/>
 			<div class="col-lg-12 text-center">
@@ -172,7 +189,7 @@
 
 			</div>
 		</div>
-		<!-- Fin Row 8 -->
+		<!-- Fin Row 9 -->
 
 	</div> <!-- Fin panel-body -->
 
