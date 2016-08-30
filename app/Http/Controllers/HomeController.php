@@ -8,9 +8,13 @@ use Illuminate\Http\Request;
 use App\Orden;
 use Carbon\Carbon;
 use App\Mascota;
+use Auth;
 
 class HomeController extends Controller
 {
+    
+    protected $date;
+
     /**
      * Create a new controller instance.
      *
@@ -19,6 +23,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->date = Carbon::now();
     }
 
     /**
@@ -29,20 +34,33 @@ class HomeController extends Controller
     public function index()
     {
 
-        $date = Carbon::now();
 
+        if(Auth::user()->is('admin')){
 
-        $year = $date->format('Y');
+            return $this->dashAdmin();
 
-        $fechaActual = $date->format('Y-m-d');
+        } elseif (Auth::user()->is('groomer')) {
+            
+            return $this->dashGroomer();
+        }
+        
+        
+    }
 
-        $strMes = $date->format('F-Y');
+    private function dashAdmin()
+    {
+
+        $year = $this->date->format('Y');
+
+        $fechaActual = $this->date->format('Y-m-d');
+
+        $strMes = $this->date->format('F-Y');
 
         //Numero de la semana actual
-        $intSemana = $date->format('W');
+        $intSemana = $this->date->format('W');
 
         //fecha actual en string
-        $strFecha = $date->toFormattedDateString();
+        $strFecha = $this->date->toFormattedDateString();
      
         //Promedio de tiempo de las ordenes mensual    
         $tblOrden = new Orden();
@@ -91,7 +109,13 @@ class HomeController extends Controller
 
 
         }
-        
+
+              
         return view('home',compact('promHoras','resultTop','totalOrdenesAnual','totalOrdenesMes','totalOrdenesDia','strMes','year','strFecha','ordenes','arrGrafico','intSemana'));
+    }
+
+    private function dashGroomer()
+    {
+        return view("Hola groomer");
     }
 }

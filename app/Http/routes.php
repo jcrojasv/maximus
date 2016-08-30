@@ -23,6 +23,12 @@
 
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index')->name('home');
+/*Route::get('/home', [
+	'as' => 'home',
+	'middleware' => 'role:admin',
+	'uses' => 'HomeController@index',
+]);
+*/
 
 //Route::auth();
 

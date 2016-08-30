@@ -164,6 +164,7 @@ return [
 
         Laracasts\Flash\FlashServiceProvider::class,
         Mitul\Generator\GeneratorServiceProvider::class,
+        Bican\Roles\RolesServiceProvider::class,
 
     ],
 

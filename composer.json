@@ -12,7 +12,8 @@
         "laracasts/flash": "~1.3",
         "bosnadev/repositories": "dev-master",
         "mitulgolakiya/laravel-api-generator": "dev-master",
-        "doctrine/dbal": "~2.3"
+        "doctrine/dbal": "~2.3",
+        "bican/roles": "2.1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
